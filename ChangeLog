@@ -1,0 +1,20 @@
+ChangeLog
+
+v2.1.1
+- Fixed missing include on autoinstaller
+
+v2.1.0
+------
+- Added new feature to purge history data
+- Implemented new installer routines for glFusion v1.1.2+
+- Implemented new 404 handling when plugin is disabled
+- No longer crash if add stats fails
+- Added RFI checks to language files
+
+v2.0.0
+------
+- Fixed several issues with the caching code
+
+v1.8.0
+------
+- Initial port to glFusion CMS
