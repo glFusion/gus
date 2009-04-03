@@ -509,6 +509,7 @@ function GUS_doUpgrades( $current_gus_version )
 				$current_gus_version = '2.0.0.fusion';
             case '2.0.0.fusion' :
                 // no updates required...
+				$current_gus_version = $_GUS_CONF['pi_version'];
 			default:
 				$current_gus_version = $_GUS_CONF['pi_version'];
 				$done = true;
