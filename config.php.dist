@@ -35,8 +35,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'].'plugins/gus/gus.php';
-
 // The method to use for host name lookup - can be 'host', 'nslookup', or 'gethostbyaddr'
 // If your system is set up such that you cannot execute shell commands, use 'gethostbyaddr'.
 $_GUS_CONF['host_lookup'] = 'gethostbyaddr';

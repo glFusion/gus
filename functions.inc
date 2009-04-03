@@ -46,6 +46,7 @@ if ( file_exists( $langfile ) ) {
     require_once $_CONF['path'].'plugins/gus/language/english.php';
 }
 
+require_once $_CONF['path'].'plugins/gus/gus.php';
 require_once $_CONF['path'].'plugins/gus/config.php';
 
 ///////////////////////////////////////////////////////////////////
@@ -420,7 +421,7 @@ function plugin_getuseroption_gus()
 // upgrade to this version of GUS
 function plugin_upgrade_gus()
 {
-	global $_TABLES;
+	global $_TABLES, $_GUS_CONF;
 
 	$res = DB_query( "SELECT pi_version FROM {$_TABLES['plugins']} WHERE pi_name = 'gus'" );
 	$row = DB_fetchArray( $res, false );
@@ -435,7 +436,6 @@ function GUS_doUpgrades( $current_gus_version )
 	global $_TABLES, $_CONF, $_DB, $_GUS_CONF;
 
 	$_DB->setDisplayError( true );
-
 
 	$done = false;
 
@@ -516,8 +516,8 @@ function GUS_doUpgrades( $current_gus_version )
 				break;
 		}
 	}
-	DB_query( "UPDATE {$_TABLES['plugins']} SET pi_version = '{$current_gus_version}' WHERE pi_name = 'gus'" );
-	DB_query( "UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.1.2',pi_homepage='http://www.glfusion.org' WHERE pi_name = 'gus'" );
+	DB_query( "UPDATE {$_TABLES['plugins']} SET pi_version = '{$_GUS_CONF['pi_version']}' WHERE pi_name = 'gus'" );
+	DB_query( "UPDATE {$_TABLES['plugins']} SET pi_gl_version = '{$_GUS_CONF['gl_version']}',pi_homepage='http://www.glfusion.org' WHERE pi_name = 'gus'" );
 
 	return true;
 }
