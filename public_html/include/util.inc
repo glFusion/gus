@@ -73,6 +73,11 @@ function GUS_template_get_page_data( $page, $query_string )
 	$html_query = htmlentities( $query_string );
 
 	$host = $_GUS_VARS['parsed_site_url']['scheme'] . '://' . $_GUS_VARS['parsed_site_url']['host'];
+
+	if ( isset($_GUS_VARS['parsed_site_url']['path']) && $_GUS_VARS['parsed_site_url']['path'] != '' ) {
+	    $host .= $_GUS_VARS['parsed_site_url']['path'];
+	}
+
 	if ( $page{0} != '/' )
 		$host .= '/';
 

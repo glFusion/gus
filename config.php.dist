@@ -35,7 +35,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// The method to use for host name lookup - can be 'host', 'nslookup', or 'gethostbyaddr'
+// The method to use for host name lookup - can be 'host', 'nslookup', 'gethostbyaddr', or 'none'
 // If your system is set up such that you cannot execute shell commands, use 'gethostbyaddr'.
 $_GUS_CONF['host_lookup'] = 'gethostbyaddr';
 

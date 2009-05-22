@@ -223,8 +223,7 @@ function ip_to_hostname( $ip )
 	global $_GUS_CONF;
 
 
-	switch( $_GUS_CONF['host_lookup'] )
-	{
+	switch( $_GUS_CONF['host_lookup'] ) {
 		case 'host':
 			$timeout = $_GUS_CONF['host_lookup_timeout'];
 
@@ -248,6 +247,10 @@ function ip_to_hostname( $ip )
 		case 'gethostbyaddr':
 			return( @gethostbyaddr( $ip ) );
 			break;
+
+        case 'none':
+            return $ip;
+            break;
 
 		default:
 			COM_errorLog( "Invalid setting for 'host_lookup' in config.php [{$_GUS_CONF['host_lookup']}]" );
