@@ -145,8 +145,7 @@ $data .= '<td class="col_right">Ban IP:</td>';
 $result = DB_query( "SELECT COUNT(*) AS installed FROM {$_TABLES['plugins']} WHERE pi_name = 'ban'" );
 $row = DB_fetchArray( $result, false );
 
-if ( $row['installed'] == '1' )
-{
+if ( $row['installed'] == '1' ) {
 	// Check to see if this IP is banned or not
 	$result = DB_query( "SELECT COUNT(*) AS banned
 							FROM {$_TABLES['ban']}
@@ -156,17 +155,14 @@ if ( $row['installed'] == '1' )
 	$row = DB_fetchArray( $result, false );
 
 
-	if ( $row['banned'] == '1' )
-	{
+	if ( $row['banned'] == '1' ) {
 		$data .= '<td><span style="font-weight: bold;">on</span></td>';
 
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
 		$data .= "<input type=\"submit\" value=\"Turn Off\"".XHTML.">";
 		$data .= "<input type=\"hidden\" value=\"0\" name=\"gus_ip_ban\"".XHTML.">";
 		$data .= '</form></td>';
-	}
-	else
-	{
+	} else {
 		$data .= '<td><span style="font-weight: bold;">off</span></td>';
 
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
@@ -175,10 +171,8 @@ if ( $row['installed'] == '1' )
 		$data .= '</form></td>';
 	}
 
-}
-else
-{
-	$data .= '<td colspan="2">[the <a href="http://gplugs.sourceforge.net">ban plugin</a> is not installed]</td>';
+} else {
+	$data .= '<td colspan="2">[the ban plugin is not installed]</td>';
 }
 $data .= '</tr></table></td></tr><tr><td>';
 
