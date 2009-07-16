@@ -118,10 +118,16 @@ function GUS()
 
 			// remove extra path from the page name if necessary
 			$page = $_SERVER['SCRIPT_NAME'];
-			$len = strlen( $_GUS_VARS['parsed_site_url']['path'] );
+			if ( isset($_GUS_VARS['parsed_site_url']['path']) ) {
+    			$len = strlen( $_GUS_VARS['parsed_site_url']['path'] );
+    		} else {
+    		    $len = 0;
+    		}
 
-			if ( strncmp( $page, $_GUS_VARS['parsed_site_url']['path'], $len ) == 0 )
-				$page = substr( $page, $len + 1 );
+			if ( isset($_GUS_VARS['parsed_site_url']['path']) ) {
+    			if ( strncmp( $page, $_GUS_VARS['parsed_site_url']['path'], $len ) == 0 )
+    				$page = substr( $page, $len + 1 );
+ 			}
 
 			$rec = DB_query( "SELECT COUNT(*) AS ignored
 								FROM {$_TABLES['gus_ignore_page']}
@@ -1140,7 +1146,7 @@ function phpblock_gusstats()
 					if ( ($_CONF['allow_user_photo'] == 1) && !empty( $row['photo'] ) )
 					{
 						$retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
-						$retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width=16 height=12 border="0" alt=""'.XHTML.'></a>';
+						$retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""'.XHTML.'></a>';
 					}
 
 					$retval .= '<br'.XHTML.'>';
