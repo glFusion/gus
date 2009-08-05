@@ -41,7 +41,7 @@ if (!defined ('GVERSION')) {
 $_GUS_CONF['pi_name']           = 'gus';
 $_GUS_CONF['pi_display_name']   = 'GUS';
 $_GUS_CONF['pi_version']        = '2.1.4';
-$_GUS_CONF['gl_version']        = '1.1.4';
+$_GUS_CONF['gl_version']        = '1.1.5';
 $_GUS_CONF['pi_url']            = 'http://www.glfusion.org';
 
 $_GUS_table_prefix = $_DB_table_prefix . 'gus_';
