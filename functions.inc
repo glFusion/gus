@@ -520,6 +520,7 @@ function GUS_doUpgrades( $current_gus_version )
             case '2.1.0' :
             case '2.1.1' :
             case '2.1.3' :
+            case '2.1.4' :
                 // no updates required...
 				$current_gus_version = $_GUS_CONF['pi_version'];
 			default:
