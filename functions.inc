@@ -910,6 +910,20 @@ function phpblock_gusstats()
     global $_USER, $_CONF, $_TABLES, $LANG01, $LANG_GUS_wo, $_GUS_CONF;
 
 
+    if ( !isset($_GUS_CONF['whatsnew_cache_time']) ) {
+        $_GUS_CONF['whatsnew_cache_time'] = 90;
+    }
+
+    $cacheInstance = 'gusblock__' . $_CONF['theme'];
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval ) {
+        $lu = CACHE_get_instance_update($cacheInstance, 0);
+        $now = time();
+        if (( $now - $lu ) < $_GUS_CONF['whatsnew_cache_time'] ) {
+            return $retval;
+        }
+    }
+
     // Code adapted from whose online block
 	$expire_time = time() - $_CONF['whosonline_threshold'];
     if ( $_GUS_CONF['wo_fullname'] )
@@ -1216,7 +1230,7 @@ function phpblock_gusstats()
             }
         }
     }
-
+    CACHE_create_instance($cacheInstance, $retval, 0);
     return $retval;
 }
 
