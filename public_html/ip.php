@@ -7,7 +7,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: ip.php 9 2008-11-22 16:29:30Z Mark                                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -53,10 +53,11 @@ if ( $gus_ip_collect_data == '0' )
 else if ( $gus_ip_collect_data == '1' )
 	DB_query( "DELETE FROM {$_TABLES['gus_ignore_ip']} WHERE ip = '$ip_addr' LIMIT 1", 1 );
 
-if ( $gus_ip_ban == '0' )
-    DB_query( "DELETE FROM {$_TABLES['ban']} WHERE bantype='REMOTE_ADDR' AND data='$ip_addr' LIMIT 1", 1 );
-else if ( $gus_ip_ban == '1' )
-    DB_query( "INSERT IGNORE INTO {$_TABLES['ban']} VALUES ('REMOTE_ADDR', '$ip_addr')", 1 );
+if ( $gus_ip_ban == '0' && function_exists('BAN_remove') ) {
+    BAN_remove('REMOTE_ADDR', $ip_addr);
+} elseif ( $gus_ip_ban == '1' && function_exists('BAN_add') ) {
+    BAN_add('REMOTE_ADDR', $ip_addr);
+}
 
 // main SQL query
 $date_compare = GUS_get_date_comparison( 'date', $year, $month, $day );
@@ -142,37 +143,24 @@ $data .= '</tr><tr>';
 $data .= '<td class="col_right">Ban IP:</td>';
 
 // check for the Ban plugin
-$result = DB_query( "SELECT COUNT(*) AS installed FROM {$_TABLES['plugins']} WHERE pi_name = 'ban'" );
-$row = DB_fetchArray( $result, false );
 
-if ( $row['installed'] == '1' ) {
-	// Check to see if this IP is banned or not
-	$result = DB_query( "SELECT COUNT(*) AS banned
-							FROM {$_TABLES['ban']}
-							WHERE bantype = 'REMOTE_ADDR' AND data = SUBSTRING( '$ip_addr', 1, LENGTH( data ) )
-							LIMIT 1", 1 );
-
-	$row = DB_fetchArray( $result, false );
-
-
-	if ( $row['banned'] == '1' ) {
+if (function_exists('BAN_check')) {
+    $banned = BAN_check('REMOTE_ADDR', $ip_addr);
+    if ($banned) {
 		$data .= '<td><span style="font-weight: bold;">on</span></td>';
-
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
 		$data .= "<input type=\"submit\" value=\"Turn Off\"".XHTML.">";
 		$data .= "<input type=\"hidden\" value=\"0\" name=\"gus_ip_ban\"".XHTML.">";
 		$data .= '</form></td>';
 	} else {
 		$data .= '<td><span style="font-weight: bold;">off</span></td>';
-
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
 		$data .= "<input type=\"submit\" value=\"Turn On\"".XHTML.">";
 		$data .= "<input type=\"hidden\" value=\"1\" name=\"gus_ip_ban\"".XHTML.">";
 		$data .= '</form></td>';
 	}
-
 } else {
-	$data .= '<td colspan="2">[the ban plugin is not installed]</td>';
+    $data .= '<td colspan="2">[the <a href="http://www.glfusion.org">BAN plugin</a> is not installed]</td>';
 }
 $data .= '</tr></table></td></tr><tr><td>';
 

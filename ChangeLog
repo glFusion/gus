@@ -1,6 +1,15 @@
 ChangeLog
 
+v2.1.6
+------
+- Improved support for BAN plugin - leverage Lee's new APIs
+- Added Dutch translation
+
+v2.1.5
+------
+
 v2.1.4
+------
 - Removed link to the now non-existent BAN plugin
 
 v2.1.3
