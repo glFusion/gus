@@ -38,7 +38,15 @@ if (!in_array('gus', $_PLUGINS)) {
 
 function GUS_HasAccess( $allow_anon = true )
 {
-	global $_GUS_anon_access, $LANG_GUS00, $_USER;
+	global $_CONF, $_GUS_anon_access, $LANG_GUS00, $_USER;
+
+    if ( COM_isAnonUser() && ( $_GUS_anon_access != 1 || $_CONF['loginrequired'] == 1) ) {
+        $display = COM_siteHeader();
+        $display .= SEC_loginRequiredForm();
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
+    }
 
 	if ( ($allow_anon && $_GUS_anon_access == 1) || SEC_hasRights( 'gus.view' ) )
 		return( true );

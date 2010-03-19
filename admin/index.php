@@ -34,6 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_CONF['path_html'] . '/gus/include/sql.inc';
 
 
@@ -433,7 +434,7 @@ else if ( ( $action == $LANG_GUS_admin['add'] ) || ( $action == $LANG_GUS_admin[
 		$data = substr( trim( $newreferrer ), 0, 128 );
 	}
 
-	$data = addslashes( $data );
+	$data = DB_escapeString( $data );
 
 	if ( $action == $LANG_GUS_admin['add'] )
 		DB_query( "INSERT INTO {$table} VALUES ('{$data}')", 1 );

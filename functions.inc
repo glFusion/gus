@@ -169,7 +169,7 @@ function GUS()
 			}
 
 			// check user agent
-			$user_agent = addslashes( substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 ) );
+			$user_agent = DB_escapeString( substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 ) );
 
 			$rec = DB_query( "SELECT COUNT(*) AS ignored
 								FROM {$_TABLES['gus_ignore_ua']}
@@ -570,7 +570,7 @@ function GUS_checkStatsInstall()
 //	- escape '%' for the LIKE clause
 function GUS_getEncodedURL( $url )
 {
-	$encoded_site_url = urlencode( addslashes( $url ) );
+	$encoded_site_url = urlencode( DB_escapeString( $url ) );
 	$encoded_site_url = str_replace( '%', '\%', $encoded_site_url );
 
 	return $encoded_site_url;
@@ -818,12 +818,12 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
 	}
 
 	if ( $query_string != '' )
-		$query_string = urlencode( addslashes( $query_string ) );
+		$query_string = urlencode( DB_escapeString( $query_string ) );
 
 	$referrer = '';
 
 	if ( isset( $_SERVER['HTTP_REFERER'] ) && ( $_SERVER['HTTP_REFERER'] != '' ) )
-		$referrer = urlencode( addslashes( $_SERVER['HTTP_REFERER'] ) );
+		$referrer = urlencode( DB_escapeString( $_SERVER['HTTP_REFERER'] ) );
 
 	$sql = "INSERT INTO " . $_TABLES['gus_userstats'] . " SET"
 		. " uid='" . $user_id

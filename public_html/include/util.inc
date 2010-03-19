@@ -242,7 +242,7 @@ function GUS_template_get_referrer_data( $referrer, $check_hide = false )
 		{
 			foreach ( $_GUS_CONF['hide_in_day_summary'] as $checkReferrer )
 			{
-				$checkReferrer = urlencode( addslashes( $checkReferrer ) );
+				$checkReferrer = urlencode( DB_escapeString( $checkReferrer ) );
 
 				$encodedCheckReferrers[] = array( 'referrer' => $checkReferrer, 'size' => strlen( $checkReferrer ) );
 			}

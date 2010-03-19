@@ -1,5 +1,9 @@
 ChangeLog
 
+v2.1.7
+------
+- Implemented new glFusion admin authentication
+
 v2.1.6
 ------
 - Improved support for BAN plugin - leverage Lee's new APIs

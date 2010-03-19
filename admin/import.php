@@ -34,6 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 require_once $_CONF['path'] . 'plugins/gus/functions.inc';
 
 
@@ -157,7 +158,7 @@ function GUS_import_user_agents()
 
 	while ( $row = DB_fetchArray( $res ) )
 	{
-		$user_agent = addslashes( substr( $row[0], 0, 128 ) );
+		$user_agent = DB_escapeString( substr( $row[0], 0, 128 ) );
 
 		$browser = GUS_getBrowser( $row[0] );
 		$platform = GUS_getComputerType( $row[0] );
