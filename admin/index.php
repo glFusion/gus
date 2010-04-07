@@ -341,6 +341,23 @@ function GUS_create_item_list_for_delete( $sql_response, $fieldname )
 	return $list;
 }
 
+function GUS_clearCache($path)
+{
+    if ( $path[strlen($path)-1] != '/' ) {
+        $path .= '/';
+    }
+    if ($dir = @opendir($path)) {
+        while ($entry = readdir($dir)) {
+            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == 'index.html') {
+                continue;
+            } else {
+                @unlink($path . $entry);
+            }
+        }
+        @closedir($dir);
+    }
+}
+
 // begin page -------
 
 if ( $action == 'capture_on' )
@@ -378,7 +395,18 @@ else if ( $action == 'purge_history' )
     if ( $days < 180 ) {
         $day = 365;
     }
+
+    if ( isset($_POST['clearcache']) ) {
+        $clearcache = 1;
+    } else {
+        $clearcache = 0;
+    }
+
     DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE date < CURDATE()-INTERVAL ".$days." DAY",1);
+
+    if ( $clearcache == 1 ) {
+        GUS_clearCache($_CONF['path_html'] . 'gus/cache/');
+    }
 
     DB_query( "UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = 'gus'" );
 
@@ -723,6 +751,8 @@ $display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/g
 $display .= "<p>Delete Records Older than " . $history_select .
             "&nbsp;<input type=\"submit\" value=\"{$LANG_GUS_admin['purge_history']}\" name=\"Purge\"".XHTML.">
 			<input type=\"hidden\" value=\"purge_history\" name=\"action\"".XHTML.">
+			<br />
+			Purge GUS cache files:&nbsp;&nbsp;<input type=\"checkbox\" value=\"1\" name=\"clearcache\" />
 			</form>";
 
 // fetch the 'imported' var since it may have changed
