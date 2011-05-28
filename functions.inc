@@ -199,6 +199,8 @@ function GUS()
 
 			// Finally, add stats
 			GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent );
+		} else {
+		    $_GUS_VARS['remote_ip'] = '';
 		}
 	}
 }
@@ -523,6 +525,7 @@ function GUS_doUpgrades( $current_gus_version )
             case '2.1.4' :
             case '2.1.5' :
             case '2.1.6' :
+            case '2.1.7' :
                 DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_name='Gus Admin'",1);
                 // no updates required...
 				$current_gus_version = $_GUS_CONF['pi_version'];

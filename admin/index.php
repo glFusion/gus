@@ -138,10 +138,10 @@ function GUS_create_form( $name, $id )
 	global	$_CONF, $LANG_GUS_admin;
 
 	$form = '<form method="post" action="' . $_CONF['site_admin_url'].'/plugins/gus/index.php'.'">';
-	$form .= '<input type="submit" value="' . $LANG_GUS_admin['add'] . '" name="action"'.XHTML.'>';
-	$form .= '&nbsp;&nbsp;<input type="text" size="32" name="' . $name . '"'.XHTML.'>&nbsp;&nbsp;';
-	$form .= '<input type="submit" value="' . $LANG_GUS_admin['remove'] . '" name="action"'.XHTML.'>';
-	$form .= '<input type="hidden" value="' . $id . '" name="selected_tab"'.XHTML.'>';
+	$form .= '<input type="submit" value="' . $LANG_GUS_admin['add'] . '" name="action"/>';
+	$form .= '&nbsp;&nbsp;<input type="text" size="32" name="' . $name . '"/>&nbsp;&nbsp;';
+	$form .= '<input type="submit" value="' . $LANG_GUS_admin['remove'] . '" name="action"/>';
+	$form .= '<input type="hidden" value="' . $id . '" name="selected_tab"/>';
 	$form .= '</form>';
 
 	return $form;
@@ -152,19 +152,19 @@ function GUS_create_cleanup_form( $count_data, $action, $id, $num_msg  )
 {
 	global	$_CONF, $LANG_GUS_admin;
 
-	$form = '<hr'.XHTML.'><div class="smaller">';
+	$form = '<hr/><div class="smaller">';
 	$form .= '<p>' . $LANG_GUS_admin['clean_msg1'];
 
 	$form .= '<form method="post" action="' . $_CONF['site_admin_url'].'/plugins/gus/index.php' . '">';
 	$form .= $LANG_GUS_admin['clean_msg2'];
-	$form .= '<p>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="' . $LANG_GUS_admin['clean_up'] . '"'.XHTML.'>';
+	$form .= '<p>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="' . $LANG_GUS_admin['clean_up'] . '"/>';
 	$form .= '&nbsp;&nbsp;[' . $LANG_GUS_admin['irreversible'] . ']';
-	$form .= '<input type="hidden" value="' . $action . '" name="action"'.XHTML.'>';
-	$form .= '<input type="hidden" value="' . $id . '" name="selected_tab"'.XHTML.'>';
+	$form .= '<input type="hidden" value="' . $action . '" name="action" />';
+	$form .= '<input type="hidden" value="' . $id . '" name="selected_tab" />';
 	$form .= '</form>';
 
 	$form .= '<p>' . $LANG_GUS_admin['clean_num_entries'] . ': <b>' . $count_data['entry_count'] . '</b>';
-	$form .= '<br'.XHTML.'>' . $num_msg . ': <b>' . $count_data['list_len'] . '</b>';
+	$form .= '<br />' . $num_msg . ': <b>' . $count_data['list_len'] . '</b>';
 
 	$form .= '<div><ul style="list-style-type: circle;">';
 
@@ -385,7 +385,7 @@ else if ( $action == 'remove_data' )
 	$display .= COM_startBlock( 'Status', '', COM_getBlockTemplate ('_msg_block', 'header') );
 	$display .= "Data removed.";
 	$display .= COM_endBlock( COM_getBlockTemplate('_msg_block', 'footer') );
-	$display .= '<hr'.XHTML.'>';
+	$display .= '<hr />';
 }
 else if ( $action == 'purge_history' )
 {
@@ -414,7 +414,7 @@ else if ( $action == 'purge_history' )
 	$display .= COM_startBlock( 'Status', '', COM_getBlockTemplate ('_msg_block', 'header') );
 	$display .= "History Data has been purged.";
 	$display .= COM_endBlock( COM_getBlockTemplate('_msg_block', 'footer') );
-	$display .= '<hr'.XHTML.'>';
+	$display .= '<hr />';
 }
 else if ( ( $action == $LANG_GUS_admin['add'] ) || ( $action == $LANG_GUS_admin['remove'] ) )
 {
@@ -561,27 +561,10 @@ else if ( $action == 'clean_referrer' )
 
 GUS_admin_load_ignore_tables();
 
-// Capture
-$display .= "<hr".XHTML."><h4>{$LANG_GUS_admin['capture']}</h4>";
-$display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\">";
 
-if ( $_GUS_VARS['capture'] == '1' )
-{
-	$display .= $LANG_GUS_admin['captureon'] . '&nbsp;&nbsp;&nbsp;';
-	$display .= '<input type="submit" value="'.$LANG_GUS_admin['turnoff'] .'"'.XHTML.'>';
-	$display .= '<input type="hidden" value="capture_off" name="action"'.XHTML.'>';
-}
-else
-{
-	$display .= $LANG_GUS_admin['captureoff'] . '&nbsp;&nbsp;&nbsp;';
-	$display .= "<input type=\"submit\" value=\"{$LANG_GUS_admin['turnon']}\"".XHTML.">";
-	$display .= '<input type="hidden" value="capture_on" name="action"'.XHTML.'>';
-}
-
-$display .= '</form>';
 
 // Ignore
-$display .= "<hr".XHTML."><h4>{$LANG_GUS_admin['ignore']}</h4>";
+$display .= "<h4>{$LANG_GUS_admin['ignore']}</h4>";
 $display .= '<div style="margin: 0px 15px; padding: 0px;">';
 
 $titles = array();
@@ -719,16 +702,37 @@ if ( $at_least_one_dirty )
 
 $display .= '</div><br>';
 
+
+// Capture
+$display .= "<hr /><h4>{$LANG_GUS_admin['capture']}</h4>";
+$display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\">";
+
+if ( $_GUS_VARS['capture'] == '1' )
+{
+	$display .= $LANG_GUS_admin['captureon'] . '&nbsp;&nbsp;&nbsp;';
+	$display .= '<input type="submit" value="'.$LANG_GUS_admin['turnoff'] .'" />';
+	$display .= '<input type="hidden" value="capture_off" name="action" />';
+}
+else
+{
+	$display .= $LANG_GUS_admin['captureoff'] . '&nbsp;&nbsp;&nbsp;';
+	$display .= "<input type=\"submit\" value=\"{$LANG_GUS_admin['turnon']}\" />";
+	$display .= '<input type="hidden" value="capture_on" name="action" />';
+}
+
+$display .= '</form>';
+
+
 // let's clear out all the data!
-$display .= "<hr".XHTML."><h4>{$LANG_GUS_admin['remove_data']}</h4>";
+$display .= "<hr /><h4>{$LANG_GUS_admin['remove_data']}</h4>";
 $display .= 'Click the \'' . $LANG_GUS_admin['remove_data'] . '\' button to clear out all the data in your GUS databases. ';
 $display .= 'This will not affect your settings - only the data. ';
 $display .= 'I will disable the plugin, perform the operation, and enable the plugin again. ';
 $display .= '<p>' . $LANG_GUS_admin['irreversible'];
 $display .= 'You will not get a silly "Are you sure you want to do this?" message.';
-$display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\"".XHTML.">
-			<input type=\"submit\" value=\"{$LANG_GUS_admin['remove_data']}\" name=\"Remove\"".XHTML.">
-			<input type=\"hidden\" value=\"remove_data\" name=\"action\"".XHTML.">
+$display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\" />
+			<input type=\"submit\" value=\"{$LANG_GUS_admin['remove_data']}\" name=\"Remove\" />
+			<input type=\"hidden\" value=\"remove_data\" name=\"action\" />
 			</form>";
 
 //date - INTERVAL expr unit
@@ -747,10 +751,10 @@ $display .= 'I will disable the plugin, perform the operation, and enable the pl
 $display .= '<p>' . $LANG_GUS_admin['irreversible'];
 $display .= 'You will not get a silly "Are you sure you want to do this?" message.';
 
-$display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\"".XHTML.">";
+$display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\" />";
 $display .= "<p>Delete Records Older than " . $history_select .
-            "&nbsp;<input type=\"submit\" value=\"{$LANG_GUS_admin['purge_history']}\" name=\"Purge\"".XHTML.">
-			<input type=\"hidden\" value=\"purge_history\" name=\"action\"".XHTML.">
+            "&nbsp;<input type=\"submit\" value=\"{$LANG_GUS_admin['purge_history']}\" name=\"Purge\" />
+			<input type=\"hidden\" value=\"purge_history\" name=\"action\" />
 			<br />
 			Purge GUS cache files:&nbsp;&nbsp;<input type=\"checkbox\" value=\"1\" name=\"clearcache\" />
 			</form>";
@@ -768,7 +772,7 @@ if ( GUS_checkStatsInstall() && $_ST_plugin_name != '' && ( $_GUS_VARS['imported
 
 	$stats_version = DB_getItem( $_TABLES['plugins'], 'pi_version', "pi_name = '{$_ST_plugin_name}'" );
 
-	$display .= "<hr".XHTML."><h4>{$LANG_GUS_admin['import_data']}</h4>";
+	$display .= "<hr /><h4>{$LANG_GUS_admin['import_data']}</h4>";
 	$display .= "I notice you have the stats plugin version {$stats_version} installed as '{$_ST_plugin_name}'. ";
 
 	if ( $stats_version != '1.3' )
@@ -782,14 +786,25 @@ if ( GUS_checkStatsInstall() && $_ST_plugin_name != '' && ( $_GUS_VARS['imported
 		$display .= "<p>You may import its data into GUS using the <a href=\"{$import_url}\">import page</a>.";
 	}
 }
-
+USES_lib_admin();
 $img_url = $_CONF['site_url'] . '/gus/images/' . $_GUS_IMG_small_name;
-$header = '<img src="' . $img_url . '" width="24" height="24" alt="GUS pic" align="middle"'.XHTML.'>&nbsp;&nbsp;' . $LANG_GUS_admin['admin'] . ' [v' . plugin_chkVersion_gus() .']';
+$header = '<img src="' . $img_url . '" width="24" height="24" alt="GUS pic" align="middle" />&nbsp;&nbsp;' . $LANG_GUS_admin['admin'] . ' [v' . plugin_chkVersion_gus() .']';
 $readme_url = $_CONF['site_admin_url'] . '/plugins/gus/readme.html#config';
 
-echo COM_siteHeader();
-echo COM_startBlock( $header, $readme_url );
+$menu_arr = array (
+    array('url' => $_CONF['site_admin_url'],
+          'text' => $LANG_ADMIN['admin_home'])
+);
+$head = COM_startBlock ($LANG_GUS_admin['admin'] . ' [v' . plugin_chkVersion_gus() .']', '',COM_getBlockTemplate ('_admin_block', 'header'));
+$head .= ADMIN_createMenu(
+    $menu_arr,
+    'This screen allows you to administer the GUS plugin. You can turn statistics capture on or off, setup ingore rules for the stats capture and perform data housekeeping actions.',
+    $_CONF['site_url'] . '/gus/images/GUS48.png'
+);
 
+echo COM_siteHeader();
+//echo COM_startBlock( $header, $readme_url );
+echo $head;
 echo $display;
 
 echo COM_endBlock();
