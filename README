@@ -1,5 +1,5 @@
 GUS Plugin for glFusion
-Version: 2.1.6
+Version: 2.1.8
 
 For the latest documentation, please see
 
@@ -26,7 +26,7 @@ GUS has the following system requirements:
 
     * PHP 4.3.3 and higher. Because of some security issues PHP 4.3.10 or
       higher is strictly recommended. (PHP5 should be fine.)
-    * glFusion v1.1.2 or newer
+    * glFusion v1.2.2 or newer
 
 INSTALLATION
 

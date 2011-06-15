@@ -1,13 +1,13 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion                                                  |
+// | GUS Plugin for glFusion CMS                                              |
 // +--------------------------------------------------------------------------+
 // | platform.php                                                             |
 // | Displays platform specific stats                                         |
 // +--------------------------------------------------------------------------+
-// | $Id:: platform.php 9 2008-11-22 16:29:30Z Mark                          $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

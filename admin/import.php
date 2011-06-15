@@ -6,8 +6,11 @@
 // |                                                                          |
 // | This file will import data from the stats plugin into the DB for GUS.    |
 // +--------------------------------------------------------------------------+
-// | $Id:: import.php 9 2008-11-22 16:29:30Z Mark                            $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the GUS Plugin for Geeklog CMS                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |

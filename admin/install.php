@@ -7,8 +7,11 @@
 // | This file installs and removes the data structures for the stats         |
 // | plugin for glFusion.                                                     |
 // +--------------------------------------------------------------------------+
-// | $Id:: install.php 21 2009-02-06 21:19:26Z mark                          $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the GUS Plugin for Geeklog CMS                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |

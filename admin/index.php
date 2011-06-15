@@ -3,11 +3,12 @@
 // | GUS Plugin for glFusion CMS                                              |
 // +--------------------------------------------------------------------------+
 // | index.php                                                                |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2011 by the following authors:                        |
 // |                                                                          |
-// | Administration page.                                                     |
-// +--------------------------------------------------------------------------+
-// | $Id:: index.php 23 2009-03-03 21:47:18Z mark                            $|
-// +--------------------------------------------------------------------------+
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the GUS Plugin for Geeklog CMS                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
@@ -761,7 +762,7 @@ $display .= "<p>Delete Records Older than " . $history_select .
 
 // fetch the 'imported' var since it may have changed
 $rec = DB_query( "SELECT value FROM {$_TABLES['gus_vars']} WHERE name = 'imported' LIMIT 1", 1 );
-$row = mysql_fetch_assoc( $rec );
+$row = DB_fetchArray( $rec );
 
 $_GUS_VARS['imported'] = $row['value'];
 
@@ -803,10 +804,8 @@ $head .= ADMIN_createMenu(
 );
 
 echo COM_siteHeader();
-//echo COM_startBlock( $header, $readme_url );
 echo $head;
 echo $display;
-
 echo COM_endBlock();
 echo COM_siteFooter( true );
 ?>

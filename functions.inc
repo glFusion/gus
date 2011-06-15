@@ -7,8 +7,11 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common GUS functions                                       |
 // +--------------------------------------------------------------------------+
-// | $Id:: functions.inc 21 2009-02-06 21:19:26Z mark                        $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the GUS Plugin for Geeklog CMS                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
@@ -66,7 +69,7 @@ function GUS()
 	if ( DB_numRows( $rec ) > 0 )
 	{
 		// Get the GUS vars from the DB
-		while ( $row = mysql_fetch_assoc( $rec ) )
+		while ( $row = DB_fetchArray( $rec ) )
 		{
 			$_GUS_VARS[$row['name']] = $row['value'];
 		}

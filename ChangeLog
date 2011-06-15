@@ -1,5 +1,10 @@
 ChangeLog
 
+v2.1.8
+------
+- Implemented improved admin menu
+- Corrected some direct mysql_() function calls.
+
 v2.1.7
 ------
 - Implemented new glFusion admin authentication

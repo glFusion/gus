@@ -1,12 +1,14 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | GUS Plugin                                                               |
+// | GUS Plugin for glFusion CMS                                              |
 // +--------------------------------------------------------------------------+
 // | gus.php                                                                  |
 // |                                                                          |
 // | Contains all the SQL necessary to install the GUS plugin                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

@@ -4,8 +4,11 @@
 // +--------------------------------------------------------------------------+
 // | security.inc                                                             |
 // +--------------------------------------------------------------------------+
-// | $Id:: security.inc 18 2009-01-26 15:12:48Z mark                         $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the GUS Plugin for Geeklog CMS                                  |
 // | Copyright (C) 2005 by the following authors:                             |

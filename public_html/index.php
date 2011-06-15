@@ -1,13 +1,13 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | GUS Plugin                                                               |
+// | GUS Plugin for glFusion CMS                                              |
 // +--------------------------------------------------------------------------+
 // | index.php                                                                |
 // | Main index page for GUS public interface                                 |
 // +--------------------------------------------------------------------------+
-// | $Id:: index.php 9 2008-11-22 16:29:30Z Mark                             $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2011 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

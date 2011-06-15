@@ -4,8 +4,11 @@
 // +--------------------------------------------------------------------------+
 // | config.php                                                               |
 // +--------------------------------------------------------------------------+
-// | $Id:: config.php.dist 17 2009-01-26 01:44:13Z mark                      $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2011 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the GUS Plugin for Geeklog CMS                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
