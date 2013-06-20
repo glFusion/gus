@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -67,7 +67,7 @@ $INSTALL_plugin['gus'] = array(
     array('type' => 'sql', 'sql' => $_DATA['capture']),
     array('type' => 'sql', 'sql' => $_DATA['imported']),
 
-    array('type' => 'block', 'name' => 'gus_block', 'title' => DB_escapeString('Who\'s Online'),
+    array('type' => 'block', 'name' => 'gus_block', 'title' => DB_escapeString("Who's Online"),
           'phpblockfn' => 'phpblock_gusstats', 'block_type' => 'phpblock',
           'group_id' => 'admin_group_id'),
 );

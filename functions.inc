@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2013 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -75,6 +75,7 @@ function GUS()
 		}
 
 		// store the MySQL version number in $_GUS_VARS['sql_version']
+/*
 		$version = mysql_get_server_info();
 
 		$_GUS_VARS['sql_version'] = array();
@@ -85,7 +86,7 @@ function GUS()
 			$_GUS_VARS['sql_version']['minor'] = $match[2];
 			$_GUS_VARS['sql_version']['patch'] = $match[3];
 		}
-
+*/
 		// save our parsed url for path info later on
 		$_GUS_VARS['parsed_site_url'] = parse_url( $_CONF['site_url'] );
 
@@ -316,7 +317,7 @@ function	plugin_getheadercode_gus()
 
 	$stylesheet = $_CONF['site_url'] . '/gus/' . $css_file;
 
-	$header_text .= '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '"'.XHTML.'>';
+	$header_text .= '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '"/>';
 
 	if ( strpos( $_SERVER['SCRIPT_NAME'], 'admin/plugins/gus/index.php' ) )
 		$header_text .= '<script type="text/javascript" src="./Tab.js"></script>';
@@ -970,10 +971,10 @@ function phpblock_gusstats()
                 if ( ($_CONF['allow_user_photo'] == 1) && !empty( $row['photo'] ) )
                 {
                     $retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
-                    $retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""'.XHTML.'></a>';
+                    $retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
                 }
 
-                $retval .= '<br'.XHTML.'>';
+                $retval .= '<br/>';
 				$num_reg++;
             }
             else
@@ -987,7 +988,7 @@ function phpblock_gusstats()
 		{
 			// note that we're overwriting the contents of $retval here
 			if( $num_reg > 0 )
-				$retval = $LANG01[112] . ': ' . $num_reg . '<br'.XHTML.'>';
+				$retval = $LANG01[112] . ': ' . $num_reg . '<br/>';
 			else
 				$retval = '';
 		}
@@ -1048,9 +1049,9 @@ function phpblock_gusstats()
 
 		if ( count( $bot_list ) )
 		{
-			$bot_text .= "<table width='100%'><tr><td width='20%'><hr".XHTML."></td>
+			$bot_text .= "<table width='100%'><tr><td width='20%'><hr/></td>
 				<td style=\"white-space:nowrap;\">{$LANG_GUS_wo['bots']}</td>
-				<td width='60%'><hr".XHTML."></td></tr></table>";
+				<td width='60%'><hr/></td></tr></table>";
 
 			$bots = array_unique( $bot_list );
 
@@ -1058,7 +1059,7 @@ function phpblock_gusstats()
 
 			foreach( $bots as $bot )
 			{
-				$bot_text .= $bot . '<br'.XHTML.'>';
+				$bot_text .= $bot . '<br/>';
 			}
 		}
 	}
@@ -1070,24 +1071,24 @@ function phpblock_gusstats()
 		else
             $retval .= $LANG01[17];
 
-        $retval .= ': ' . $num_anon . '<br'.XHTML.'>';
+        $retval .= ': ' . $num_anon . '<br/>';
     }
 
 	$retval .= $bot_text;
 
     if ( $_GUS_CONF['wo_daily'] )
 	{
-        $retval .= "<table width='100%'><tr><td width='20%'><hr".XHTML."></td>
+        $retval .= "<table width='100%'><tr><td width='20%'><hr/></td>
         			<td style=\"white-space:nowrap;\">{$LANG_GUS_wo['stats']}</td>
-       				<td width='60%'><hr".XHTML."></td></tr></table>";
+       				<td width='60%'><hr/></td></tr></table>";
 
         $result = DB_query( "SELECT COUNT(*) AS pages FROM {$_TABLES['gus_userstats']} WHERE date = CURRENT_DATE()" );
         $row = DB_fetchArray( $result, false );
-        $retval .= $row['pages'] . ' ' . $LANG_GUS_wo['page_title'] . '<br'.XHTML.'>';
+        $retval .= $row['pages'] . ' ' . $LANG_GUS_wo['page_title'] . '<br/>';
 
         $result = DB_query( "SELECT COUNT( DISTINCT ip ) AS visitors FROM {$_TABLES['gus_userstats']} WHERE date = CURRENT_DATE()" );
         $row = DB_fetchArray( $result, false );
-        $retval .= $row['visitors'] . ' ' . $LANG_GUS_wo['unique_visitors'] . '<br'.XHTML.'>';
+        $retval .= $row['visitors'] . ' ' . $LANG_GUS_wo['unique_visitors'] . '<br/>';
     }
 
     if ( $_GUS_CONF['wo_registered'] )
@@ -1098,13 +1099,13 @@ function phpblock_gusstats()
 
 		if ( $num_reg > 0 )
 		{
-			$retval .= "<table width='100%'><tr><td width='20%'><hr".XHTML."></td>
+			$retval .= "<table width='100%'><tr><td width='20%'><hr/></td>
 						<td style=\"white-space:nowrap;\">{$LANG_GUS_wo['reg_users']}</td>
-						<td width='60%'><hr".XHTML."></td></tr></table>";
+						<td width='60%'><hr/></td></tr></table>";
 
 			if ( $_GUS_CONF['wo_users_anonymous'] && ( empty( $_USER['uid'] ) || ( $_USER['uid'] == 1 ) ) )
 			{
-				$retval .= $LANG01[112] . ': ' . $num_reg . '<br'.XHTML.'>';
+				$retval .= $LANG01[112] . ': ' . $num_reg . '<br/>';
 			}
 			else
 			{
@@ -1128,10 +1129,10 @@ function phpblock_gusstats()
 					if ( ($_CONF['allow_user_photo'] == 1) && !empty( $A['photo'] ) )
 					{
 						$retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'] . '">';
-						$retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""'.XHTML.'></a>';
+						$retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
 					}
 
-					$retval .= '<br'.XHTML.'>';
+					$retval .= '<br/>';
 				}
 			}
 		}
@@ -1146,13 +1147,13 @@ function phpblock_gusstats()
 
 		if ( $num_new > 0 )
 		{
-			$retval .= "<table width='100%'><tr><td width='20%'><hr".XHTML."></td>
+			$retval .= "<table width='100%'><tr><td width='20%'><hr/></td>
 						<td style=\"white-space:nowrap;\">{$LANG_GUS_wo['new_users']}</td>
-						<td width='60%'><hr".XHTML."></td></tr></table>";
+						<td width='60%'><hr/></td></tr></table>";
 
 			if ( $_GUS_CONF['wo_users_anonymous'] && ( empty( $_USER['uid'] ) || ( $_USER['uid'] == 1 ) ) )
 			{
-				$retval .= $LANG_GUS_wo['new_users'] . ': ' . $num_new . '<br'.XHTML.'>';
+				$retval .= $LANG_GUS_wo['new_users'] . ': ' . $num_new . '<br/>';
 			}
 			else
 			{
@@ -1170,10 +1171,10 @@ function phpblock_gusstats()
 					if ( ($_CONF['allow_user_photo'] == 1) && !empty( $row['photo'] ) )
 					{
 						$retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
-						$retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""'.XHTML.'></a>';
+						$retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
 					}
 
-					$retval .= '<br'.XHTML.'>';
+					$retval .= '<br/>';
 				}
 			}
 		}
@@ -1202,9 +1203,9 @@ function phpblock_gusstats()
 		{
 			if ( !$header_output )
 			{
-				$retval .= "<table width=\"100%\"><tr><td width=\"20%\"><hr".XHTML."></td>
+				$retval .= "<table width=\"100%\"><tr><td width=\"20%\"><hr/></td>
 					<td style=\"white-space:nowrap;\">{$LANG_GUS_wo['referers']}</td>
-					<td width='60%'><hr".XHTML."></td></tr></table>";
+					<td width='60%'><hr/></td></tr></table>";
 
 				$header_output = true;
 			}
@@ -1231,7 +1232,7 @@ function phpblock_gusstats()
 
             foreach ( $ref as $key => $value )
 			{
-                $retval .= '<a href="' . $refurl["$key"] . '" rel="nofollow">' . $key . '</a> - ' . $value . '<br'.XHTML.'>';
+                $retval .= '<a href="' . $refurl["$key"] . '" rel="nofollow">' . $key . '</a> - ' . $value . '<br/>';
 
 				$i++;
 

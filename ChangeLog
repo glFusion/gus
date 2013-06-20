@@ -2,6 +2,7 @@ ChangeLog
 
 v2.1.8
 ------
+- Fixed escaped string issue in block title.
 - Implemented improved admin menu
 - Corrected some direct mysql_() function calls.
 
