@@ -4,9 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | gus.php                                                                  |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,9 +38,9 @@ if (!defined ('GVERSION')) {
 
 $_GUS_CONF['pi_name']           = 'gus';
 $_GUS_CONF['pi_display_name']   = 'GUS';
-$_GUS_CONF['pi_version']        = '2.1.8';
-$_GUS_CONF['gl_version']        = '1.2.2';
-$_GUS_CONF['pi_url']            = 'http://www.glfusion.org';
+$_GUS_CONF['pi_version']        = '2.2.0';
+$_GUS_CONF['gl_version']        = '1.5.0';
+$_GUS_CONF['pi_url']            = 'https://www.glfusion.org';
 
 $_GUS_table_prefix = $_DB_table_prefix . 'gus_';
 
