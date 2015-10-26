@@ -5,9 +5,7 @@
 // | ip.php                                                                   |
 // | Displays statistics on IPs                                               |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -42,7 +40,7 @@ require_once './include/sql.inc';
 require_once './include/util.inc';
 
 $gus_ip_collect_data = isset( $_POST['gus_ip_collect_data'] ) ? COM_applyFilter( $_POST['gus_ip_collect_data'] ) : '';
-$gus_ip_ban = isset( $_POST['gus_ip_ban'] ) ? COM_applyFilter( $_POST['gus_ip_ban'] ) : '';
+$gus_ip_ban = isset( $_POST['gus_ip_ban'] ) ? COM_applyFilter( $_POST['gus_ip_ban']) : 0;
 
 $sort = isset( $_GET['sort'] ) ? COM_applyFilter( $_GET['sort'] ) : '';
 $ip_addr = isset( $_GET['ip_addr'] ) ? COM_applyFilter( $_GET['ip_addr'] ) : '';
@@ -53,10 +51,12 @@ if ( $gus_ip_collect_data == '0' )
 else if ( $gus_ip_collect_data == '1' )
 	DB_query( "DELETE FROM {$_TABLES['gus_ignore_ip']} WHERE ip = '$ip_addr' LIMIT 1", 1 );
 
-if ( $gus_ip_ban == '0' && function_exists('BAN_remove') ) {
-    BAN_remove('REMOTE_ADDR', $ip_addr);
-} elseif ( $gus_ip_ban == '1' && function_exists('BAN_add') ) {
-    BAN_add('REMOTE_ADDR', $ip_addr);
+
+
+if ( $gus_ip_ban == '0' && function_exists('bb2_ban_remove') ) {
+    bb2_ban_remove($ip_addr);
+} elseif ( $gus_ip_ban == '1' && function_exists('bb2_ban') ) {
+    bb2_ban($ip_addr,0);
 }
 
 // main SQL query
@@ -144,8 +144,8 @@ $data .= '<td class="col_right">Ban IP:</td>';
 
 // check for the Ban plugin
 
-if (function_exists('BAN_check')) {
-    $banned = BAN_check('REMOTE_ADDR', $ip_addr);
+if (function_exists('bb2_ban')) {
+    $banned = bb2_ban_check($ip_addr);
     if ($banned) {
 		$data .= '<td><span style="font-weight: bold;">on</span></td>';
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
@@ -160,7 +160,7 @@ if (function_exists('BAN_check')) {
 		$data .= '</form></td>';
 	}
 } else {
-    $data .= '<td colspan="2">[the <a href="http://www.glfusion.org">BAN plugin</a> is not installed]</td>';
+    $data .= '<td colspan="2">[the <a href="http://www.glfusion.org">BB2 Banning</a> is not activated]</td>';
 }
 $data .= '</tr></table></td></tr><tr><td>';
 
@@ -318,7 +318,7 @@ $display = '<div class="gus">';
 $display .= $T->finish( $T->get_var( 'page_header' ) );
 $display .= $T->finish( $T->get_var( 'ip_info' ) );
 $display .= $T->finish( $T->get_var( 'table' ) );
-$display .= '<br'.XHTML.'>';
+$display .= '<br>';
 $display .= $T->finish( $T->get_var( 'page_footer' ) );
 $display .= '</div>';
 
