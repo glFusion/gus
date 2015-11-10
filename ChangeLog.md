@@ -1,9 +1,12 @@
 Please view this file on the master branch, on other branches it's out of date.
 
+v2.2.1
+  - Had developer mode enabled by accident
+
 v 2.2.0
   - Replaced all egreg() calls with preg_match()
   - Enhanced browser and OS detection code to support modern browsers
-  - Integrated with glFusion's BB2 banning functions   
+  - Integrated with glFusion's BB2 banning functions
 
 v 2.1.8
   - Fixed escaped string issue in block title.

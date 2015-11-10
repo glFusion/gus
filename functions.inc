@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 }
 
 // *************** UNCOMMENT WHEN TESTING IN DEVELOPMENT
-define('GUS_DVLP_MODE',true);
+//define('GUS_DVLP_MODE',true);
 
 $langfile = $_CONF['path'] . 'plugins/gus/language/' . $_CONF['language'] . '.php';
 
@@ -505,6 +505,8 @@ function GUS_doUpgrades( $current_gus_version )
                 $current_gus_version = $_GUS_CONF['pi_version'];
             case '2.1.8' :
                 DB_query("ALTER TABLE {$_TABLES['gus_user_agents']} CHANGE `version` `version` VARCHAR(40) NULL DEFAULT NULL;",1);
+
+            case '2.2.0' :
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];

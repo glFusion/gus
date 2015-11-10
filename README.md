@@ -1,5 +1,5 @@
 ## GUS Plugin for glFusion
-**Version: 2.2.0**
+**Version: 2.2.1**
 
 For the latest documentation, please see
 
@@ -17,7 +17,7 @@ The glFusion Usage Stats [GUS] plugin collects statistics on who visits your sit
 
 GUS has the following system requirements:
 
-* PHP 5.3.0 and higher. 
+* PHP 5.3.0 and higher.
 * glFusion v1.5.0 or newer.  This version does not work on older versions of glFusion.
 
 ### INSTALLATION
@@ -41,7 +41,7 @@ Review the privacy policy. The installation also provides a privacy policy page.
 Configuration options are controlled in the glFusion Online configuration section under Command & Control.
 
 
-**host-lookup**           
+**host-lookup**
 :  The method to use for host name look up - can be 'host','nslookup', 'gethostbyaddr', or 'none'
 
 **host_lookup_timeout**
