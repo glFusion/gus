@@ -568,12 +568,12 @@ function GUS_getBrowser( $UA )
     elseif (preg_match("@iPhone +OS +([1-9]_[1-9]_[1-9])@i", $UA,$match) )
     {
         $browser['type'] = 'iPhone';
-        $browser['ver']  = str_repace('_','.',$match[1]);
+        $browser['ver']  = str_replace('_','.',$match[1]);
     }
     elseif (preg_match("@iPad +OS +([1-9]_[1-9]_[1-9])@i", $UA,$match) )
     {
         $browser['type'] = 'iPad';
-        $browser['ver']  = str_repace('_','.',$match[1]);
+        $browser['ver']  = str_replace('_','.',$match[1]);
     }
     elseif ( preg_match("@(Safari|Camino|Firefox|Firebird)/([\.\+[:digit:]]+)@i",$UA,$match) )
     {
