@@ -34,7 +34,7 @@ In the Admin block you will find a link to the GUS admin page where you may set 
 
 Set up security. Upon install, only the root users have access to statistics admin and viewing. You can delegate control for either of these functions through the user and group editors.
 
-Review the privacy policy. The installation also provides a privacy policy page. This is controlled by the $_GUS_priv variable in the config.php file. If your site already has a privacy policy available to your site users, I would encourage you to review it and see that it is worded so that your site users know what information is being collected about them. If you allowed anonymous access, a link to the visitor statistics viewer is also added.
+Review the privacy policy. The installation also provides a privacy policy page. This is controlled by the **Enable Privacy Policy** setting in the GUS configuration. If your site already has a privacy policy available to your site users, I would encourage you to review it and see that it is worded so that your site users know what information is being collected about them. If you allowed anonymous access, a link to the visitor statistics viewer is also added.
 
 #### Configuration Options
 
