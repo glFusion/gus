@@ -6,13 +6,11 @@
 // |                                                                          |
 // | This file will import data from the stats plugin into the DB for GUS.    |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the GUS Plugin for Geeklog CMS                                  |
+// | Based on the GUS Plugin                                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
 // |                                                                          |
 // | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
@@ -45,7 +43,7 @@ require_once $_CONF['path'] . 'plugins/gus/functions.inc';
 if ( !SEC_inGroup( 'Root' ) )
 {
     // Someone is trying to illegally access this page
-    COM_errorLog( "Someone has tried to illegally access the GUS import page.  "
+    COM_errorLog( "Someone has tried to access the GUS import page.  "
     	. "User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: {$_SERVER['REMOTE_ADDR']}", 1 );
 
     echo COM_siteHeader();

@@ -4,13 +4,11 @@
 // +--------------------------------------------------------------------------+
 // | util.inc                                                                 |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the GUS Plugin for Geeklog CMS                                  |
+// | Based on the GUS Plugin                                                  |
 // | Copyright (C) 2005 by the following authors:                             |
 // |                                                                          |
 // | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
@@ -326,7 +324,7 @@ function GUS_make_nav( $day, $month, $year, $additional_args = '' )
 	if ( $day != '' )
 	{
 		$day_before = mktime( 0, 0, 0, $month, $day - 1, $year );
-		$today = mktime();
+		$today = time();
 		$day_after = mktime( 0, 0, 0, $month, $day + 1, $year );
 
 		$additional_nav = GUS_make_link_for_date( $additional_args, $day_before );
@@ -351,7 +349,7 @@ function GUS_make_nav( $day, $month, $year, $additional_args = '' )
 	else if ( $month != '' )
 	{
 		$month_before = mktime( 0, 0, 0, $month - 1, 1, $year );
-		$today = mktime();
+		$today = time();
 		$month_after = mktime( 0, 0, 0, $month + 1, 1, $year );
 
 		$additional_nav = GUS_make_link_for_date( $additional_args, $month_before, false );
@@ -371,7 +369,7 @@ function GUS_make_nav( $day, $month, $year, $additional_args = '' )
 	else if ( $year != '' )
 	{
 		$year_before = mktime( 0, 0, 0, 1, 1, $year - 1 );
-		$today = mktime();
+		$today = time();
 		$year_after = mktime( 0, 0, 0, 1, 1, $year + 1 );
 
 		$additional_nav = GUS_make_link_for_date( $additional_args, $year_before, false, false );

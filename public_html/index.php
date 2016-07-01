@@ -9,7 +9,7 @@
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the GUS Plugin for Geeklog                                      |
+// | Based on the GUS Plugin                                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
 // |                                                                          |
 // | Authors: Andy Maloney      - asmaloney@users.sf.net                      |

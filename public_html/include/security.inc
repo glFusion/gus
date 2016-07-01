@@ -4,13 +4,11 @@
 // +--------------------------------------------------------------------------+
 // | security.inc                                                             |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2011 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the GUS Plugin for Geeklog CMS                                  |
+// | Based on the GUS Plugin                                                  |
 // | Copyright (C) 2005 by the following authors:                             |
 // |                                                                          |
 // | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
@@ -54,7 +52,7 @@ function GUS_HasAccess( $allow_anon = true )
 	if ( ($allow_anon && $_GUS_anon_access == 1) || SEC_hasRights( 'gus.view' ) )
 		return( true );
 
-	COM_errorLog( "Someone has tried to illegally access a GUS stats page.  "
+	COM_errorLog( "Someone has tried to access a GUS stats page.  "
 		. "User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: {$_SERVER['REMOTE_ADDR']}", 1 );
 
 	echo COM_siteHeader();

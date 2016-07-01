@@ -5,13 +5,11 @@
 // | platform.php                                                             |
 // | Displays platform specific stats                                         |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Based on the GUS Plugin for Geeklog                                      |
+// | Based on the GUS Plugin                                                  |
 // | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
 // |                                                                          |
 // | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
