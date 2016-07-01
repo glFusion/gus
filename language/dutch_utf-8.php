@@ -199,6 +199,22 @@ $LANG_confignames['gus'] = array(
     'show_right_blocks'     => 'Show Extra Blocks',
     'allow_ignore_anonymous'  => 'Ignore Non-Logged in Users',
     'hide_in_day_summary'   => 'Referrers to hide from Daily Summary',
+    'wo_fullname'           => 'Use user\'s full name',
+    'wo_users_anonymous'	=> 'Show anonymous users',
+    'wo_online'             => 'Show online users',
+    'wo_show_bots'          => 'Show Bots',
+    'wo_registered'         => 'Show registered Users',
+    'wo_new'                => 'Show New Users',
+    'wo_daily'              => 'Show Daily Totals',
+    'wo_refs'               => 'Show Referrers',
+    'wo_hide_referrers'     => 'Referrers to Exclude',
+    'wo_max_referrers'      => 'Max Referrers to Show',
+    'whois_url'             => 'URL to Whois Lookup',
+    'anon_access'           => 'Anonymous Access',
+    'enable_main_menu_GUS'  => 'Add GUS to main menu',
+    'enable_main_menu_privacy_policy' => 'Enable Privacy Policy',
+    'gus_user'              => 'Enable GUS link on User Menu',
+    'gus_stats'             => 'Add GUS stats to site Statistics Page',
 );
 
 $LANG_configsubgroups['gus'] = array(
@@ -208,7 +224,6 @@ $LANG_configsubgroups['gus'] = array(
 $LANG_fs['gus'] = array(
     'gus_options'           => 'General Settings',
     'gus_wo'                => 'Who\'s Online Block Settings',
-    'gus_other'             => 'OtherSettings',
     'gus_access'            => 'Permissions',
 );
 
@@ -217,12 +232,5 @@ $LANG_configselects['gus'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
     2 => array('Host' => 'host', 'Nslookup' => 'nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'None' => 'none'),
-
-    4 => array('Default' => 'default','Simple' => 'simple'),
-    5 => array('JPG' => 'jpg','PNG' => 'png'),
-    6 => array('clean' => 'clean','red' => 'red','white' => 'white','blackglass' => 'blackglass'),
 );
-
-
-
 ?>
