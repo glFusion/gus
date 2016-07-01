@@ -192,7 +192,7 @@ $LANG_configsections['gus'] = array(
     'title'                 => 'GUS Configuration'
 );
 $LANG_confignames['gus'] = array(
-    'hostlookup'            => 'Hostname Lookup Method',
+    'host_lookup'           => 'Hostname Lookup Method',
     'host_lookup_timeout'   => 'Timeout for host lookup',
     'SQL_use_TEMPORARY'     => 'Use MySQL Temporary Tables',
     'show_left_blocks'      => 'Show Navigation Blocks',
