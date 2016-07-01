@@ -35,6 +35,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+global $_GUS_VARS, $_USER;
+
 $_SQL['gus_userstats'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_userstats']} (
   uid int(10) NOT NULL default '1',
@@ -110,6 +112,8 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_vars']} (
   PRIMARY KEY  (name)
 )";
 
+if ( !isset($_GUS_VARS['remote_ip'])) $_GUS_VARS['remote_ip'] = $_SERVER['REMOTE_ADDR'];
+if ( !isset($_USER['uid'])) $_USER['uid'] = 2;
 
 // By default ignore current IP
 $_DATA['remote_ip'] = "INSERT IGNORE INTO {$_TABLES['gus_ignore_ip']} VALUES ('" . $_GUS_VARS['remote_ip'] . "')";
