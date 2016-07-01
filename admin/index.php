@@ -737,6 +737,8 @@ $display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/g
 //date - INTERVAL expr unit
 
 $history_select  = '<select name="histperiod">';
+$history_select .= '<option value="30">1 Month</option>';
+$history_select .= '<option value="90">3 Months</option>';
 $history_select .= '<option value="180">6 Months</option>';
 $history_select .= '<option value="365">1 Year</option>';
 $history_select .= '<option value="730">2 Years</option>';
