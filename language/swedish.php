@@ -186,4 +186,43 @@ $LANG_GUS_admin = array(
 	'purge_history' => 'Purge History',
 );
 
+// Localization of the Admin Configuration UI
+$LANG_configsections['gus'] = array(
+    'label'                 => 'glFusion Usage Stats (GUS)',
+    'title'                 => 'GUS Configuration'
+);
+$LANG_confignames['gus'] = array(
+    'hostlookup'            => 'Hostname Lookup Method',
+    'host_lookup_timeout'   => 'Timeout for host lookup',
+    'SQL_use_TEMPORARY'     => 'Use MySQL Temporary Tables',
+    'show_left_blocks'      => 'Show Navigation Blocks',
+    'show_right_blocks'     => 'Show Extra Blocks',
+    'allow_ignore_anonymous'  => 'Ignore Non-Logged in Users',
+    'hide_in_day_summary'   => 'Referrers to hide from Daily Summary',
+);
+
+$LANG_configsubgroups['gus'] = array(
+    'sg_main'               => 'Configuration Settings'
+);
+
+$LANG_fs['gus'] = array(
+    'gus_options'           => 'General Settings',
+    'gus_wo'                => 'Who\'s Online Block Settings',
+    'gus_other'             => 'OtherSettings',
+    'gus_access'            => 'Permissions',
+);
+
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
+$LANG_configselects['gus'] = array(
+    0 => array('True' => 1, 'False' => 0),
+    1 => array('True' => TRUE, 'False' => FALSE),
+    2 => array('Host' => 'host', 'Nslookup' => 'nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'None' => 'none'),
+
+    4 => array('Default' => 'default','Simple' => 'simple'),
+    5 => array('JPG' => 'jpg','PNG' => 'png'),
+    6 => array('clean' => 'clean','red' => 'red','white' => 'white','blackglass' => 'blackglass'),
+);
+
+
+
 ?>
