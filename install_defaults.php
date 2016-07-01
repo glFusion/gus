@@ -49,7 +49,7 @@ function plugin_initconfig_gus()
     // Subgroup: Gus
     $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'gus');
 
-    $c->add('gus_options', NULL, 'fieldset', 0, 0, NULL, 0, TRUE);
+    $c->add('gus_options', NULL, 'fieldset', 0, 0, NULL, 0, TRUE, 'gus');
 
     $c->add('hostlookup','gethostbyaddr','select', 0, 0, 2, 10, true, 'gus');
     $c->add('host_lookup_timeout', '1', 'text', 0, 0, 0, 20, true, 'gus');

@@ -50,8 +50,6 @@ if ( file_exists( $langfile ) ) {
     require_once $_CONF['path'].'plugins/gus/language/english.php';
 }
 
-require_once $_CONF['path'].'plugins/gus/gus.php';
-
 $gus_config = config::get_instance();
 $_GUS_CONF = $gus_config->get_config('gus');
 
@@ -71,6 +69,8 @@ $_GUS_limit = 25;
 $_GUS_months = 4;
 $_GUS_days = 31;
 $_GUS_cache = true;
+
+require_once $_CONF['path'].'plugins/gus/gus.php';
 
 ///////////////////////////////////////////////////////////////////
 ///  Set up config variables and call to add stats to database  //
