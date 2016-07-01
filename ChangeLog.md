@@ -1,5 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
+v2.3.0
+  - Moved to online configuration
+  - Fixed uninstall error
+  - Fixed install error where the block was created with a mis-formed title
+
 v2.2.1
   - Had developer mode enabled by accident
 

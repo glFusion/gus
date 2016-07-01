@@ -6,9 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -36,7 +34,6 @@ if (!defined ('GVERSION')) {
 global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/gus/gus.php';
-require_once $_CONF['path'].'plugins/gus/config.php';
 require_once $_CONF['path'].'plugins/gus/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
@@ -67,7 +64,7 @@ $INSTALL_plugin['gus'] = array(
     array('type' => 'sql', 'sql' => $_DATA['capture']),
     array('type' => 'sql', 'sql' => $_DATA['imported']),
 
-    array('type' => 'block', 'name' => 'gus_block', 'title' => DB_escapeString("Who's Online"),
+    array('type' => 'block', 'name' => 'gus_block', 'title' => "Who's Online",
           'phpblockfn' => 'phpblock_gusstats', 'block_type' => 'phpblock',
           'group_id' => 'admin_group_id'),
 );
@@ -99,6 +96,22 @@ function plugin_install_gus()
 }
 
 /**
+* Loads the configuration records for the Online Config Manager
+*
+* @return   boolean     true = proceed with install, false = an error occured
+*
+*/
+function plugin_load_configuration_gus()
+{
+    global $_CONF;
+
+    require_once $_CONF['path'].'plugins/gus/install_defaults.php';
+
+    return plugin_initconfig_gus();
+}
+
+
+/**
 * Automatic uninstall function for plugins
 *
 * @return   array
@@ -122,7 +135,8 @@ function plugin_autouninstall_gus ()
 						'gus_ignore_page',
 						'gus_ignore_ua',
 						'gus_ignore_host',
-						'gus_vars' ),
+						'gus_vars',
+        				'gus_ignore_referrer' ),
         /* give the full name of the group, as in the db */
         'groups' => array('Gus Admin'),
         /* give the full name of the feature, as in the db */

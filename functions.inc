@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common GUS functions                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -51,7 +51,26 @@ if ( file_exists( $langfile ) ) {
 }
 
 require_once $_CONF['path'].'plugins/gus/gus.php';
-require_once $_CONF['path'].'plugins/gus/config.php';
+
+$gus_config = config::get_instance();
+$_GUS_CONF = $gus_config->get_config('gus');
+
+// This the URL for the Whois lookup. This uses www.whois.sc
+$_GUS_Whois_URL_start = '<a href="'.$_GUS_CONF['whois_url'];
+$_GUS_Whois_URL_end = '" target="_blank">';
+$_GUS_IMG_name = "GUS48.png";
+$_GUS_IMG_small_name = "GUS24.png";
+$_GUS_anon_access = $_GUS_CONF['anon_access'];
+$_GUS_enable_main_menu_GUS = $_GUS_CONF['enable_main_menu_GUS'];
+$_GUS_enable_main_menu_privacy_policy = $_GUS_CONF['enable_main_menu_privacy_policy'];
+$_GUS_user = $_GUS_CONF['gus_user'];
+$_GUS_stats = $_GUS_CONF['gus_stats'];
+
+$_GUS_phplinks = 0;
+$_GUS_limit = 25;
+$_GUS_months = 4;
+$_GUS_days = 31;
+$_GUS_cache = true;
 
 ///////////////////////////////////////////////////////////////////
 ///  Set up config variables and call to add stats to database  //
@@ -507,6 +526,7 @@ function GUS_doUpgrades( $current_gus_version )
                 DB_query("ALTER TABLE {$_TABLES['gus_user_agents']} CHANGE `version` `version` VARCHAR(40) NULL DEFAULT NULL;",1);
 
             case '2.2.0' :
+            case '2.2.1' :
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
