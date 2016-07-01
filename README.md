@@ -41,98 +41,73 @@ Review the privacy policy. The installation also provides a privacy policy page.
 Configuration options are controlled in the glFusion Online configuration section under Command & Control.
 
 
-**host-lookup**
+**Hostname Lookup Method**
 :  The method to use for host name look up - can be 'host','nslookup', 'gethostbyaddr', or 'none'
 
-**host_lookup_timeout**
+**Timeout for Host Lookup**
 :	Sets the timeout for host name look up using 'host' or 'nslookup' [minimum 1 second]
 
-**SQL_use_TEMPORARY**
+**Use MySQL Temporary Tables**
 :	Set this to false if you know you cannot use temporary tables in your MySQL setup. If you aren't sure, then leave it set to true - everything will still work properly. This is only used as a slight optimization - it doesn't have to try to use TEMPORARY tables first.
 
-**show_left_blocks**
+**Show Navigation Blocks**
 :	Set these to show or hide the left and right blocks
 
-**show_right_blocks**
+**Show Extra Blocks**
 :	Right or left
 
-**allow_ignore_anonymous**
+**Ignore Non-Logged-in Users**
 :	Set this to true if you want to be able to ignore the user 'Anonymous' Leaving it false allows a slight optimization by eliminating a database look up.
 
-**hide_in_day_summary**
+**Referrers to hide from Daily Summary**
 : 	Set this to the referrers you DO NOT want to show up in the day summary. Note that the data is still collected, it is just not visible in the day summary.
 
-**GUS_Whois_URL_start**
-:	This the URL for the Whois lookup. This uses www.whois.sc If you have an alternate source of this information supply it here.
+### Who's Online Block Settings
 
-**GUS_Whois_URL_end**
-:	target="_blank"
+**Use User's Full Name**
+:   If set to true then the full name is displayed if available instead of username
 
-**anon_access**
+**Show Anonymous Users**
+:   If set to true, show only a count of users for Who's Online, Registered Users, and New Users to anon users
+
+**Show Online Users**
+:   If set to true, show a list of who's online
+
+**Show Bots**
+:   If set to true, then show bots as they access your site
+
+**Show Registered Users**
+:   If set to true, show Registered users
+
+**Show New Users**
+:   If set to true, show New users
+
+**Show Daily Totals**
+:   If set to true, show daily usage stats
+
+**Show Referrers**
+:   If set to true, show referrers
+
+**Referrers to Exclude**
+:   Set this to the referrers you DO NOT want to show up in the Who's Online block. Note that the data is still collected, it is just not visible in the block.
+
+**Max Referrers to Show**
+:   Maximum number of referrers to show
+
+### Permissions
+
+**Anonymous Access**
 :	Enable anonymous access to summary stats
 
-**enable_main_menu_GUS**
+**Add GUS to main menu**
 :	Show a link in the main menu if user has permission to access the stats
 
-**enable_main_menu_privacy_policy**
+**Enable Privacy Policy**
 :	Show a link to the privacy policy in the main menu
 
-**GUS_user**
-:	Set to 1 to enable user stats menu option in the 'User Functions' block
+**Enable GUS link on User Menu**
+:	Set to True to enable user stats menu option in the 'User Functions' block
 
-**GUS_stats**
-:	Set to 1 to extend the regular glFusion stats page to include 'Unique Visitors' and 'Registered Users'
+**Add GUS stats to site Statistics Page**
+:	Set to True to extend the regular glFusion stats page to include 'Unique Visitors' and 'Registered Users'
 
-**GUS_phplinks**
-:	Set to 1 to enable phplinks integration
-
-**GUS_limit**
-:	Limit on number of lines to display on certain stats reports
-
-
-// Number of months displayed on the index page
-$_GUS_months = 4;
-
-// Number of days on each page
-$_GUS_days = 31;
-
-// Enable the caching of stats
-$_GUS_cache = true;
-
-// The following variables allow custom configuration of WhosOnline Block.
-
-// If set to true then the full name is displayed if available instead of username
-$_GUS_CONF['wo_fullname'] = false;
-
-// If set to true, show only a count of users for Who's Online, Registered Users, and New Users to anon users
-$_GUS_CONF['wo_users_anonymous'] = true;
-
-// If set to true, show a list of who's online
-$_GUS_CONF['wo_online'] = true;
-
-// If set to true, then show bots as they access your site
-$_GUS_CONF['wo_show_bots'] = true;
-
-// If set to true, show Registered users
-$_GUS_CONF['wo_registered'] = true;
-
-// If set to true, show New users
-$_GUS_CONF['wo_new'] = true;
-
-// If set to true, show daily usage stats
-$_GUS_CONF['wo_daily'] = true;
-
-// If set to true, show referrers
-$_GUS_CONF['wo_refs'] = false;
-
-// Set this to the referrers you DO NOT want to show up in the Who's Online block.
-//	Note that the data is still collected, it is just not visible in the block.
-$_GUS_CONF['wo_hide_referrers'] = array(
-		$_CONF['site_url']
-	//	, 'http://images.google.com'	// hide all images.google.com referrers
-	//	, 'http://images.google.'		// hide all images.google.* referrers
-		 );
-
-// Maximum number of referrers to show
-$_GUS_CONF['wo_max_referrers'] = 100;
-?>
