@@ -107,10 +107,11 @@ if ((file_exists(GUS_cachefile())) && !$dc) {
 
     $num_pages = ceil($totalrows / $_GUS_limit);
 
-    if ( !isset( $_GET['page'] ) || empty( $_GET['page'] ) )
+    if ( !isset( $_GET['page'] ) || empty( $_GET['page'] ) ) {
       $curpage = 1;
-    else
+    } else {
       $curpage = COM_applyFilter($_GET['page'],true);
+    }
 
     settype( $curpage, 'integer' );
 
@@ -136,8 +137,8 @@ if ((file_exists(GUS_cachefile())) && !$dc) {
     $T->set_block('page','ROW','BBlock');
     $T->set_block('page','TABLE','ABlock');
 
-    $nav_down = "<br".XHTML."><img src=\"{$_CONF['site_url']}/gus/images/nav_down.gif\" width=\"13\" height=\"11\" alt=\"{$LANG_GUS00['sortDESC']}\" border=\"0\"".XHTML.">";
-    $nav_up = "<img src=\"{$_CONF['site_url']}/gus/images/nav_up.gif\" width=\"13\" height=\"11\" alt=\"{$LANG_GUS00['sortASC']}\" border=\"0\"".XHTML.">";
+    $nav_down = "<br><img src=\"{$_CONF['site_url']}/gus/images/nav_down.gif\" width=\"13\" height=\"11\" alt=\"{$LANG_GUS00['sortDESC']}\" border=\"0\">";
+    $nav_up = "<img src=\"{$_CONF['site_url']}/gus/images/nav_up.gif\" width=\"13\" height=\"11\" alt=\"{$LANG_GUS00['sortASC']}\" border=\"0\">";
 
     $T->set_var( 'colclass', 'col_right' );
     $T->set_var('data','<div align="center">' . $LANG_GUS00['page_views'] . '&nbsp;<a href="' . $header_url . 'sort=viewsDESC">' . $nav_down .'</a><a href="' . $header_url . 'sort=viewsASC">' . $nav_up . '</a></div>');
@@ -172,7 +173,7 @@ if ((file_exists(GUS_cachefile())) && !$dc) {
     	$T->set_var( 'colclass', 'col_right' );
         $T->set_var('data','<a href="' . $_CONF['site_url'] . '/gus/page.php?year=' . $year . '&amp;month=' . $month . '&amp;day=' . $day . '&amp;ip=' . $row['ip'] . '&amp;uid=' . $row['uid'] . '">' . $row['views'] . '</a>');
         $T->parse( 'CBlock', 'COLUMN', false );
-    	$T->set_var( 'colclass', 'col_left' );
+    	$T->set_var( 'colclass', 'uk-align-center' );
 
     	$the_data = GUS_template_get_user_data( $row['uid'], $row['username'] );
     	$T->set_var( 'data', $the_data );
