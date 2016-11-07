@@ -1,5 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
+v2.3.1
+  - Utilize uikit styles
+  - Modify index sizes
+
 v2.3.0
   - Moved to online configuration
   - Fixed uninstall error
