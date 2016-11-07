@@ -170,10 +170,10 @@ if ((file_exists(GUS_cachefile())) && !$dc) {
 
         $row = DB_fetchArray($rec);
 
-    	$T->set_var( 'colclass', 'col_right' );
+    	$T->set_var( 'colclass', 'uk-text-center' );
         $T->set_var('data','<a href="' . $_CONF['site_url'] . '/gus/page.php?year=' . $year . '&amp;month=' . $month . '&amp;day=' . $day . '&amp;ip=' . $row['ip'] . '&amp;uid=' . $row['uid'] . '">' . $row['views'] . '</a>');
         $T->parse( 'CBlock', 'COLUMN', false );
-    	$T->set_var( 'colclass', 'uk-align-center' );
+    	$T->set_var( 'colclass', 'uk-text-center' );
 
     	$the_data = GUS_template_get_user_data( $row['uid'], $row['username'] );
     	$T->set_var( 'data', $the_data );
@@ -182,14 +182,16 @@ if ((file_exists(GUS_cachefile())) && !$dc) {
         $ip = '';
 //        if ( $row['ip'] != $row['host'] )
 //   	      $ip = ' [' . $row['ip'] . ']';
+    	$T->set_var( 'colclass', 'uk-text-left' );
 
         $T->set_var('data','<a href="' . $_CONF['site_url'] . '/gus/ip.php?year=' . $year . '&amp;month=' . $month . '&amp;day=' . $day . '&amp;ip_addr=' . $row['ip'] . '&amp;uid=' . $row['uid'] . '">' . $row['host'] . '</a>' . $ip);
         $T->parse( 'CBlock', 'COLUMN', true );
-
+    	$T->set_var( 'colclass', 'uk-text-center' );
         $T->set_var( 'data', $row['date_formatted'] );
         $T->parse( 'CBlock', 'COLUMN', true );
 
     	$the_data = GUS_template_get_referrer_data( $row['referer'], true );
+    	$T->set_var( 'colclass', 'uk-text-left' );
     	$T->set_var( 'data', $the_data );
     	$T->parse( 'CBlock', 'COLUMN', true );
 
