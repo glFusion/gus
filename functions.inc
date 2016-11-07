@@ -558,7 +558,7 @@ function GUS_doUpgrades( $current_gus_version )
 
             case '2.3.' :
                 DB_query("ALTER TABLE {$_TABLES['gus_userstats']} DROP INDEX `refer`, ADD INDEX `refer` (`referer`(191));");
-                DB_query("ALTER TABLE {$_TABLES['gus_ignore_page']} DROP INDEX page, ADD index page (page(191));";
+                DB_query("ALTER TABLE {$_TABLES['gus_ignore_page']} DROP INDEX page, ADD index page (page(191));");
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
