@@ -53,10 +53,11 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_userstats']} (
   KEY uid (uid),
   KEY ip (ip),
   KEY page (page),
-  KEY refer (referer),
+  KEY refer (referer(191)),
   KEY ua_id (ua_id),
   KEY `date` (`date`)
-)";
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_user_agents'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_user_agents']} (
@@ -67,50 +68,58 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_user_agents']} (
   platform varchar(30) default NULL,
   PRIMARY KEY  (ua_id),
   UNIQUE KEY user_agent (user_agent)
-)";
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_ignore_ip'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_ip']} (
   ip varchar(20) NOT NULL default '0.0.0.0',
   PRIMARY KEY  (ip)
-)";
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_ignore_user'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_user']} (
   username varchar(16) NOT NULL default '',
-  PRIMARY KEY  (username)
-)";
+  PRIMARY KEY (username)
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_ignore_page'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_page']} (
   page varchar(255) NOT NULL default '',
-  PRIMARY KEY  (page)
-)";
+  PRIMARY KEY  (page(191))
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_ignore_ua'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_ua']} (
   ua varchar(128) NOT NULL default '',
   PRIMARY KEY (ua)
-)";
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_ignore_host'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_host']} (
   host varchar(128) NOT NULL default '',
   PRIMARY KEY (host)
-)";
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_ignore_referrer'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_referrer']} (
   referrer varchar(128) NOT NULL default '',
   PRIMARY KEY (referrer)
-)";
+) ENGINE=MyISAM
+";
 
 $_SQL['gus_vars'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_vars']} (
   name varchar(10) NOT NULL default '',
   `value` varchar(32) default '',
   PRIMARY KEY  (name)
-)";
+) ENGINE=MyISAM
+";
 
 if ( !isset($_GUS_VARS['remote_ip'])) $_GUS_VARS['remote_ip'] = $_SERVER['REMOTE_ADDR'];
 if ( !isset($_USER['uid'])) $_USER['uid'] = 2;
