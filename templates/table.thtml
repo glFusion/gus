@@ -1,9 +1,9 @@
 <!-- BEGIN TABLE -->
-<table cellspacing="0" cellpadding="5">
+<table class="uk-table uk-table-stripped">
 <!-- BEGIN ROW -->
-<tr class="{rowclass}">
+<tr>
 <!-- BEGIN COLUMN -->
-<td class="{colclass}">{starthref}{data}{endhref}</td>
+<td>{starthref}{data}{endhref}</td>
 <!-- END COLUMN -->
 </tr>
 <!-- END ROW -->
