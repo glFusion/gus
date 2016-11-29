@@ -1168,24 +1168,25 @@ function phpblock_gusstats()
                     $rec = DB_query( "SELECT uid, username, fullname, photo
                                 FROM {$_TABLES['users']}
                                 WHERE uid = '" . $row['uid'] . "' LIMIT 1" );
+                    if ( DB_numRows($rec) > 0 ) {
+                        $A = DB_fetchArray( $rec, false );
 
-                    $A = DB_fetchArray( $rec, false );
+                        $retval .= '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'] . '">';
 
-                    $retval .= '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'] . '">';
+                        if ( $_GUS_CONF['wo_fullname'] && !empty( $A['fullname'] ) )
+                            $retval .= $A['fullname'];
+                        else
+                            $retval .= $A['username'];
 
-                    if ( $_GUS_CONF['wo_fullname'] && !empty( $A['fullname'] ) )
-                        $retval .= $A['fullname'];
-                    else
-                        $retval .= $A['username'];
+                        $retval .= '</a>';
 
-                    $retval .= '</a>';
+                        if ( ($_CONF['allow_user_photo'] == 1) && !empty( $A['photo'] ) ) {
+                            $retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'] . '">';
+                            $retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
+                        }
 
-                    if ( ($_CONF['allow_user_photo'] == 1) && !empty( $A['photo'] ) ) {
-                        $retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid'] . '">';
-                        $retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
+                        $retval .= '<br/>';
                     }
-
-                    $retval .= '<br/>';
                 }
             }
         }
@@ -1206,21 +1207,23 @@ function phpblock_gusstats()
                 $retval .= $LANG_GUS_wo['new_users'] . ': ' . $num_new . '<br/>';
             } else {
                 while ( $row = DB_fetchArray( $result, false ) ) {
-                    $retval .= '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
+                    if (!empty($row['username'])) {
+                        $retval .= '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
 
-                    if ( $_GUS_CONF['wo_fullname'] && !empty( $row['fullname'] ) )
-                        $retval .= $row['fullname'];
-                    else
-                        $retval .= $row['username'];
+                        if ( $_GUS_CONF['wo_fullname'] && !empty( $row['fullname'] ) )
+                            $retval .= $row['fullname'];
+                        else
+                            $retval .= $row['username'];
 
-                    $retval .= '</a>';
+                        $retval .= '</a>';
 
-                    if ( ($_CONF['allow_user_photo'] == 1) && !empty( $row['photo'] ) ) {
-                        $retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
-                        $retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
+                        if ( ($_CONF['allow_user_photo'] == 1) && !empty( $row['photo'] ) ) {
+                            $retval .= '&nbsp;<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $row['uid'] . '">';
+                            $retval .= '<img src="' . $_CONF['site_url'] . '/gus/images/user_photo.gif" width="16" height="12" border="0" alt=""/></a>';
+                        }
+
+                        $retval .= '<br/>';
                     }
-
-                    $retval .= '<br/>';
                 }
             }
         }
