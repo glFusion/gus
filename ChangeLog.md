@@ -3,6 +3,7 @@ Please view this file on the master branch, on other branches it's out of date.
 v2.3.1
   - Utilize uikit styles
   - Modify index sizes
+  - Improved layout of stats block when users have been deleted
 
 v2.3.0
   - Moved to online configuration
