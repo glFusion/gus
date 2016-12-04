@@ -1,9 +1,8 @@
 ## GUS Plugin for glFusion
-**Version: 2.3.0**
 
 For the latest documentation, please see
 
-http://www.glfusion.org/wiki/doku.php?id=gus:start
+https://www.glfusion.org/wiki/glfusion:plugins:gus:start
 
 ### LICENSE
 
@@ -17,7 +16,7 @@ The glFusion Usage Stats [GUS] plugin collects statistics on who visits your sit
 
 GUS has the following system requirements:
 
-* PHP 5.3.0 and higher.
+* PHP 5.3.3 and higher.
 * glFusion v1.5.0 or newer.  This version does not work on older versions of glFusion.
 
 ### INSTALLATION
