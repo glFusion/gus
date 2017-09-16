@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table cellspacing="0" cellpadding="5">
 <tr style="text-align: right;" class="header">
 	<td>{month_title}</td>
@@ -43,3 +44,4 @@
 	<td>{platform}</td>
 </tr>
 </table>
+{# end {templatelocation} #}

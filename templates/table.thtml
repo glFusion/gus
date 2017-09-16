@@ -1,11 +1,15 @@
-<!-- BEGIN TABLE -->
-<table class="uk-table uk-table-stripped">
-<!-- BEGIN ROW -->
-<tr>
-<!-- BEGIN COLUMN -->
-<td>{starthref}{data}{endhref}</td>
-<!-- END COLUMN -->
-</tr>
-<!-- END ROW -->
-</table>
-<!-- END TABLE -->
+{# begin {templatelocation} #}
+<div class="uk-overflow-container">
+  <!-- BEGIN TABLE -->
+  <table class="uk-table uk-table-stripped">
+    <!-- BEGIN ROW -->
+    <tr>
+      <!-- BEGIN COLUMN -->
+      <td class="uk-truncate">{starthref}{data}{endhref}</td>
+      <!-- END COLUMN -->
+    </tr>
+    <!-- END ROW -->
+  </table>
+  <!-- END TABLE -->
+</div>
+{# end {templatelocation} #}

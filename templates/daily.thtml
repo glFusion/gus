@@ -1,4 +1,6 @@
-<table cellspacing="0" cellpadding="5">
+{# begin {templatelocation} #}
+<div class="uk-overflow-container">
+<table class="uk-table uk-table-stripped">
 <tr style="text-align: right;" class="header">
 	<td>{period_title}</td>
 	<td>{anon_title}</td>
@@ -28,3 +30,5 @@
 	<td>{linksf}</td>
 </tr>
 </table>
+</div>
+{# end {templatelocation} #}
