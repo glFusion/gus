@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common GUS functions                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -267,7 +267,8 @@ function ip_to_hostname( $ip )
             break;
 
         default:
-            COM_errorLog( "Invalid setting for 'host_lookup' in config.php [{$_GUS_CONF['host_lookup']}]" );
+            return( @gethostbyaddr( $ip ) );
+//            COM_errorLog( "Invalid setting for 'host_lookup' in configuration [{$_GUS_CONF['host_lookup']}]" );
             break;
     }
 
@@ -319,7 +320,7 @@ function plugin_getheadercode_gus()
     $stylesheet = $_CONF['site_url'] . '/gus/' . $css_file;
     $outputHandle->addLinkStyle($stylesheet,HEADER_PRIO_NORMAL,'text/css');
 
-    if ( strpos( $_SERVER['SCRIPT_NAME'], 'admin/plugins/gus/index.php' ) )
+    if ( strpos( $_SERVER['SCRIPT_NAME'], 'plugins/gus/index.php' ) )
         $outputHandle->addLinkScript('./Tab.js',HEADER_PRIO_NORMAL,'text/javascript');
 
     return;
@@ -559,6 +560,9 @@ function GUS_doUpgrades( $current_gus_version )
             case '2.3.0' :
                 DB_query("ALTER TABLE {$_TABLES['gus_userstats']} DROP INDEX `refer`, ADD INDEX `refer` (`referer`(191));");
                 DB_query("ALTER TABLE {$_TABLES['gus_ignore_page']} DROP PRIMARY KEY, ADD PRIMARY KEY (`page`(191));");
+
+			case '2.3.1' :
+				// no db or config changes
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
@@ -985,6 +989,17 @@ function phpblock_gusstats()
         }
     }
 
+	$adminurl = $_CONF['site_admin_url'];
+	if (strrpos ($adminurl, '/') == strlen ($adminurl)) {
+		$adminurl = substr ($adminurl, 0, -1);
+	}
+	$pos = strrpos ($adminurl, '/');
+	if ($pos === false) {
+		$adminPath = 'admin';
+	} else {
+		$adminPath = substr ($adminurl, $pos + 1);
+	}
+
     // Code adapted from whose online block
     $expire_time = time() - $_CONF['whosonline_threshold'];
     if ( $_GUS_CONF['wo_fullname'] )
@@ -1261,7 +1276,7 @@ function phpblock_gusstats()
 
                 if ( $host != '' && $host != $_GUS_VARS['parsed_site_url']['host'] ) {
                     $ref["$host"] += 1;
-                    $refurl["$host"] = htmlentities( preg_replace( '/admin\/plugins.*$/', '', $referrer, 1 ) );
+                    $refurl["$host"] = htmlentities( preg_replace( '/'.$adminPath.'\/plugins.*$/', '', $referrer, 1 ) );
                 }
             }
         }

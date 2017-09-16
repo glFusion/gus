@@ -1,3 +1,7 @@
+## v2.3.2
+  - Improved support for alternate admin directory
+  - Fixed installation issue due to missing global $_CONF
+
 ## v2.3.1
   - Utilize uikit styles
   - Modify index sizes
