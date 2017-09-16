@@ -44,6 +44,8 @@ if (!defined ('GVERSION')) {
 */
 function plugin_initconfig_gus()
 {
+    global $_CONF;
+
     $c = config::get_instance();
 
     // Subgroup: Gus
