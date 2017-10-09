@@ -1,3 +1,6 @@
+## v2.3.3
+  - Fixed issue where unbanning IP did not work from IP view
+
 ## v2.3.2
   - Improved support for alternate admin directory
   - Fixed installation issue due to missing global $_CONF

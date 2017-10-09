@@ -5,7 +5,7 @@
 // | ip.php                                                                   |
 // | Displays statistics on IPs                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,7 +40,6 @@ require_once './include/sql.inc';
 require_once './include/util.inc';
 
 $gus_ip_collect_data = isset( $_POST['gus_ip_collect_data'] ) ? COM_applyFilter( $_POST['gus_ip_collect_data'] ) : '';
-$gus_ip_ban = isset( $_POST['gus_ip_ban'] ) ? COM_applyFilter( $_POST['gus_ip_ban']) : 0;
 
 $sort = isset( $_GET['sort'] ) ? COM_applyFilter( $_GET['sort'] ) : '';
 $ip_addr = isset( $_GET['ip_addr'] ) ? COM_applyFilter( $_GET['ip_addr'] ) : '';
@@ -51,14 +50,14 @@ if ( $gus_ip_collect_data == '0' )
 else if ( $gus_ip_collect_data == '1' )
 	DB_query( "DELETE FROM {$_TABLES['gus_ignore_ip']} WHERE ip = '$ip_addr' LIMIT 1", 1 );
 
-
-
-if ( $gus_ip_ban == '0' && function_exists('bb2_ban_remove') ) {
-    bb2_ban_remove($ip_addr);
-} elseif ( $gus_ip_ban == '1' && function_exists('bb2_ban') ) {
-    bb2_ban($ip_addr,0);
+if ( isset($_POST['banmode'])) {
+    $gus_ip_ban = isset( $_POST['gus_ip_ban'] ) ? COM_applyFilter( $_POST['gus_ip_ban']) : 0;
+    if ( $gus_ip_ban == '0' && function_exists('bb2_ban_remove') ) {
+        bb2_ban_remove($ip_addr);
+    } elseif ( $gus_ip_ban == '1' && function_exists('bb2_ban') ) {
+        bb2_ban($ip_addr,0);
+    }
 }
-
 // main SQL query
 $date_compare = GUS_get_date_comparison( 'date', $year, $month, $day );
 $date_format = ($day == 0) ? 'CONCAT( DATE_FORMAT( date, \'%d %b - \' ), TIME_FORMAT( time, \'%H:%i\' ) )' : 'TIME_FORMAT( time, \'%H:%i\' )';
@@ -149,14 +148,14 @@ if (function_exists('bb2_ban')) {
     if ($banned) {
 		$data .= '<td><span style="font-weight: bold;">on</span></td>';
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
-		$data .= "<input type=\"submit\" value=\"Turn Off\"".XHTML.">";
-		$data .= "<input type=\"hidden\" value=\"0\" name=\"gus_ip_ban\"".XHTML.">";
+		$data .= "<input type=\"submit\" name=\"banmode\" value=\"Turn Off\">";
+		$data .= "<input type=\"hidden\" value=\"0\" name=\"gus_ip_ban\">";
 		$data .= '</form></td>';
 	} else {
 		$data .= '<td><span style="font-weight: bold;">off</span></td>';
 		$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
-		$data .= "<input type=\"submit\" value=\"Turn On\"".XHTML.">";
-		$data .= "<input type=\"hidden\" value=\"1\" name=\"gus_ip_ban\"".XHTML.">";
+		$data .= "<input type=\"submit\" name=\"banmode\" value=\"Turn On\">";
+		$data .= "<input type=\"hidden\" value=\"1\" name=\"gus_ip_ban\">";
 		$data .= '</form></td>';
 	}
 } else {
