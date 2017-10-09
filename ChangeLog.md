@@ -1,5 +1,6 @@
 ## v2.3.3
   - Fixed issue where unbanning IP did not work from IP view
+  - Fixed SQL error when generating temporary tables
 
 ## v2.3.2
   - Improved support for alternate admin directory

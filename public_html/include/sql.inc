@@ -42,8 +42,9 @@ function GUS_create_temp_userstats_table( $year, $month )
 
 	$Ym_date_format = "$year-" . ($month < 10 ? '0' : '' ) . $month;
 
+    $selDate = $Ym_date_format . '-01';
 	$table = GUS_create_temp_table( $tmp_name, "SELECT * FROM {$_TABLES['gus_userstats']}
-		WHERE date LIKE '{$Ym_date_format}%'" );
+		WHERE Month(date) = Month('{$selDate}') AND Year(date) = Year('{$selDate}')" );
 
 	return $table;
 }
