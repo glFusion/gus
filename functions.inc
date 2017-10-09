@@ -564,6 +564,10 @@ function GUS_doUpgrades( $current_gus_version )
 			case '2.3.1' :
 				// no db or config changes
 
+		    case '2.3.2' :
+		        // no db or config changes
+
+
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
                 $done = true;
