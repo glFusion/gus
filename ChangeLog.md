@@ -1,4 +1,7 @@
 ## v2.3.3
+  - Additional SQL updates to better handle date ranges
+  - Fixed error where GUS block not removed on uninstall
+  - GUS block now toggles based on enabling / disabing the plugin
   - Fixed issue where unbanning IP did not work from IP view
   - Fixed SQL error when generating temporary tables
 
