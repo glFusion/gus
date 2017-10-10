@@ -108,6 +108,7 @@ $_COUNTRIES = array (
     'ER' => 'Eritrea',
     'ES' => 'Spain',
     'ET' => 'Ethiopia',
+    'EU' => 'Europe',
     'FI' => 'Finland',
     'FJ' => 'Fiji',
     'FK' => 'Falkland Islands (Malvinas)',
@@ -224,6 +225,7 @@ $_COUNTRIES = array (
     'QA' => 'Qatar',
     'RE' => 'Reunion',
     'RO' => 'Romania',
+    'RS' => 'Serbia',
     'RU' => 'Russian Federation',
     'RW' => 'Rwanda',
     'SA' => 'Saudi Arabia',
@@ -391,7 +393,8 @@ if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
         $T->parse('CBlock','COLUMN',true);
 
     	$T->set_var( 'colclass', 'col_left' );
-        $T->set_var('data',$_COUNTRIES[strtoupper($ctry)]);
+    	$country_code = isset($_COUNTRIES[strtoupper($ctry)]) ? $_COUNTRIES[strtoupper($ctry)] : 'N/A';
+        $T->set_var('data',$country_code);
         $T->parse('CBlock','COLUMN',true);
 
         $T->parse('BBlock','ROW',true);
