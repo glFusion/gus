@@ -142,7 +142,7 @@ function plugin_autouninstall_gus ()
         /* give the full name of the feature, as in the db */
         'features' => array('gus.admin','gus_view'),
         /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_gusstats'),
+        'php_blocks' => array('gus_block'),
         /* give all vars with their name */
         'vars'=> array()
     );
