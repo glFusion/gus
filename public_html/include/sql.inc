@@ -92,16 +92,31 @@ function GUS_get_date_comparison( $field, $year, $month, $day = '' )
 {
 	global	$_GUS_VARS;
 
+	$Ym_date_format = "$year";
 
-	$date_formatted = "$year-";
+	if ( $month && ($month != 0) ) {
+		$Ym_date_format.= '-'.($month < 10 ? '0' : '' ) . $month;
+	} else {
+	    $Ym_date_format .= '-' . date('M');
+	}
 
-	if ( $month && ($month != 0) )
-		$date_formatted .= ($month < 10 ? '0' : '' ) . $month;
+	if ( $day && ($day != 0) ) {
+		$Ym_date_format .= '-' . ($day < 10 ? '0' : '' ) . $day;
+	} else {
+	    $Ym_date_format .= '-' . '01';
+	}
 
-	if ( $day && ($day != 0) )
-		$date_formatted .= '-' . ($day < 10 ? '0' : '' ) . $day;
+    $retval = " Year({$field}) = Year('{$Ym_date_format}') ";
 
-	return "$field LIKE '{$date_formatted}%'";
+    if ( $month && ($month != 0 )) {
+        $retval .= " AND Month(".$field.") = Month('{$Ym_date_format}') ";
+    }
+
+    if ( $day && ($day != 0 ) ) {
+        $retval .= " AND Day({$field}) = Day('{$Ym_date_format}') ";
+    }
+
+    return $retval;
 }
 
 function GUS_get_order_by( $sort )
