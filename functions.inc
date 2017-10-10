@@ -428,6 +428,21 @@ function plugin_getuseroption_gus()
     }
 }
 
+function plugin_enablestatechange_gus( $enable )
+{
+    global $_TABLES;
+
+    if ( $enable == FALSE ) {
+        DB_query("UPDATE {$_TABLES['blocks']} SET is_enabled=0 WHERE name='gus_block'",1);
+    } else {
+        DB_query("UPDATE {$_TABLES['blocks']} SET is_enabled=1 WHERE name='gus_block'",1);
+    }
+
+    return 1;
+
+}
+
+
 // upgrade to this version of GUS
 function plugin_upgrade_gus()
 {
