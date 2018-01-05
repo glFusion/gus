@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common GUS functions                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1346,4 +1346,26 @@ function GUS_create_url( $ignore )
 
     return htmlentities( $retval );
 }
+
+if ( !function_exists('match_cidr')) {
+    function match_cidr($addr, $cidr) {
+    	$output = false;
+
+    	if (is_array($cidr)) {
+    		foreach ($cidr as $cidrlet) {
+    			if (match_cidr($addr, $cidrlet)) {
+    				$output = true;
+    				break;
+    			}
+    		}
+    	} else {
+    		@list($ip, $mask) = explode('/', $cidr);
+    		if (!$mask) $mask = 32;
+    		$mask = pow(2,32) - pow(2, (32 - $mask));
+    		$output = ((ip2long($addr) & $mask) == (ip2long($ip) & $mask));
+    	}
+    	return $output;
+    }
+}
+
 ?>

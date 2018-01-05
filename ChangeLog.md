@@ -1,3 +1,6 @@
+## 2.3.4
+  - Fixed dependency issue on Bad Behavior plugin
+
 ## v2.3.3
   - Additional SQL updates to better handle date ranges
   - Fixed error where GUS block not removed on uninstall
