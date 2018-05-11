@@ -1,3 +1,10 @@
+## 2.4.0
+  - Support Privacy Plugin data export
+  - Allow user to opt-in / opt-out of statistics collection
+  - Purge user's data on delete
+  - Fixed size of 'version' column in user agent table
+  - Fixed size of username column to match glFusion username length
+
 ## 2.3.4
   - Fixed dependency issue on Bad Behavior plugin
 

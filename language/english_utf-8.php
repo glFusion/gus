@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file (UTF-8)                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -100,7 +100,9 @@ $LANG_GUS00 = array (
 	'install_header'	=> 'Install GUS',
 	'sortDESC'			=> 'Sort descending order',
 	'sortASC'			=> 'Sort ascending order',
-	'import_header'     => 'GUS Import Data'
+	'import_header'     => 'GUS Import Data',
+	'allow_usage_tracking' => 'Allow Usage Tracking',
+	'tracking_help'     => 'This site collects usage statistics consisting of username, IP address, page visited and date / time. By checking the Allow Usage Tracking checkbox, you grant permission to collect this data when logged into the site.',
 );
 
 // Admin and user block entries
@@ -226,6 +228,8 @@ $LANG_confignames['gus'] = array(
     'enable_main_menu_privacy_policy' => 'Enable Privacy Policy',
     'gus_user'              => 'Enable GUS link on User Menu',
     'gus_stats'             => 'Add GUS stats to site Statistics Page',
+    'registration_opt_in'   => 'Require Opt-In on Registration screen to collect statistics',
+    'profile_opt_in'        => 'Allow user to opt-out of stats collection in My Account',
 );
 
 $LANG_configsubgroups['gus'] = array(

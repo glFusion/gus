@@ -91,7 +91,9 @@ $LANG_GUS00 = array (
 	'install_header'	=> 'GUS - Installation',
 	'sortDESC'			=> 'Absteigend sortieren',
 	'sortASC'			=> 'Aufsteigend sortieren',
-	'import_header'     => 'GUS Daten importieren'
+	'import_header'     => 'GUS Daten importieren',
+	'allow_usage_tracking' => 'Allow Usage Tracking',
+	'tracking_help'     => 'This site collects usage statistics consisting of username, IP address, page visited and date / time. By checking the Allow Usage Tracking checkbox, you grant permission to collect this data when logged into the site.',
 );
 
 // Admin and user block entries
@@ -219,6 +221,8 @@ $LANG_confignames['gus'] = array(
     'enable_main_menu_privacy_policy' => 'Enable Privacy Policy',
     'gus_user'              => 'Enable GUS link on User Menu',
     'gus_stats'             => 'Add GUS stats to site Statistics Page',
+    'registration_opt_in'   => 'Require Opt-In on Registration screen to collect statistics',
+    'profile_opt_in'        => 'Allow user to opt-out of stats collection in My Account',
 );
 
 $LANG_configsubgroups['gus'] = array(

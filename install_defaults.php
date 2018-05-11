@@ -8,7 +8,7 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -51,6 +51,10 @@ function plugin_initconfig_gus()
     // Subgroup: Gus
     $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'gus');
     $c->add('gus_options', NULL, 'fieldset', 0, 0, NULL, 0, TRUE, 'gus');
+
+    $c->add('registration_opt_in',1,'select', 0, 0, 0, 5, true, 'gus');
+    $c->add('profile_opt_in',1,'select', 0, 0, 0, 7, true, 'gus');
+
     $c->add('host_lookup','gethostbyaddr','select', 0, 0, 2, 10, true, 'gus');
     $c->add('host_lookup_timeout', '1', 'text', 0, 0, 0, 20, true, 'gus');
     $c->add('SQL_use_TEMPORARY', 1, 'select', 0, 0, 0, 30, true, 'gus');

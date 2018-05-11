@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Contains all the SQL necessary to install the GUS plugin                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_userstats']} (
   ip varchar(20) default '0.0.0.0',
   host varchar(75) default '',
   page varchar(50) default '',
-  username varchar(16) default '',
+  username varchar(48) default '',
   referer varchar(255) default '',
   request varchar(10) default '',
   query_string varchar(255) default '',
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_user_agents']} (
   ua_id smallint(5) unsigned NOT NULL auto_increment,
   user_agent varchar(128) default NULL,
   browser varchar(20) default NULL,
-  version varchar(10) default NULL,
+  version varchar(40) default NULL,
   platform varchar(30) default NULL,
   PRIMARY KEY  (ua_id),
   UNIQUE KEY user_agent (user_agent)
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_ip']} (
 
 $_SQL['gus_ignore_user'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_user']} (
-  username varchar(16) NOT NULL default '',
+  username varchar(48) NOT NULL default '',
   PRIMARY KEY (username)
 ) ENGINE=MyISAM
 ";

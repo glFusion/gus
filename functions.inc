@@ -80,7 +80,7 @@ GUS();
 
 function GUS()
 {
-    global $_GUS_VARS, $_GUS_CONF, $_USER, $_TABLES, $_CONF;
+    global $_GUS_VARS, $_GUS_CONF, $_USER, $_TABLES, $_CONF, $REMOTE_ADDR;
 
     $_GUS_VARS = array();
 
@@ -96,8 +96,11 @@ function GUS()
         $_GUS_VARS['parsed_site_url'] = parse_url( $_CONF['site_url'] );
 
         if ( $_GUS_VARS['capture'] == '1' ) {
-            // First check the IP...
-            $_GUS_VARS['remote_ip'] = GetIP( $_SERVER['REMOTE_ADDR'] );
+            if ( version_compare(GVERSION,'1.7.4','<')) {
+                $_GUS_VARS['remote_ip'] = GetIP( $REMOTE_ADDR );
+            } else {
+                $_GUS_VARS['remote_ip'] = GetIP( $_SERVER['REAL_ADDR'] );
+            }
 
             $rec = DB_query("SELECT EXISTS(SELECT 1
                             FROM {$_TABLES['gus_ignore_ip']}
@@ -414,9 +417,9 @@ function plugin_getadminoption_gus()
 */
 function plugin_getuseroption_gus()
 {
-    global $LANG_GUS_blocks, $_CONF, $_GUS_user;
+    global $LANG_GUS_blocks, $_CONF, $_GUS_user, $_GUS_VARS;
 
-    if ( SEC_hasRights( 'gus.view' ) && ($_GUS_user == 1) ) {
+    if ( $_GUS_VARS['capture'] == '1' && SEC_hasRights( 'gus.view' ) && ($_GUS_user == 1) ) {
         $title = $LANG_GUS_blocks['user_menu_title'];
 
         // Micro-hack:
@@ -582,6 +585,16 @@ function GUS_doUpgrades( $current_gus_version )
 		    case '2.3.2' :
 		        // no db or config changes
 
+            case '2.3.3' :
+
+            case '2.3.4' :
+                $c = config::get_instance();
+                $c->add('registration_opt_in',1,'select', 0, 0, 0, 5, true, 'gus');
+                $c->add('profile_opt_in',1,'select', 0, 0, 0, 7, true, 'gus');
+
+                DB_query("ALTER TABLE {$_TABLES['gus_user_agents']} CHANGE `version` `version` VARCHAR(40) NULL DEFAULT NULL;",1);
+                DB_query("ALTER TABLE {$_TABLES['gus_userstats']} CHANGE `username` `username` VARCHAR(48) NOT NULL DEFAULT '';",1);
+                DB_query("ALTER TABLE {$_TABLES['gus_ignore_user']} CHANGE `username` `username` VARCHAR(48) NOT NULL DEFAULT '';",1);
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
@@ -1368,4 +1381,177 @@ if ( !function_exists('match_cidr')) {
     }
 }
 
+function plugin_privacy_export_gusXX($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('uid','ip','host','page','username','date','time');
+
+    $sql = "SELECT * FROM {$_TABLES['gus_userstats']} WHERE uid = ". (int) $uid;
+/*
+    if ( $ip != '' ) {
+        $sql .= " OR (ip = '" . DB_escapeString($ip)."' AND uid = 1) ";
+    }
+*/
+    $sql .= " ORDER BY date ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<usage_stats>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<access>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</access>\n";
+    }
+    $retval .= "</usage_stats>\n";
+
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
+    return $retval;
+}
+
+/**
+* Called if admin deletes a user - Removes any moderator records for user
+*/
+function plugin_user_delete_gus ($uid)
+{
+    global $_TABLES;
+
+    $username = DB_getItem($_TABLES['users'], "username", "uid=".(int) $uid);
+
+    DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE uid=".(int) $uid);
+    DB_query("DELETE FROM {$_TABLES['gus_ignore_user']} WHERE username ='".DB_escapeString($username)."'");
+}
+
+function plugin_profileedit_gus($uid,$panel,$fieldset)
+{
+    global $_CONF, $_TABLES, $_USER, $_GUS_CONF, $_GUS_VARS, $LANG_GUS00;
+
+    $retval = '';
+
+    switch ($panel) {
+        case 'privacy' :
+            switch ($fieldset) {
+                case 'privacy' :
+                    if (isset($_GUS_CONF['profile_opt_in']) && $_GUS_CONF['profile_opt_in'] != 1 ) return $retval;
+                    if ( $_GUS_VARS['capture'] != '1' ) {
+                        return $retval;
+                    }
+                    $ignored = false;
+                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore_user']} WHERE username='".DB_escapeString($_USER['username'])."'");
+                    $nrows = DB_numRows($result);
+                    if ($nrows > 0) {
+                        $ignored = true;
+                    }
+                    $T = new Template($_CONF['path'].'plugins/gus/templates/');
+                    $T->set_file (array ('privacy'=>'gus_profile_privacy.thtml'));
+                    $T->set_var(array(
+                        'lang_gustrack'     => $LANG_GUS00['allow_usage_tracking'],
+                        'lang_help'         => $LANG_GUS00['tracking_help'],
+                    ));
+                    $T->parse ('output', 'privacy');
+                    $retval .= $T->finish ($T->get_var('output'));
+                    break;
+            }
+            break;
+
+        default :
+            $retval = '';
+            break;
+    }
+    return $retval;
+}
+
+function plugin_profilesave_gus( $uid = 0 )
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        return;
+    }
+
+    if ( $uid == 0 ) $uid = $_USER['uid'];
+
+    if ( isset($_POST['gustrack']) && $_POST['gustrack'] == 'on') {
+        $track = 1;
+    } else {
+        $track = 0;
+    }
+
+    if ( $track == 0 ) {
+        DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($_USER['username'])."'");
+        DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE username='".DB_escapeString($_USER['username'])."'",1);
+    } else {
+        DB_delete($_TABLES['gus_ignore_user'],'username',DB_escapeString($_USER['username']));
+    }
+}
+
+/**
+ * Privacy controls at account creation
+ *
+ * @return  string   formatted HTML for display
+ */
+function plugin_templatesetvars_gus($templatename, $template)
+{
+    global $_CONF, $_GUS_CONF, $_GUS_VARS, $_TABLES, $LANG_GUS00;
+
+    if ( $templatename != 'registration' ) return;
+    if ( $_GUS_CONF['registration_opt_in'] != 1 ) return;
+
+    $retval = '';
+
+    switch ($templatename) {
+        case 'registration' :
+            if ( $_GUS_VARS['capture'] != '1' ) {
+                return $retval;
+            }
+            $ignored = true;
+            $T = new Template($_CONF['path'].'plugins/gus/templates/');
+            $T->set_file (array ('privacy'=>'gus_profile_privacy.thtml'));
+            $T->set_var(array(
+                'lang_gustrack'     => $LANG_GUS00['allow_usage_tracking'],
+                'lang_help'         => $LANG_GUS00['tracking_help'],
+                'gustrack_checked'  => !$ignored ? ' checked="checked"' : '',
+            ));
+            $T->parse ('output', 'privacy');
+            $retval .= $T->finish ($T->get_var('output'));
+
+            $template->set_var('plugin_fields', $retval);
+
+            break;
+    }
+}
+
+function plugin_user_create_gus($uid)
+{
+    global $_CONF, $_TABLES, $_GUS_CONF, $_GUS_VARS;
+
+    if ( $_GUS_CONF['registration_opt_in'] != 1 ) return;
+
+    if ( $_GUS_VARS['capture'] != '1' ) {
+        return;
+    }
+    if ( isset($_POST['gustrack']) && $_POST['gustrack'] == 'on') {
+        $track = 1;
+    } else {
+        $track = 0;
+    }
+
+    if ( $track == 0 ) {
+        $username = DB_getItem($_TABLES['users'],'username','uid='.(int)$uid);
+        if ( $username != '' && $username != null ) {
+            DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($username)."'");
+        }
+    }
+}
 ?>
