@@ -39,74 +39,79 @@ Review the privacy policy. The installation also provides a privacy policy page.
 
 Configuration options are controlled in the glFusion Online configuration section under Command & Control.
 
+**Require Opt-In on Registration screen to collect statistics**
+If set to **True**, places a checkbox and description of usage stats collection on the registration screen requiring the new user to opt-in to stats collection. If they do not check the box, no stats will be collected while they are logged into the site.
+
+**Allow user to opt-out of stats collection in My Account**
+If set to **True**, a Allow Usage Stats item will appear on the user's Privacy panel under My Account, allowing them to opt-out or opt-in to stats collection.
 
 **Hostname Lookup Method**
-:  The method to use for host name look up - can be 'host','nslookup', 'gethostbyaddr', or 'none'
+The method to use for host name look up - can be 'host','nslookup', 'gethostbyaddr', or 'none'
 
 **Timeout for Host Lookup**
-:	Sets the timeout for host name look up using 'host' or 'nslookup' [minimum 1 second]
+Sets the timeout for host name look up using 'host' or 'nslookup' [minimum 1 second]
 
 **Use MySQL Temporary Tables**
-:	Set this to false if you know you cannot use temporary tables in your MySQL setup. If you aren't sure, then leave it set to true - everything will still work properly. This is only used as a slight optimization - it doesn't have to try to use TEMPORARY tables first.
+Set this to false if you know you cannot use temporary tables in your MySQL setup. If you aren't sure, then leave it set to true - everything will still work properly. This is only used as a slight optimization - it doesn't have to try to use TEMPORARY tables first.
 
 **Show Navigation Blocks**
-:	Set these to show or hide the left and right blocks
+Set these to show or hide the left and right blocks
 
 **Show Extra Blocks**
-:	Right or left
+Right or left
 
 **Ignore Non-Logged-in Users**
-:	Set this to true if you want to be able to ignore the user 'Anonymous' Leaving it false allows a slight optimization by eliminating a database look up.
+Set this to true if you want to be able to ignore the user 'Anonymous' Leaving it false allows a slight optimization by eliminating a database look up.
 
 **Referrers to hide from Daily Summary**
-: 	Set this to the referrers you DO NOT want to show up in the day summary. Note that the data is still collected, it is just not visible in the day summary.
+Set this to the referrers you DO NOT want to show up in the day summary. Note that the data is still collected, it is just not visible in the day summary.
 
 ### Who's Online Block Settings
 
 **Use User's Full Name**
-:   If set to true then the full name is displayed if available instead of username
+If set to true then the full name is displayed if available instead of username
 
 **Show Anonymous Users**
-:   If set to true, show only a count of users for Who's Online, Registered Users, and New Users to anon users
+If set to true, show only a count of users for Who's Online, Registered Users, and New Users to anon users
 
 **Show Online Users**
-:   If set to true, show a list of who's online
+If set to true, show a list of who's online
 
 **Show Bots**
-:   If set to true, then show bots as they access your site
+If set to true, then show bots as they access your site
 
 **Show Registered Users**
-:   If set to true, show Registered users
+If set to true, show Registered users
 
 **Show New Users**
-:   If set to true, show New users
+If set to true, show New users
 
 **Show Daily Totals**
-:   If set to true, show daily usage stats
+If set to true, show daily usage stats
 
 **Show Referrers**
-:   If set to true, show referrers
+If set to true, show referrers
 
 **Referrers to Exclude**
-:   Set this to the referrers you DO NOT want to show up in the Who's Online block. Note that the data is still collected, it is just not visible in the block.
+Set this to the referrers you DO NOT want to show up in the Who's Online block. Note that the data is still collected, it is just not visible in the block.
 
 **Max Referrers to Show**
-:   Maximum number of referrers to show
+Maximum number of referrers to show
 
 ### Permissions
 
 **Anonymous Access**
-:	Enable anonymous access to summary stats
+Enable anonymous access to summary stats
 
 **Add GUS to main menu**
-:	Show a link in the main menu if user has permission to access the stats
+Show a link in the main menu if user has permission to access the stats
 
 **Enable Privacy Policy**
-:	Show a link to the privacy policy in the main menu
+Show a link to the privacy policy in the main menu
 
 **Enable GUS link on User Menu**
-:	Set to True to enable user stats menu option in the 'User Functions' block
+Set to True to enable user stats menu option in the 'User Functions' block
 
 **Add GUS stats to site Statistics Page**
-:	Set to True to extend the regular glFusion stats page to include 'Unique Visitors' and 'Registered Users'
+Set to True to extend the regular glFusion stats page to include 'Unique Visitors' and 'Registered Users'
 
