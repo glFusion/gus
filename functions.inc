@@ -1447,8 +1447,9 @@ function plugin_profileedit_gus($uid,$panel,$fieldset)
                     if ( $_GUS_VARS['capture'] != '1' ) {
                         return $retval;
                     }
+                    $username = DB_getItem($_TABLES['users'],'username','uid = ' . (int) $uid);
                     $ignored = false;
-                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore_user']} WHERE username='".DB_escapeString($_USER['username'])."'");
+                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore_user']} WHERE username='".DB_escapeString($username)."'");
                     $nrows = DB_numRows($result);
                     if ($nrows > 0) {
                         $ignored = true;
@@ -1458,6 +1459,7 @@ function plugin_profileedit_gus($uid,$panel,$fieldset)
                     $T->set_var(array(
                         'lang_gustrack'     => $LANG_GUS00['allow_usage_tracking'],
                         'lang_help'         => $LANG_GUS00['tracking_help'],
+                        'gustrack_checked'  => $ignored ? '' : ' checked="checked"',
                     ));
                     $T->parse ('output', 'privacy');
                     $retval .= $T->finish ($T->get_var('output'));
@@ -1488,11 +1490,14 @@ function plugin_profilesave_gus( $uid = 0 )
         $track = 0;
     }
 
+    $username = DB_getItem($_TABLES['users'],'username','uid = ' . (int) $uid);
+    if ( $username == '' || $username == null ) return;
+
     if ( $track == 0 ) {
-        DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($_USER['username'])."'");
-        DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE username='".DB_escapeString($_USER['username'])."'",1);
+        DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($username)."'");
+        DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE username='".DB_escapeString($username)."'",1);
     } else {
-        DB_delete($_TABLES['gus_ignore_user'],'username',DB_escapeString($_USER['username']));
+        DB_delete($_TABLES['gus_ignore_user'],'username',DB_escapeString($username));
     }
 }
 
