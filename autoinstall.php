@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -142,7 +142,7 @@ function plugin_autouninstall_gus ()
         /* give the full name of the feature, as in the db */
         'features' => array('gus.admin','gus_view'),
         /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('gus_block'),
+        'php_blocks' => array('phpblock_gusstats'),
         /* give all vars with their name */
         'vars'=> array()
     );
