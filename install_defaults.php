@@ -60,7 +60,7 @@ function plugin_initconfig_gus()
     $c->add('SQL_use_TEMPORARY', 1, 'select', 0, 0, 0, 30, true, 'gus');
     $c->add('show_left_blocks', 0, 'select', 0, 0, 0, 40, true, 'gus');
     $c->add('show_right_blocks',0, 'select', 0, 0, 0, 50, true, 'gus');
-    $c->add('allow_ignore_anonymous',0,'select', 0, 0, 0, 60, true, 'gus');
+    $c->add('allow_ignore_anonymous',1,'select', 0, 0, 0, 60, true, 'gus');
     $c->add('hide_in_day_summary',array($_CONF['site_url']),'%text',0,0,0,70,true,'gus');
     $c->add('whois_url', 'http://www.whois.sc/', 'text', 0, 0, 0, 80, true, 'gus');
     $c->add('gus_wo', NULL, 'fieldset', 0, 1, NULL, 0, true, 'gus');
