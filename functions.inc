@@ -60,7 +60,7 @@ $_GUS_IMG_name = "GUS48.png";
 $_GUS_IMG_small_name = "GUS24.png";
 $_GUS_anon_access = $_GUS_CONF['anon_access'];
 $_GUS_enable_main_menu_GUS = $_GUS_CONF['enable_main_menu_GUS'];
-$_GUS_enable_main_menu_privacy_policy = $_GUS_CONF['enable_main_menu_privacy_policy'];
+//$_GUS_enable_main_menu_privacy_policy = $_GUS_CONF['enable_main_menu_privacy_policy'];
 $_GUS_user = $_GUS_CONF['gus_user'];
 $_GUS_stats = $_GUS_CONF['gus_stats'];
 
@@ -338,18 +338,13 @@ function plugin_getheadercode_gus()
 */
 function plugin_getmenuitems_gus()
 {
-    global $_CONF, $LANG_GUS00, $_GUS_anon_access, $_GUS_enable_main_menu_GUS, $_GUS_enable_main_menu_privacy_policy;
+    global $_CONF, $LANG_GUS00, $_GUS_anon_access, $_GUS_enable_main_menu_GUS;
 
     $menuitems = array();
 
     if ( $_GUS_enable_main_menu_GUS && ($_GUS_anon_access || SEC_hasRights( 'gus.view' )) ) {
         $tmp = $LANG_GUS00['main_menu_title'];
         $menuitems["$tmp"] = $_CONF['site_url'] . '/gus/index.php';
-    }
-
-    if ( $_GUS_enable_main_menu_privacy_policy == 1 ) {
-        $tmp = $LANG_GUS00['priv_pol'];
-        $menuitems["$tmp"] = $_CONF['site_url'] . '/gus/privpol.php';
     }
 
     return $menuitems;
@@ -571,7 +566,7 @@ function GUS_doUpgrades( $current_gus_version )
                 $c->add('gus_access', NULL, 'fieldset', 0, 3, NULL, 0, true, 'gus');
                 $c->add('anon_access', '0', 'select', 0, 3, 0, 10, true, 'gus');
                 $c->add('enable_main_menu_GUS', '0', 'select', 0, 3, 0, 30, true, 'gus');
-                $c->add('enable_main_menu_privacy_policy', '0', 'select', 0, 3, 0, 40, true, 'gus');
+//                $c->add('enable_main_menu_privacy_policy', '0', 'select', 0, 3, 0, 40, true, 'gus');
                 $c->add('gus_user', '1', 'select', 0, 3, 0, 50, true, 'gus');
                 $c->add('gus_stats', '0', 'select', 0, 3, 0, 60, true, 'gus');
 
@@ -588,6 +583,7 @@ function GUS_doUpgrades( $current_gus_version )
             case '2.3.3' :
 
             case '2.3.4' :
+            case '2.3.5' :
                 $c = config::get_instance();
                 $c->add('registration_opt_in',1,'select', 0, 0, 0, 5, true, 'gus');
                 $c->add('profile_opt_in',1,'select', 0, 0, 0, 7, true, 'gus');
@@ -595,6 +591,8 @@ function GUS_doUpgrades( $current_gus_version )
                 DB_query("ALTER TABLE {$_TABLES['gus_user_agents']} CHANGE `version` `version` VARCHAR(40) NULL DEFAULT NULL;",1);
                 DB_query("ALTER TABLE {$_TABLES['gus_userstats']} CHANGE `username` `username` VARCHAR(48) NOT NULL DEFAULT '';",1);
                 DB_query("ALTER TABLE {$_TABLES['gus_ignore_user']} CHANGE `username` `username` VARCHAR(48) NOT NULL DEFAULT '';",1);
+
+                $c->del('enable_main_menu_privacy_policy','gus');
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];

@@ -77,7 +77,7 @@ function plugin_initconfig_gus()
     $c->add('gus_access', NULL, 'fieldset', 0, 3, NULL, 0, true, 'gus');
     $c->add('anon_access', '0', 'select', 0, 3, 0, 10, true, 'gus');
     $c->add('enable_main_menu_GUS', '0', 'select', 0, 3, 0, 30, true, 'gus');
-    $c->add('enable_main_menu_privacy_policy', '0', 'select', 0, 3, 0, 40, true, 'gus');
+//    $c->add('enable_main_menu_privacy_policy', '0', 'select', 0, 3, 0, 40, true, 'gus');
     $c->add('gus_user', '1', 'select', 0, 3, 0, 50, true, 'gus');
     $c->add('gus_stats', '0', 'select', 0, 3, 0, 60, true, 'gus');
 

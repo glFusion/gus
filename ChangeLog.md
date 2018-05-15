@@ -1,4 +1,5 @@
 ## 2.4.0
+  - Removed duplicate link to privacy policy
   - Support Privacy Plugin data export
   - Allow user to opt-in / opt-out of statistics collection
   - Purge user's data on delete
