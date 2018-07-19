@@ -41,11 +41,12 @@ if ( !GUS_HasAccess() )
 require_once './include/sql.inc';
 require_once './include/util.inc';
 
-if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
-	$day    = date( 'j' );
+$dt = new \Date('now',$_CONF['timezone']);
 
+if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
+    $day   = $dt->format('j',true);
 	$sort_sep = '?';
 }
 
@@ -53,7 +54,7 @@ if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
 * Main Function
 */
 // Check for cached file
-if((file_exists(GUS_cachefile())) && (date("Yn") != $year . $month)) {
+if((file_exists(GUS_cachefile())) && ($dt->format("Yn",true) != $year . $month)) {
     $display = GUS_getcache();
 } else {
     // no cached version found - generate page
@@ -83,7 +84,7 @@ if((file_exists(GUS_cachefile())) && (date("Yn") != $year . $month)) {
     $comments=0;
     $linksf=0;
 
-    $days = Date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
+    $days = $dt->format( 't', true );
 
     // special case for this month - don't show days in the future
     $today = getdate();
@@ -104,12 +105,17 @@ if((file_exists(GUS_cachefile())) && (date("Yn") != $year . $month)) {
 
     $temp_table = GUS_create_temp_userstats_table( $year, $month );
 
+    $dtTitle = new \Date('now',$_CONF['timezone']);
+
     for($day=1;$day<=$days;$day++)
     {
         if ( ($day > (($curpage - 1) * $_GUS_days)) && ($day <= ($curpage * $_GUS_days)) )
         {
-            $day_of_week = Date( 'l', mktime( 0, 0, 0, $month, $day, $year ) );
-            $date_formatted = Date( 'l d', mktime( 0, 0, 0, $month, $day, $year ) );
+
+            $dtTitle->setDateTimestamp ( $year,$month,$day,0,0,0 );
+
+            $day_of_week = $dtTitle->format( 'l', true );
+            $date_formatted = $dtTitle->format( 'l d', true );
             $T->set_var( 'day_display', $date_formatted );
 
             $T->set_var( 'day', $day );
@@ -167,7 +173,7 @@ if((file_exists(GUS_cachefile())) && (date("Yn") != $year . $month)) {
     $T->set_var('linksf',$linksf);
     $T->set_var('google_paging',$navlinks);
 
-    $title = Date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['daily_title'];
+    $title = $dt->format( 'F Y - ', true ) . $LANG_GUS00['daily_title'];
 
     $display = GUS_template_finish( $T, $title );
 

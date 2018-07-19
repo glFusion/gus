@@ -42,20 +42,22 @@ if ( !GUS_HasAccess() )
 require_once './include/sql.inc';
 require_once './include/util.inc';
 
+$dt = new \Date('now',$_CONF['timezone']);
+
 /*
 * Main Function
 */
 // check for cached file
 if ($day == '' || $day == 0) {
-    $today = date("nY");
+    $today = $dt->format("nY",true);
 } else {
-    $today = date("jnY");
+    $today = $dt->format("jnY",true);
 }
 
 if ( $day == 0 || $day == '') {
-    $dc = (date("nY") == $month . $year);
+    $dc = ($dt->format("nY",true) == $month . $year);
 } else {
-    $dc = (date("jnY") == $day . $month . $year);
+    $dc = ($dt->format("jnY",true) == $day . $month . $year);
 }
 
 
@@ -125,9 +127,9 @@ for ($i=0; $i<$nrows; $i++)
 $T->parse( 'ABlock', 'TABLE', true );
 
 if ( $day != '' )
-    $title = Date( 'l, j F, Y - ', mktime( 0, 0, 0, $month, $day, $year ) ) . $LANG_GUS00['new_stories'];
+    $title = $dt->format( 'l, j F, Y - ', true ) . $LANG_GUS00['new_stories'];
 else
-    $title = Date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['new_stories'];
+    $title = $dt->format( 'F Y - ', true ) . $LANG_GUS00['new_stories'];
 
 $display = GUS_template_finish( $T, $title );
 

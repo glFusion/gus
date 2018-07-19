@@ -673,7 +673,7 @@ if ( $counts['list_len'] )
 }
 
 // show our tabbed Ignore pages
-$display .= '<script type="text/javascript">';
+$display .= '<script>';
 $display .= "
 	var ts = new tabstrip();
 	new tab( ts, 11, \"{$titles['user']}\", '" . str_replace( "/", "\/", $i_user ) . "' );

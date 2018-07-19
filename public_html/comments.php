@@ -45,14 +45,15 @@ require_once './include/util.inc';
 /*
 * Main Function
 */
+$dt = new \Date('now',$_CONF['timezone']);
 
 if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
-	$day    = date( 'j' );
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
+    $day   = $dt->format('j',true);
 }
 
-$today = date("nY");
+$today = $dt->format("nY",true);
 
 if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     $display = GUS_getcache();
@@ -117,9 +118,9 @@ if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     $T->Parse('ABlock','TABLE',true);
 
     if ( $day != '' )
-        $title = Date( 'l, j F, Y - ', mktime( 0, 0, 0, $month, $day, $year ) ) . $LANG_GUS00['new_comments'];
+        $title = $dt->format( 'l, j F, Y - ', true ) . $LANG_GUS00['new_comments'];
     else
-        $title = Date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['new_comments'];
+        $title = $dt->format( 'F Y - ', true ) . $LANG_GUS00['new_comments'];
 
     $display = GUS_template_finish( $T, $title );
 

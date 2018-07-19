@@ -42,6 +42,7 @@ if ( !GUS_HasAccess( false ) )
 require_once './include/sql.inc';
 require_once './include/util.inc';
 
+$dt = new \Date('now',$_CONF['timezone']);
 
 // limit rows to display in reports
 // this should be set in config.php
@@ -68,15 +69,15 @@ $sort = isset( $_GET['sort'] ) ? COM_applyFilter($_GET['sort']) : '';
 // IF nothing is set
 //	THEN use today
 if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
+	$year   = $dt->format( 'Y',true );
+	$month  = $dt->format('n', true );
 }
 
 // check for cached file
 if ($day == 0)
-    $today = date("nY");
+    $today = $dt->format("nY",true);
 else
-    $today = date("jnY");
+    $today = $dt->format("jnY",true);
 
 if ((file_exists(GUS_cachefile())) && ($today != $day . $month . $year)) {
     $display = GUS_getcache();
@@ -211,9 +212,9 @@ if ((file_exists(GUS_cachefile())) && ($today != $day . $month . $year)) {
     $T->set_var('google_paging',$navlinks);
 
     if ( $day != '' )
-        $date_formatted = Date( 'l, j F, Y - ', mktime( 0, 0, 0, $month, $day, $year ) );
+        $date_formatted = $dt->format( 'l, j F, Y - ', true );
     else
-        $date_formatted = Date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) );
+        $date_formatted = $dt->format( 'F Y - ', true );
 
     $ip_str = ( $ip != '' ) ? "$ip,&nbsp;" : '';
 

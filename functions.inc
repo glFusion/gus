@@ -84,6 +84,7 @@ function GUS()
 
     $_GUS_VARS = array();
 
+// cache this...
     $rec = DB_query( "SELECT * FROM {$_TABLES['gus_vars']}", 1 );
 
     if ( DB_numRows( $rec ) > 0 ) {
@@ -101,7 +102,7 @@ function GUS()
             } else {
                 $_GUS_VARS['remote_ip'] = GetIP( $_SERVER['REAL_ADDR'] );
             }
-
+// Query 1
             $rec = DB_query("SELECT EXISTS(SELECT 1
                             FROM {$_TABLES['gus_ignore_ip']}
                             WHERE '{$_GUS_VARS['remote_ip']}' LIKE ip
@@ -115,7 +116,7 @@ function GUS()
 
             // Next check the hostname...
             $host_name = ip_to_hostname( $_GUS_VARS['remote_ip'] );
-
+// Query 2
             $rec = DB_query("SELECT EXISTS(SELECT 1
                             FROM {$_TABLES['gus_ignore_host']}
                             WHERE '{$host_name}' LIKE host
@@ -138,6 +139,7 @@ function GUS()
                 if ( strncmp( $page, $_GUS_VARS['parsed_site_url']['path'], $len ) == 0 )
                     $page = substr( $page, $len + 1 );
             }
+// query 3
             $rec = DB_query("SELECT EXISTS(SELECT 1
                                 FROM {$_TABLES['gus_ignore_page']}
                                 WHERE '".DB_escapeString($page)."' LIKE page
@@ -163,6 +165,7 @@ function GUS()
             }
 
             if ( $check_user ) {
+// query 4
                 $rec = DB_query( "SELECT EXISTS(SELECT 1
                                     FROM {$_TABLES['gus_ignore_user']}
                                     WHERE '{$user_name}' LIKE username
@@ -173,7 +176,7 @@ function GUS()
                     return;
                 }
             }
-
+// query 5
             // check user agent
             $user_agent = DB_escapeString( substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 ) );
             $rec = DB_query( "SELECT EXISTS(SELECT 1
@@ -190,6 +193,7 @@ function GUS()
             // check the referrer
             if ( isset( $_SERVER['HTTP_REFERER'] ) && ( $_SERVER['HTTP_REFERER'] != '' ) ) {
                 $referrer = $_SERVER['HTTP_REFERER'];
+// query 6
                 $rec = DB_query( "SELECT EXISTS(SELECT 1
                                     FROM {$_TABLES['gus_ignore_referrer']}
                                     WHERE '".DB_escapeString($referrer)."' LIKE referrer
@@ -271,7 +275,6 @@ function ip_to_hostname( $ip )
 
         default:
             return( @gethostbyaddr( $ip ) );
-//            COM_errorLog( "Invalid setting for 'host_lookup' in configuration [{$_GUS_CONF['host_lookup']}]" );
             break;
     }
 
@@ -416,10 +419,6 @@ function plugin_getuseroption_gus()
 
     if ( $_GUS_VARS['capture'] == '1' && SEC_hasRights( 'gus.view' ) && ($_GUS_user == 1) ) {
         $title = $LANG_GUS_blocks['user_menu_title'];
-
-        // Micro-hack:
-        //  We're only supposed to return one thing, but we close the anchor and open another
-        //  in order to return two...
         $title .= '</a> <a href="' . $_CONF['site_url'] . '/gus/day.php' . '">[' . $LANG_GUS_blocks['today'] . ']';
 
         return array( $title, $_CONF['site_url'] . '/gus/index.php?page=latest', 0 );
@@ -437,7 +436,6 @@ function plugin_enablestatechange_gus( $enable )
     }
 
     return 1;
-
 }
 
 
@@ -566,7 +564,6 @@ function GUS_doUpgrades( $current_gus_version )
                 $c->add('gus_access', NULL, 'fieldset', 0, 3, NULL, 0, true, 'gus');
                 $c->add('anon_access', '0', 'select', 0, 3, 0, 10, true, 'gus');
                 $c->add('enable_main_menu_GUS', '0', 'select', 0, 3, 0, 30, true, 'gus');
-//                $c->add('enable_main_menu_privacy_policy', '0', 'select', 0, 3, 0, 40, true, 'gus');
                 $c->add('gus_user', '1', 'select', 0, 3, 0, 50, true, 'gus');
                 $c->add('gus_stats', '0', 'select', 0, 3, 0, 60, true, 'gus');
 
@@ -593,6 +590,9 @@ function GUS_doUpgrades( $current_gus_version )
                 DB_query("ALTER TABLE {$_TABLES['gus_ignore_user']} CHANGE `username` `username` VARCHAR(48) NOT NULL DEFAULT '';",1);
 
                 $c->del('enable_main_menu_privacy_policy','gus');
+
+            case '2.4.0' :
+                // no db or config changes
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
@@ -629,246 +629,22 @@ function GUS_getEncodedURL( $url )
 */
 function GUS_getBrowser( $UA )
 {
+    global $_CONF;
+    require_once $_CONF['path'].'plugins/gus/BrowserDetection.php';
+
+    $b = new BrowserDetection();
+
     $browser = array();
 
-    if ( preg_match("@opera[ /]([0-9]{1,2}.[0-9]{1,3}){0,1}@i",$UA,$match) )
-    {
-        $browser['type'] = "Opera";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@(Edge)/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = $match[1];
-        $browser['ver'] = $match[2];
-    }
-    elseif ( preg_match("@(Chrome)/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = $match[1];
-        $browser['ver'] = $match[2];
-    }
-    elseif ( preg_match("@Trident/7.+ rv:([^\)]+)\)@i",$UA,$match) )
-    {
-        $browser['type'] = "MSIE";
-        $browser['ver'] = $match[1];
-    }
-    elseif (preg_match("@iPhone +OS +([1-9]_[1-9]_[1-9])@i", $UA,$match) )
-    {
-        $browser['type'] = 'iPhone';
-        $browser['ver']  = str_replace('_','.',$match[1]);
-    }
-    elseif (preg_match("@iPad +OS +([1-9]_[1-9]_[1-9])@i", $UA,$match) )
-    {
-        $browser['type'] = 'iPad';
-        $browser['ver']  = str_replace('_','.',$match[1]);
-    }
-    elseif ( preg_match("@(Safari|Camino|Firefox|Firebird)/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = $match[1];
-        $browser['ver'] = $match[2];
-    }
-    elseif ( preg_match("@konqueror/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = "Konqueror";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@lynx/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = "Lynx";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@links \(([0-9]{1,2}.[0-9]{1,3})@i",$UA,$match) )
-    {
-        $browser['type'] = "Links";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@msie ([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = "MSIE";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@(Googlebot)/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = $match[1];
-        $browser['ver'] = $match[2];
-    }
-    elseif ( preg_match("@^Mozilla/5.0 \(compatible; bingbot@i",$UA,$match) )
-    {
-        $browser['type'] = "BingBot";
-        $browser['ver'] = '2.0';
-    }
-    elseif ( preg_match("@^Mozilla/5.0 \(compatible; Baiduspider@i",$UA,$match) )
-    {
-        $browser['type'] = "Baiduspider";
-        $browser['ver'] = '2.0';
-    }
-    elseif ( preg_match("@^Mozilla/5.0 \(compatible; Yahoo\! Slurp;@i",$UA,$match) )
-    {
-        $browser['type'] = "Yahoo! Slurp";
-        $browser['ver'] = '1.0';
-    }
-    elseif ( preg_match("@netscape6/(6.[0-9]{1,3})@i",$UA,$match) )
-    {
-        $browser['type'] = "Netscape";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@netscape/(7.[0-9]{1,3})@i",$UA,$match) )
-    {
-        $browser['type'] = "Netscape";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@^mozilla/5.+ rv:([^\)]+)\)@i",$UA,$match) )
-    {
-        $browser['type'] = "Mozilla";
-        $browser['ver'] = $match[1];
-    }
-    elseif ( preg_match("@^mozilla/([\.\+[:digit:]]+)@i",$UA,$match) )
-    {
-        $browser['type'] = "Netscape";
-        $browser['ver'] = $match[1];
-    }
-    elseif (preg_match("@^Jigsaw/([^ ]+)@i", $UA, $match))
-    {
-        $browser['type'] = "W3C CSS Validator";
-        $browser['ver'] = $match[1];
-    }
-    elseif (stripos($UA, 'w3m') !== FALSE)
-    {
-        $browser['type'] = "w3m";
-        $browser['ver'] = "Unknown";
-    }
-    elseif (preg_match("@^([^/]+)/([\.[:digit:]]+)@i", $UA, $match))
-    {
-        $browser['type'] = strtr( $match[1], '_', ' ' );
-        $browser['ver'] = $match[2];
-    }
-    else
-    {
-        $browser['type'] = "Unknown";
-        $browser['ver'] = "Unknown";
+    $browser['type'] = $b->getName();
+    $browser['ver'] = $b->getVersion();
+//    $browser['platform'] = $b->getPlatform();
+    $browser['platform'] = $b->getPlatformVersion();
+    if ( $browser['platform'] == 'unknown' ) {
+        $browser['platform'] = $b->getPlatform();
     }
 
     return $browser;
-}
-
-/*
-* Return Computer Type
-*/
-function GUS_getComputerType( $UA )
-{
-    if (preg_match("@android@i",$UA) )
-    {
-        $return = "Android";
-    }
-    if (preg_match("@linux@i",$UA) )
-    {
-        $return = "Linux";
-    }
-    elseif (preg_match("@win32@i",$UA) )
-    {
-        $return = "Windows";
-    }
-    elseif (preg_match("@win ?9x@i",$UA) )
-    {
-        $return = "Windows 9x";
-    }
-    elseif (preg_match("@Windows XP@i",$UA) )
-    {
-        $return = "Windows XP";
-    }
-    elseif (preg_match("@(winnt)([0-9]{1,2}.[0-9]{1,2}){0,1}@i", $UA, $match))
-    {
-        if ($match[2] == '5.1') $return = "Windows XP";
-        elseif ($match[2] == '5.0') $return = "Windows 2000";
-        elseif ($match[2] == '5.2') $return = "Windows 2003";
-        elseif ($match[2] == '6.0') $return = "Windows Vista";
-        elseif ($match[2] == '6.1') $return = "Windows 7";
-        elseif ($match[2] == '6.2') $return = "Windows 8.0";
-        elseif ($match[2] == '6.3') $return = "Windows 8.1";
-        elseif ($match[2] == '10.0') $return = "Windows 10";
-        else $return = "Windows NT $match[2]";
-    }
-    elseif (preg_match("@(windows nt) {0,1}([0-9]{1,2}.[0-9]{1,2}){0,1}@i", $UA, $match))
-    {
-        if ($match[2] == '5.1') $return = "Windows XP";
-        elseif ($match[2] == '5.0') $return = "Windows 2000";
-        elseif ($match[2] == '5.2') $return = "Windows 2003";
-        elseif ($match[2] == '6.0') $return = "Windows Vista";
-        elseif ($match[2] == '6.1') $return = "Windows 7";
-        elseif ($match[2] == '6.2') $return = "Windows 8";
-        elseif ($match[2] == '6.3') $return = "Windows 8.1";
-        elseif ($match[2] == '10.0') $return = "Windows 10";
-        else $return = "Windows NT $match[2]";
-    }
-    elseif (preg_match("@like Mac OS X@i", $UA))
-    {
-        $return = "iOS";
-    }
-    elseif (preg_match("@mac os x@i", $UA))
-    {
-        $return = "Mac OS X";
-    }
-    elseif (stripos($UA, 'mac') !== FALSE)
-    {
-        $return = "MacOS";
-    }
-    elseif (stripos($UA, 'darwin') !== FALSE)
-    {
-        $return = "Darwin";
-    }
-    elseif (preg_match("@(sunos) ([0-9]{1,2}.[0-9]{1,2}){0,1}@i", $UA, $match))
-    {
-        $return = "SunOS $match[2]";
-    }
-    elseif (preg_match("@(beos) r([0-9]{1,2}.[0-9]{1,2}){0,1}@i", $UA, $match))
-    {
-        $return = "BeOS $match[2]";
-    }
-    elseif (stripos($UA, 'freebsd') !== FALSE)
-    {
-        $return = "FreeBSD";
-    }
-    elseif (stripos($UA, 'openbsd') !== FALSE)
-    {
-        $return = "OpenBSD";
-    }
-    elseif (stripos($UA, 'irix') !== FALSE)
-    {
-        $return = "IRIX";
-    }
-    elseif (stripos($UA, 'os/2') !== FALSE)
-    {
-        $return = "OS/2";
-    }
-    elseif (stripos($UA, 'plan9') !== FALSE)
-    {
-        $return = "Plan9";
-    }
-    elseif ((stripos($UA, 'unix') !== FALSE) OR (stripos($UA, 'hp-ux') !== FALSE))
-    {
-        $return = "Unix";
-    }
-    elseif (stripos($UA, 'osf') !== FALSE)
-    {
-        $return = "OSF";
-    }
-    elseif (stripos($UA, 'Symbian') !== FALSE)
-    {
-        $return = "SymbianOS";
-    }
-    elseif (stripos($UA, 'WebTV') !== FALSE)
-    {
-        $return = "WebTV";
-    }
-    elseif (preg_match("@(bot|Slurp|larbin|Jeeves|Spider)@i", $UA))
-    {
-        $return = "[Robot]";
-    }
-    else
-    {
-        $return = "Unknown";
-    }
-
-    return $return;
 }
 
 
@@ -877,7 +653,7 @@ function GUS_getComputerType( $UA )
 */
 function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
 {
-    global $_TABLES, $_GUS_VARS, $QUERY_STRING;
+    global $_CONF, $_TABLES, $_GUS_VARS, $QUERY_STRING;
 
     $sql = "SELECT ua_id FROM {$_TABLES['gus_user_agents']} WHERE user_agent = '{$user_agent}' LIMIT 1";
     $res = DB_query( $sql );
@@ -887,13 +663,12 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
     } else {
 
 		$browser  = GUS_getBrowser( $_SERVER['HTTP_USER_AGENT'] );
-		$platform = GUS_getComputerType( $_SERVER['HTTP_USER_AGENT'] );
 
         $sql = "INSERT INTO {$_TABLES['gus_user_agents']} SET
-            user_agent = '". DB_escapeString($user_agent) . "',
-            browser = '" . DB_escapeString($browser['type']) . "',
-            version = '" . DB_escapeString($browser['ver']) . "',
-            platform = '" . DB_escapeString($platform) . "'";
+                user_agent = '". DB_escapeString($user_agent) . "',
+                browser = '" . DB_escapeString($browser['type']) . "',
+                version = '" . DB_escapeString($browser['ver']) . "',
+                platform = '" . DB_escapeString($browser['platform']) . "'";
 
         $res = DB_query( $sql,1 );
 
@@ -920,13 +695,15 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
     if ( isset( $_SERVER['HTTP_REFERER'] ) && ( $_SERVER['HTTP_REFERER'] != '' ) )
         $referrer = urlencode( DB_escapeString( $_SERVER['HTTP_REFERER'] ) );
 
+    $dt = new \Date('now',$_CONF['timezone']);
+
     $sql = "INSERT INTO " . $_TABLES['gus_userstats'] . " SET"
         . " uid='" . $user_id
         . "', username='" . $user_name
         . "', ip='" . $_GUS_VARS['remote_ip']
         . "', host='" . $host_name
-        . "', date='" . date( "Y-m-d" )
-        . "', time='" . date( "G:i:s" )
+        . "', date='" . $dt->format("Y-m-d",true)
+        . "', time='" . $dt->format("G:i:s",true)
         . "', referer='" . $referrer
         . "', query_string='" . $query_string
         . "', request='" . DB_escapeString($_SERVER['REQUEST_METHOD'])
@@ -1187,17 +964,20 @@ function phpblock_gusstats()
                     <td style=\"white-space:nowrap;\">{$LANG_GUS_wo['stats']}</td>
                     <td width='60%'><hr/></td></tr></table>";
 
-        $result = DB_query( "SELECT COUNT(*) AS pages FROM {$_TABLES['gus_userstats']} WHERE date = CURRENT_DATE()" );
+        $dt = new Date('now',$_CONF['timezone']);
+        $current_date = $dt->format("Y-m-d",true);
+
+        $result = DB_query( "SELECT COUNT(*) AS pages FROM {$_TABLES['gus_userstats']} WHERE date = '".$current_date."'" );
         $row = DB_fetchArray( $result, false );
         $retval .= $row['pages'] . ' ' . $LANG_GUS_wo['page_title'] . '<br/>';
 
-        $result = DB_query( "SELECT COUNT( DISTINCT ip ) AS visitors FROM {$_TABLES['gus_userstats']} WHERE date = CURRENT_DATE()" );
+        $result = DB_query( "SELECT COUNT( DISTINCT ip ) AS visitors FROM {$_TABLES['gus_userstats']} WHERE date = '".$current_date."'" );
         $row = DB_fetchArray( $result, false );
         $retval .= $row['visitors'] . ' ' . $LANG_GUS_wo['unique_visitors'] . '<br/>';
     }
 
     if ( $_GUS_CONF['wo_registered'] ) {
-        $result = DB_query( "SELECT DISTINCT uid FROM {$_TABLES['gus_userstats']} WHERE uid > 1 AND date = CURRENT_DATE()" );
+        $result = DB_query( "SELECT DISTINCT uid FROM {$_TABLES['gus_userstats']} WHERE uid > 1 AND date = '".$current_date."'" );
 
         $num_reg = DB_numRows( $result );
 
@@ -1239,7 +1019,7 @@ function phpblock_gusstats()
 
     if ( $_GUS_CONF['wo_new'] ) {
         $result = DB_query( "SELECT uid, username, fullname, photo FROM {$_TABLES['users']}
-                                WHERE regdate >= DATE_SUB( CURRENT_DATE(), INTERVAL 1 DAY )" );
+                                WHERE regdate >= DATE_SUB( '".$current_date."', INTERVAL 1 DAY )" );
 
         $num_new = DB_numRows( $result );
 
@@ -1285,8 +1065,7 @@ function phpblock_gusstats()
 
         $result = DB_query( "SELECT referer FROM {$_TABLES['gus_userstats']}
                             WHERE referer <> ''
-                                AND date = CURRENT_DATE()
-                                $likeClause" );
+                                AND date = '".$current_date."' $likeClause" );
 
         $header_output = false;
         while ( $row = DB_fetchArray( $result, false ) ) {
@@ -1412,7 +1191,7 @@ function plugin_privacy_export_gusXX($uid,$email='',$username='',$ip='')
     $retval .= "</usage_stats>\n";
 
     if ( function_exists('tidy_repair_string')) {
-        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+        $retval = tidy_repair_string($retval, array('input-xml' => 1));
     }
 
     return $retval;

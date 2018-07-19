@@ -45,9 +45,11 @@ require_once './include/util.inc';
 * Main Function
 */
 
+$dt = new \Date('now',$_CONF['timezone']);
+
 if ( ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
 }
 
 // check for cached file
@@ -111,7 +113,7 @@ if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     }
     $T->Parse( 'ABlock', 'TABLE', true );
 
-    $title = Date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['views_per_hour'];
+    $title = $dt->format( 'F Y - ', true ) . $LANG_GUS00['views_per_hour'];
 
     $display = GUS_template_finish( $T, $title );
 

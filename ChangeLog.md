@@ -1,3 +1,8 @@
+## 2.4.1
+  - Improved browser and OS detection
+  - Improved date handling to now use the system's configured timezone for all date / time references
+  - Fixed a PHP v5.3 compatibility issue
+
 ## 2.4.0
   - Removed duplicate link to privacy policy
   - Support Privacy Plugin data export

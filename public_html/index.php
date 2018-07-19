@@ -5,7 +5,7 @@
 // | index.php                                                                |
 // | Main index page for GUS public interface                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -49,28 +49,26 @@ $rec = DB_query( "SELECT DISTINCT YEAR( date ) AS year,
 		MONTH( date ) AS month,
 		DATE_FORMAT( date, '%b %Y' ) AS display_month
 		FROM {$_TABLES['gus_userstats']} ORDER BY date" );
-
 $rnum       = DB_numRows($rec);
 $GUS_MONTHS = array();
 $num_pages  = ceil( $rnum / $_GUS_months );
 
-if ( !isset( $_GET['page'] ) || empty( $_GET['page'] ) )
+if ( !isset( $_GET['page'] ) || empty( $_GET['page'] ) ) {
     $curpage = 1;
-else if ( $_GET['page'] == 'latest' )
+} else if ( $_GET['page'] == 'latest' ) {
 	$curpage = $num_pages;
-else
+} else {
     $curpage = COM_applyFilter($_GET['page'],true);
+}
 
 settype( $curpage, 'integer' );
 
 $base_url = GUS_create_url( 'page' );
 $navlinks = COM_printPageNavigation( $base_url, $curpage, $num_pages );
 
-for ( $i = 0; $i < $rnum; $i++ )
-{
+for ( $i = 0; $i < $rnum; $i++ ) {
     $A = DB_fetchArray($rec);
-    if (($i >= (($curpage - 1) * $_GUS_months)) && ($i < ($curpage * $_GUS_months)))
-	{
+    if (($i >= (($curpage - 1) * $_GUS_months)) && ($i < ($curpage * $_GUS_months))) {
 		$GUS_MONTHS[] = $A;
     }
 }
@@ -116,8 +114,7 @@ if (($curpage != $num_pages) && (file_exists(GUS_cachefile()))) {
     $countries=0;
     $rowNum = 1;
 
-    foreach ( $GUS_MONTHS as $res )
-    {
+    foreach ( $GUS_MONTHS as $res ) {
         $T->set_var( 'display_month', $res['display_month'] );
         $T->set_var( 'year', $res['year'] );
         $T->set_var( 'month', $res['month'] );
@@ -158,25 +155,19 @@ if (($curpage != $num_pages) && (file_exists(GUS_cachefile()))) {
         $comments += $row['num_comments'];
         $T->set_var('comments', $row['num_comments']);
 
-        if ( $_GUS_phplinks == 1 )
-        {
+        if ( $_GUS_phplinks == 1 ) {
     		$outer_frame = DB_getItem($_TABLES['plsettings'], 'OuterFrame',"ID = '1' LIMIT 1" );
 
-    		if ($outer_frame == "N")
-    		{
+    		if ($outer_frame == "N") {
     			$result = DB_query( "SELECT COUNT(*) AS num_links FROM {$temp_table['name']} WHERE page='phplinks/out.php'" );
     			$row = DB_fetchArray( $result, false );
     			$linksf += $row['num_links'];
-    		}
-    		else
-    		{
+    		} else {
     			$result = DB_query( "SELECT COUNT(*) AS num_links FROM {$temp_table['name']} WHERE page='phplinks/out_frame.php'" );
     			$row = DB_fetchArray( $result, false );
     			$linksf += $row['num_links'];
     		}
-        }
-        else
-        {
+        } else {
     		$result = DB_query( "SELECT COUNT(*) AS num_links FROM {$temp_table['name']}
     							WHERE page LIKE '%portal.php' AND query_string <> ''" );
     		$row = DB_fetchArray( $result, false );

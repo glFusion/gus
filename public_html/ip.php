@@ -39,6 +39,14 @@ if ( !GUS_HasAccess( false ) )
 require_once './include/sql.inc';
 require_once './include/util.inc';
 
+$dt = new \Date('now',$_CONF['timezone']);
+
+if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
+    $day   = $dt->format('j',true);
+}
+
 $gus_ip_collect_data = isset( $_POST['gus_ip_collect_data'] ) ? COM_applyFilter( $_POST['gus_ip_collect_data'] ) : '';
 
 $sort = isset( $_GET['sort'] ) ? COM_applyFilter( $_GET['sort'] ) : '';
@@ -301,11 +309,11 @@ $T->parse( 'ABlock', 'TABLE', true );
 $T->set_var( 'google_paging', $navigation_URLs );
 
 if ( $day != '' )
-    $title = "$ip_addr - " . date( 'l, j F, Y ', mktime( 0, 0, 0, $month, $day, $year ) );
+    $title = "$ip_addr - " . $dt->format( 'l, j F, Y ', true );
 else if ( $month != '' )
-    $title = "$ip_addr - " . date( 'F Y ', mktime( 0, 0, 0, $month, 1, $year ) );
+    $title = "$ip_addr - " . $dt->format( 'F Y ', true );
 else
-    $title = "$ip_addr - " . date( 'Y ', mktime( 0, 0, 0, 1, 1, $year ) );
+    $title = "$ip_addr - " . $dt->format( 'Y ', true );
 
 $T->set_var( 'header_text', $title );
 

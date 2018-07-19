@@ -5,7 +5,7 @@
 // | day.php                                                                  |
 // | Displays stats for a specific day                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -53,13 +53,14 @@ if (empty($_GUS_limit)) {
 * Main Function
 */
 
+$dt = new \Date('now',$_CONF['timezone']);
+
 // IF nothing is set
 //	THEN use today
 if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
-	$day    = date( 'j' );
-
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
+    $day   = $dt->format('j',true);
 	$sort_sep = '?';
 } else {
 	$sort_sep = '&amp;';
@@ -71,9 +72,9 @@ $anon = isset( $_GET['anon'] ) ? COM_applyFilter($_GET['anon'],true) : '';
 // check for cached file
 
 if ( $day == 0 ) {
-    $dc = (date("nY") == $month . $year);
+    $dc = ($dt->format("nY",true) == $month . $year);
 } else {
-    $dc = (date("jnY") == $day . $month . $year);
+    $dc = ($dt->format("jnY",true) == $day . $month . $year);
 }
 
 
@@ -201,12 +202,13 @@ if ((file_exists(GUS_cachefile())) && !$dc) {
     $T->Parse('ABlock','TABLE',true);
     $T->set_var('google_paging',$navlinks);
 
-    if ( $day != '' )
-        $title = date( 'l, j F, Y - ', mktime( 0, 0, 0, $month, $day, $year ) ) . $LANG_GUS00['views'];
-    else if ( $month != '' )
-        $title = date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['views'];
-    else
-        $title = date( 'Y ', mktime( 0, 0, 0, 1, 1, $year ) ) . $LANG_GUS00['views'];
+    if ( $day != '' ) {
+        $title = $dt->format( 'l, j F, Y - ',true ) . $LANG_GUS00['views'];
+    } else if ( $month != '' ) {
+        $title = $dt->format( 'F Y - ',true ) . $LANG_GUS00['views'];
+    } else {
+        $title = $dt->format( 'Y ',true ) . $LANG_GUS00['views'];
+    }
 
     $display = GUS_template_finish( $T, $title );
 

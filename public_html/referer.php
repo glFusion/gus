@@ -47,14 +47,17 @@ $referrer = isset( $_GET['referrer'] ) ? $_GET['referrer'] : '';
 * Main Function
 */
 
+$dt = new \Date('now',$_CONF['timezone']);
+
 if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
-	$day    = date( 'j' );
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
+    $day   = $dt->format('j',true);
 }
 
+
 // check for cached file
-$today = date("MY");
+$today = $dt->format("MY",true);
 if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     $display = GUS_getcache();
 } else {
@@ -131,7 +134,7 @@ if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     $T->Parse('ABlock','TABLE',true);
     $T->set_var('google_paging',$navlinks);
 
-    $title = Date( 'F Y ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['referers'] . ' - ' . $referrer;
+    $title = $dt->format( 'F Y ', true ) . $LANG_GUS00['referers'] . ' - ' . $referrer;
 
     $display = GUS_template_finish( $T, $title );
 

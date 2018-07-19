@@ -45,14 +45,16 @@ require_once './include/util.inc';
 * Main Function
 */
 
+$dt = new \Date('now',$_CONF['timezone']);
+
 if ( ($day == 0) && ($month == 0) && ($year == 0) ) {
-	$year   = date( 'Y' );
-	$month  = date( 'n' );
-	$day    = date( 'j' );
+    $year  = $dt->format('Y',true);
+    $month = $dt->format('n',true);
+    $day   = $dt->format('j',true);
 }
 
 // check for cached file
-$today = date("nY");
+$today = $dt->format("nY",true);
 if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     $display = GUS_getcache();
 } else {
@@ -134,7 +136,7 @@ if ((file_exists(GUS_cachefile())) && ($today != $month . $year)) {
     $T->Parse('ABlock','TABLE',true);
     $T->set_var('google_paging',$navlinks);
 
-    $title = Date( 'F Y - ', mktime( 0, 0, 0, $month, 1, $year ) ) . $LANG_GUS00['referers'];
+    $title = $dt->format( 'F Y - ', true ) . $LANG_GUS00['referers'];
 
     $display = GUS_template_finish( $T, $title );
 
