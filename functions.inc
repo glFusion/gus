@@ -786,11 +786,13 @@ function phpblock_gusstats()
         $_GUS_CONF['whatsnew_cache_time'] = 90;
     }
 
+    $dt = new \Date('now',$_CONF['timezone']);
+
     $cacheInstance = 'gusblock__' . $_CONF['theme'];
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
         $lu = CACHE_get_instance_update($cacheInstance, 0);
-        $now = time();
+        $now = $dt->toUnix();
         if (( $now - $lu ) < $_GUS_CONF['whatsnew_cache_time'] ) {
             return $retval;
         }
@@ -808,7 +810,7 @@ function phpblock_gusstats()
 	}
 
     // Code adapted from whose online block
-    $expire_time = time() - $_CONF['whosonline_threshold'];
+    $expire_time = $dt->toUnix() - $_CONF['whosonline_threshold'];
     if ( $_GUS_CONF['wo_fullname'] )
         $byname = 'fullname, username';
     else
