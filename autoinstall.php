@@ -140,7 +140,7 @@ function plugin_autouninstall_gus ()
         /* give the full name of the group, as in the db */
         'groups' => array('Gus Admin'),
         /* give the full name of the feature, as in the db */
-        'features' => array('gus.admin','gus_view'),
+        'features' => array('gus.admin','gus.view'),
         /* give the full name of the block, including 'phpblock_', etc */
         'php_blocks' => array('phpblock_gusstats'),
         /* give all vars with their name */
