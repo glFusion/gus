@@ -1,3 +1,9 @@
+# GUS ChangeLog
+
+## v2.4.2
+  - Updated Browser Detection library
+  - Fixed typo in permission name for uninstall
+
 ## 2.4.1
   - Improved browser and OS detection
   - Improved date handling to now use the system's configured timezone for all date / time references
