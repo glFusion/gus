@@ -1,39 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// |                                                                          |
-// | This file implements the necessary glFusion Plugin API functions and     |
-// | includes some common GUS functions                                       |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the original GUS Plugin                                         |
-// | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
-// |                                                                          |
-// | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
-// |          Tom Willett       - twillett@users.sourceforge.net              |
-// |          John Hughes       - jlhughes@users.sf.net                       |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats
+*
+* glFusion API functions
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*  Authors: Andy Maloney      - asmaloney@users.sf.net
+*           Tom Willett       - twillett@users.sourceforge.net
+*           John Hughes       - jlhughes@users.sf.net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -72,6 +57,11 @@ $_GUS_cache = true;
 
 require_once $_CONF['path'].'plugins/gus/gus.php';
 
+// Tom - you will need to run "composer require wolfcast/browser-detection" from
+// /private/plugins/gus/ directory.
+
+require_once $_CONF['path'].'plugins/gus/vendor/autoload.php';
+
 ///////////////////////////////////////////////////////////////////
 ///  Set up config variables and call to add stats to database  //
 /////////////////////////////////////////////////////////////////
@@ -86,10 +76,9 @@ function GUS()
 
 // cache this...
     $rec = DB_query( "SELECT * FROM {$_TABLES['gus_vars']}", 1 );
-
-    if ( DB_numRows( $rec ) > 0 ) {
-        // Get the GUS vars from the DB
-    	while ( $row = DB_fetchArray( $rec ) ) {
+    $rows = DB_fetchAll($rec,false);
+    if (count($rows)> 0) {
+        foreach ($rows AS $row) {
             $_GUS_VARS[$row['name']] = $row['value'];
         }
         // save our parsed url for path info later on
@@ -594,6 +583,9 @@ function GUS_doUpgrades( $current_gus_version )
             case '2.4.0' :
                 // no db or config changes
 
+            case '2.4.1' :
+                // no changes
+
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
                 $done = true;
@@ -601,7 +593,7 @@ function GUS_doUpgrades( $current_gus_version )
         }
     }
     DB_query( "UPDATE {$_TABLES['plugins']} SET pi_version = '{$_GUS_CONF['pi_version']}' WHERE pi_name = 'gus'" );
-    DB_query( "UPDATE {$_TABLES['plugins']} SET pi_gl_version = '{$_GUS_CONF['gl_version']}',pi_homepage='http://www.glfusion.org' WHERE pi_name = 'gus'" );
+    DB_query( "UPDATE {$_TABLES['plugins']} SET pi_gl_version = '{$_GUS_CONF['gl_version']}',pi_homepage='https://www.glfusion.org' WHERE pi_name = 'gus'" );
 
     return true;
 }
@@ -630,15 +622,14 @@ function GUS_getEncodedURL( $url )
 function GUS_getBrowser( $UA )
 {
     global $_CONF;
-    require_once $_CONF['path'].'plugins/gus/BrowserDetection.php';
 
-    $b = new BrowserDetection();
-
+// Tom - modify the new to use the proper namespace
+    $b = new Wolfcast\BrowserDetection();
+    $b->addCustomBrowserDetection('Vivaldi');
     $browser = array();
 
     $browser['type'] = $b->getName();
     $browser['ver'] = $b->getVersion();
-//    $browser['platform'] = $b->getPlatform();
     $browser['platform'] = $b->getPlatformVersion();
     if ( $browser['platform'] == 'unknown' ) {
         $browser['platform'] = $b->getPlatform();
@@ -681,8 +672,6 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
     } else {
         $query_string = $_SERVER['QUERY_STRING'];
 
-        // This fixes a problem reported by Tom whereby $_SERVER['QUERY_STRING'] and $QUERY_STRING are not
-        //  the same [as they should be...]
         if ( $query_string == '' )
             $query_string = $QUERY_STRING;
     }
