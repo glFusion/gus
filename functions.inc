@@ -32,7 +32,7 @@ $langfile = $_CONF['path'] . 'plugins/gus/language/' . $_CONF['language'] . '.ph
 if ( file_exists( $langfile ) ) {
     include_once $langfile;
 } else {
-    require_once $_CONF['path'].'plugins/gus/language/english.php';
+    require_once $_CONF['path'].'plugins/gus/language/english_utf8.php';
 }
 
 $gus_config = config::get_instance();
