@@ -329,7 +329,7 @@ function GUS_create_item_list_for_delete( $sql_response, $fieldname )
 
 	while ( $row = DB_fetchArray( $sql_response, false ) )
 	{
-		$list .= '\'' . $row[$fieldname] . '\'';
+		$list .= '\'' . DB_escapeString($row[$fieldname]) . '\'';
 
 		if ( $count > 1 )
 			$list .= ',';
@@ -420,9 +420,9 @@ else if ( ( $action == $LANG_GUS_admin['add'] ) || ( $action == $LANG_GUS_admin[
 	$newip = isset( $_POST['newip'] ) ? COM_applyFilter( $_POST['newip'] ) : '';
 	$newuser = isset( $_POST['newuser'] ) ? COM_applyFilter( $_POST['newuser'] ) : '';
 	$newpage = isset( $_POST['newpage'] ) ? COM_applyFilter( $_POST['newpage'] ) : '';
-	$newuseragent = isset( $_POST['newuseragent'] ) ? COM_applyFilter( $_POST['newuseragent'] ) : '';
+	$newuseragent = isset( $_POST['newuseragent'] ) ? $_POST['newuseragent']  : '';
 	$newhost = isset( $_POST['newhost'] ) ? COM_applyFilter( $_POST['newhost'] ) : '';
-	$newreferrer = isset( $_POST['newreferrer'] ) ? COM_applyFilter( $_POST['newreferrer'] ) : '';
+	$newreferrer = isset( $_POST['newreferrer'] ) ? $_POST['newreferrer'] : '';
 
 	if ( $newip != '' )
 	{
