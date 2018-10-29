@@ -123,9 +123,9 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_vars']} (
 
 if ( !isset($_GUS_VARS['remote_ip'])) {
     if ( version_compare(GVERSION,'1.7.4','<')) {
-        $_GUS_VARS['remote_ip'] = GetIP($_SERVER['REMOTE_ADDR']);
+        $_GUS_VARS['remote_ip'] = $_SERVER['REMOTE_ADDR'];
     } else {
-        $_GUS_VARS['remote_ip'] = GetIP( $_SERVER['REAL_ADDR'] );
+        $_GUS_VARS['remote_ip'] = $_SERVER['REAL_ADDR'];
     }
 }
 
