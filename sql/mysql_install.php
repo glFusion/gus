@@ -121,7 +121,14 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_vars']} (
 ) ENGINE=MyISAM
 ";
 
-if ( !isset($_GUS_VARS['remote_ip'])) $_GUS_VARS['remote_ip'] = $_SERVER['REMOTE_ADDR'];
+if ( !isset($_GUS_VARS['remote_ip'])) {
+    if ( version_compare(GVERSION,'1.7.4','<')) {
+        $_GUS_VARS['remote_ip'] = GetIP($_SERVER['REMOTE_ADDR']);
+    } else {
+        $_GUS_VARS['remote_ip'] = GetIP( $_SERVER['REAL_ADDR'] );
+    }
+}
+
 if ( !isset($_USER['uid'])) $_USER['uid'] = 2;
 
 // By default ignore current IP
