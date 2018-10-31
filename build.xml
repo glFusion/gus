@@ -76,6 +76,7 @@
                 <exclude name="**/tests/**"/>
                 <exclude name="*.tar.gz"/>
                 <exclude name="*.zip"/>
+                <exclude name="vendor/**/docs/**"/>
             </fileset>
         </copy>
 
