@@ -1,5 +1,8 @@
 # GUS ChangeLog
 
+## v2.4.3 
+  - Fixed a typo in the language file inclusion
+
 ## v2.4.2
   - Updated Browser Detection library
   - Fixed typo in permission name for uninstall

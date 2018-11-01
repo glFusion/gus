@@ -32,7 +32,7 @@ $langfile = $_CONF['path'] . 'plugins/gus/language/' . $_CONF['language'] . '.ph
 if ( file_exists( $langfile ) ) {
     include_once $langfile;
 } else {
-    require_once $_CONF['path'].'plugins/gus/language/english_utf8.php';
+    include_once $_CONF['path'].'plugins/gus/language/english_utf-8.php';
 }
 
 $gus_config = config::get_instance();
@@ -585,6 +585,9 @@ function GUS_doUpgrades( $current_gus_version )
 
             case '2.4.1' :
                 // no changes
+
+			case '2.4.2' :
+				// no changes
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
