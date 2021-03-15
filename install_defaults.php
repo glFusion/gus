@@ -1,33 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin - glFusion CMS                                                |
-// +--------------------------------------------------------------------------+
-// | install_defaults.php                                                     |
-// |                                                                          |
-// | Initial Installation Defaults used when loading the online configuration |
-// | records. These settings are only used during the initial installation    |
-// | and not referenced any more once the plugin is installed.                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats
+*
+* Configuration Settings
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*  Authors: Andy Maloney      - asmaloney@users.sf.net
+*           Tom Willett       - twillett@users.sourceforge.net
+*           John Hughes       - jlhughes@users.sf.net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -77,17 +68,9 @@ function plugin_initconfig_gus()
     $c->add('gus_access', NULL, 'fieldset', 0, 3, NULL, 0, true, 'gus');
     $c->add('anon_access', '0', 'select', 0, 3, 0, 10, true, 'gus');
     $c->add('enable_main_menu_GUS', '0', 'select', 0, 3, 0, 30, true, 'gus');
-//    $c->add('enable_main_menu_privacy_policy', '0', 'select', 0, 3, 0, 40, true, 'gus');
     $c->add('gus_user', '1', 'select', 0, 3, 0, 50, true, 'gus');
     $c->add('gus_stats', '0', 'select', 0, 3, 0, 60, true, 'gus');
 
     return true;
-    /*
-        $_GUS_phplinks = 0;
-        $_GUS_limit = 25;
-        $_GUS_months = 4;
-        $_GUS_days = 31;
-        $_GUS_cache = true;
-    */
 }
 ?>

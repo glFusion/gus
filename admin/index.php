@@ -1,36 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the GUS Plugin                                                  |
-// | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
-// |                                                                          |
-// | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
-// |          Tom Willett       - twillett@users.sourceforge.net              |
-// |          John Hughes       - jlhughes@users.sf.net                       |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats
+*
+* Administrative Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*  Authors: Andy Maloney      - asmaloney@users.sf.net
+*           Tom Willett       - twillett@users.sourceforge.net
+*           John Hughes       - jlhughes@users.sf.net
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
@@ -38,9 +26,7 @@ require_once $_CONF['path_html'] . '/gus/include/sql.inc';
 
 
 // Only let admin users access this page
-if ( (!SEC_inGroup('Root')) && (!SEC_hasRights('gus.view')) )
-{
-    // Someone is trying to illegally access this page
+if ( (!SEC_inGroup('Root')) && (!SEC_hasRights('gus.view')) ) {
     COM_errorLog( "Someone has tried to access the GUS admin page.  "
         . "User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: {$_SERVER['REMOTE_ADDR']}", 1 );
     $display = COM_siteHeader();
@@ -64,9 +50,8 @@ $display = '';
 */
 
 // GUS_admin_load_ignore_tables
-function GUS_admin_load_ignore_tables()
-{
-    global  $_TABLES, $_GUS_IP_IGNORE, $_GUS_PAGE_IGNORE, $_GUS_USER_IGNORE, $_GUS_UA_IGNORE, $_GUS_HOST_IGNORE, $_GUS_REFERRER_IGNORE;
+function GUS_admin_load_ignore_tables() {
+    global  $_TABLES, $_GUS_USER_IGNORE, $_GUS_PAGE_IGNORE, $_GUS_HOST_IGNORE, $_GUS_IP_IGNORE, $_GUS_UA_IGNORE, $_GUS_REFERRER_IGNORE;
 
     $_GUS_IP_IGNORE = array();
     $_GUS_PAGE_IGNORE = array();
@@ -75,34 +60,34 @@ function GUS_admin_load_ignore_tables()
     $_GUS_HOST_IGNORE = array();
     $_GUS_REFERRER_IGNORE = array();
 
-    $rec = DB_query( "SELECT ip FROM {$_TABLES['gus_ignore_ip']}", 1 );
-    while ( $row = DB_fetchArray( $rec, false ) )
-        $_GUS_IP_IGNORE[] = $row['ip'];
-
-    $rec = DB_query( "SELECT page FROM {$_TABLES['gus_ignore_page']}", 1 );
-    while ( $row = DB_fetchArray( $rec, false ) )
-        $_GUS_PAGE_IGNORE[] = $row['page'];
-
-    $rec = DB_query( "SELECT username FROM {$_TABLES['gus_ignore_user']}", 1 );
-    while ( $row = DB_fetchArray( $rec, false ) )
-        $_GUS_USER_IGNORE[] = $row['username'];
-
-    $rec = DB_query( "SELECT ua FROM {$_TABLES['gus_ignore_ua']}", 1 );
-    while ( $row = DB_fetchArray( $rec, false ) )
-        $_GUS_UA_IGNORE[] = $row['ua'];
-
-    $rec = DB_query( "SELECT host FROM {$_TABLES['gus_ignore_host']}", 1 );
-    while ( $row = DB_fetchArray( $rec, false ) )
-        $_GUS_HOST_IGNORE[] = $row['host'];
-
-    $rec = DB_query( "SELECT referrer FROM {$_TABLES['gus_ignore_referrer']}", 1 );
-    while ( $row = DB_fetchArray( $rec, false ) )
-        $_GUS_REFERRER_IGNORE[] = $row['referrer'];
+    $rec = DB_query("SELECT * FROM {$_TABLES['gus_ignore']}",1);
+    $ignoreData = DB_fetchAll($rec);
+    foreach($ignoreData AS $row) {
+        switch ($row['type']) {
+            case 'ip' :
+                $_GUS_IP_IGNORE[] = $row['value'];
+                break;
+            case 'page' :
+                $_GUS_PAGE_IGNORE[] = $row['value'];
+                break;
+            case 'user' :
+                $_GUS_USER_IGNORE[] = $row['value'];
+                break;
+            case 'ua' :
+                $_GUS_UA_IGNORE[] = $row['value'];
+                break;
+            case 'host' :
+                $_GUS_HOST_IGNORE[] = $row['value'];
+                break;
+            case 'referrer' :
+                $_GUS_REFERRER_IGNORE[] = $row['value'];
+                break;
+        }
+    }
 }
 
 // GUS_create_table_from_data
-function GUS_create_table_from_data( $data, $cols = 4 )
-{
+function GUS_create_table_from_data( $data, $cols = 4 ) {
     $table = '<table width="100%" style="border: 1px solid grey; padding: 3px;">';
 
     $i = 0;
@@ -132,8 +117,7 @@ function GUS_create_table_from_data( $data, $cols = 4 )
 }
 
 // GUS_create_form
-function GUS_create_form( $name, $id )
-{
+function GUS_create_form( $name, $id ) {
     global  $_CONF, $LANG_GUS_admin;
 
     $form = '<form method="post" action="' . $_CONF['site_admin_url'].'/plugins/gus/index.php'.'">';
@@ -147,8 +131,7 @@ function GUS_create_form( $name, $id )
 }
 
 // GUS_create_cleanup_form
-function GUS_create_cleanup_form( $count_data, $action, $id, $num_msg  )
-{
+function GUS_create_cleanup_form( $count_data, $action, $id, $num_msg  ) {
     global  $_CONF, $LANG_GUS_admin;
 
     $form = '<hr/><div class="smaller">';
@@ -177,105 +160,104 @@ function GUS_create_cleanup_form( $count_data, $action, $id, $num_msg  )
 }
 
 // GUS_create_item_list_for_count
-function GUS_create_item_list_for_count( $sql_response, $field_name, $decodeURL = false )
-{
+function GUS_create_item_list_for_count( $sql_response, $field_name, $decodeURL = false ) {
     $list = array();
     $count = 0;
 
-    while ( $row = DB_fetchArray( $sql_response, false ) )
-    {
+    while ( $row = DB_fetchArray( $sql_response, false ) ) {
         $item = $row[$field_name];
 
-        if ( $decodeURL )
+        if ( $decodeURL ) {
             $item = urldecode( $item );
+        }
 
         $list[] = htmlentities( $item );
         $count +=  $row['entries'];
     }
 
     return array( 'list' => $list,
-                    'list_len' => count( $list ),
-                    'entry_count' => $count );
+                  'list_len' => count( $list ),
+                  'entry_count' => $count );
 }
 
 // GUS_get_user_counts
-function GUS_get_user_counts()
-{
+function GUS_get_user_counts() {
     global $_TABLES, $_GUS_USER_IGNORE, $_GUS_table_prefix;
 
-    if ( !count( $_GUS_USER_IGNORE ) )
+    if ( !count( $_GUS_USER_IGNORE ) ) {
         return array( 'list' => array(), 'list_len' => 0, 'entry_count' => 0 );
+    }
 
     $result = DB_query( "SELECT DISTINCT( us.username ) AS username, COUNT( * ) AS entries
-                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_user']} iu
-                        WHERE us.username LIKE iu.username
+                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} iu
+                        WHERE (iu.type='user') AND (us.username LIKE iu.value)
                         GROUP BY us.username" );
 
     return GUS_create_item_list_for_count( $result, 'username' );
 }
 
 // GUS_get_page_counts
-function GUS_get_page_counts()
-{
+function GUS_get_page_counts() {
     global $_TABLES, $_GUS_PAGE_IGNORE, $_GUS_table_prefix;
 
-    if ( !count( $_GUS_PAGE_IGNORE ) )
+    if ( !count( $_GUS_PAGE_IGNORE ) ) {
         return array( 'list' => array(), 'list_len' => 0, 'entry_count' => 0 );
+    }
 
     $result = DB_query( "SELECT DISTINCT( us.page ) AS page, COUNT( * ) AS entries
-                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_page']} ip
-                        WHERE us.page LIKE ip.page
+                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ip
+                        WHERE (ip.type='page') && (us.page LIKE ip.value)
                         GROUP BY us.page" );
 
     return GUS_create_item_list_for_count( $result, 'page' );
 }
 
 // GUS_get_ip_counts
-function GUS_get_ip_counts()
-{
+function GUS_get_ip_counts() {
     global $_TABLES, $_GUS_IP_IGNORE, $_GUS_table_prefix;
 
-    if ( !count( $_GUS_IP_IGNORE ) )
+    if ( !count( $_GUS_IP_IGNORE ) ) {
         return array( 'list' => array(), 'list_len' => 0, 'entry_count' => 0 );
+    }
 
     $result = DB_query( "SELECT DISTINCT( us.ip ) AS ip, COUNT( * ) AS entries
-                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_ip']} iip
-                        WHERE us.ip LIKE iip.ip
+                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} iip
+                        WHERE (iip.type='ip') AND (us.ip LIKE iip.value)
                         GROUP BY us.ip" );
 
     return GUS_create_item_list_for_count( $result, 'ip' );
 }
 
 // GUS_get_host_counts
-function GUS_get_host_counts()
-{
+function GUS_get_host_counts() {
     global $_TABLES, $_GUS_HOST_IGNORE, $_GUS_table_prefix;
 
-    if ( !count( $_GUS_HOST_IGNORE ) )
+    if ( !count( $_GUS_HOST_IGNORE ) ) {
         return array( 'list' => array(), 'list_len' => 0, 'entry_count' => 0 );
+    }
 
     $result = DB_query( "SELECT DISTINCT( us.host ) AS host, COUNT( * ) AS entries
-                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_host']} ih
-                        WHERE us.host LIKE ih.host
+                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ih
+                        WHERE (ih.type='host') AND us.host LIKE ih.value
                         GROUP BY us.host" );
 
     return GUS_create_item_list_for_count( $result, 'host' );
 }
 
 // GUS_get_ua_counts
-function GUS_get_ua_counts()
-{
+function GUS_get_ua_counts() {
     global $_TABLES, $_GUS_UA_IGNORE, $_GUS_table_prefix;
 
-    if ( !count( $_GUS_UA_IGNORE ) )
+    if ( !count( $_GUS_UA_IGNORE ) ) {
         return array( 'list' => array(), 'list_len' => 0, 'entry_count' => 0 );
+    }
 
     $tmp_name = $_GUS_table_prefix . 'temp_ua_table';
 
     $temp_table = GUS_create_temp_table( $tmp_name,
                 "SELECT DISTINCT ua_id, user_agent
-                FROM {$_TABLES['gus_user_agents']} ua, {$_TABLES['gus_ignore_ua']} iua
-                WHERE ua.user_agent LIKE iua.ua" );
+                FROM {$_TABLES['gus_user_agents']} ua, {$_TABLES['gus_ignore']} iua
+                WHERE (iua.type='ua') AND (ua.user_agent LIKE iua.value)" );
 
     $result = DB_query( "SELECT DISTINCT( user_agent ), COUNT( * ) AS entries
                         FROM {$_TABLES['gus_userstats']} ua JOIN {$temp_table['name']} tmp ON ua.ua_id = tmp.ua_id
@@ -289,31 +271,31 @@ function GUS_get_ua_counts()
 }
 
 // GUS_get_referrer_counts
-function GUS_get_referrer_counts()
-{
+function GUS_get_referrer_counts() {
     global $_TABLES, $_GUS_REFERRER_IGNORE, $_GUS_table_prefix;
 
-    if ( !count( $_GUS_REFERRER_IGNORE ) )
+    if ( !count( $_GUS_REFERRER_IGNORE ) ) {
         return array( 'list' => array(), 'list_len' => 0, 'entry_count' => 0 );
+    }
 
-    $result = DB_query( "SELECT * FROM {$_TABLES['gus_ignore_referrer']}" );
+    $result = DB_query( "SELECT * FROM {$_TABLES['gus_ignore']} WHERE `type`='referrer'" );
 
     $count = DB_numRows( $result );
 
-    $list = 'WHERE ';
+    $list = "WHERE (ir.type='referrer') AND (";
 
-    while ( $row = DB_fetchArray( $result, false ) )
-    {
-        $list .= 'us.referer LIKE \'' . str_replace( '%25', '%', urlencode( $row['referrer'] ) ) . '\'';
+    while ( $row = DB_fetchArray( $result, false ) ) {
+        $list .= 'us.referer LIKE \'' . str_replace( '%25', '%', urlencode( $row['value'] ) ) . '\'';
 
         if ( $count > 1 )
             $list .= 'OR ';
 
         $count--;
     }
+    $list .= ') ';
 
     $result = DB_query( "SELECT DISTINCT( us.referer ) AS referrer, COUNT( * ) AS entries
-                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_referrer']} ir
+                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ir
                         {$list}
                         GROUP BY us.referer" );
 
@@ -321,18 +303,17 @@ function GUS_get_referrer_counts()
 }
 
 // GUS_create_item_list_for_delete
-function GUS_create_item_list_for_delete( $sql_response, $fieldname )
-{
+function GUS_create_item_list_for_delete( $sql_response, $fieldname ) {
     $count = DB_numRows( $sql_response );
 
     $list = '';
 
-    while ( $row = DB_fetchArray( $sql_response, false ) )
-    {
+    while ( $row = DB_fetchArray( $sql_response, false ) ) {
         $list .= '\'' . DB_escapeString($row[$fieldname]) . '\'';
 
-        if ( $count > 1 )
+        if ( $count > 1 ) {
             $list .= ',';
+        }
 
         $count--;
     }
@@ -340,8 +321,7 @@ function GUS_create_item_list_for_delete( $sql_response, $fieldname )
     return $list;
 }
 
-function GUS_clearCache($path)
-{
+function GUS_clearCache($path) {
     if ( $path[strlen($path)-1] != '/' ) {
         $path .= '/';
     }
@@ -359,18 +339,13 @@ function GUS_clearCache($path)
 
 // begin page -------
 
-if ( $action == 'capture_on' )
-{
+if ( $action == 'capture_on' ) {
     DB_query( "UPDATE {$_TABLES['gus_vars']} SET value='1' WHERE name='capture' LIMIT 1" );
     $_GUS_VARS['capture'] = '1';
-}
-else if ( $action == 'capture_off' )
-{
+} else if ( $action == 'capture_off' ) {
     DB_query( "UPDATE {$_TABLES['gus_vars']} SET value='0' WHERE name='capture' LIMIT 1" );
     $_GUS_VARS['capture'] = '0';
-}
-else if ( $action == 'remove_data' )
-{
+} else if ( $action == 'remove_data' ) {
     DB_query( "UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = 'gus'" );
 
     DB_query( "TRUNCATE {$_TABLES['gus_user_agents']}" );
@@ -385,9 +360,7 @@ else if ( $action == 'remove_data' )
     $display .= "Data removed.";
     $display .= COM_endBlock( COM_getBlockTemplate('_msg_block', 'footer') );
     $display .= '<hr />';
-}
-else if ( $action == 'purge_history' )
-{
+} else if ( $action == 'purge_history' ) {
     DB_query( "UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = 'gus'" );
 
     $days = COM_applyFilter($_POST['histperiod'],true);
@@ -414,9 +387,7 @@ else if ( $action == 'purge_history' )
     $display .= "History Data has been purged.";
     $display .= COM_endBlock( COM_getBlockTemplate('_msg_block', 'footer') );
     $display .= '<hr />';
-}
-else if ( ( $action == $LANG_GUS_admin['add'] ) || ( $action == $LANG_GUS_admin['remove'] ) )
-{
+} else if ( ( $action == $LANG_GUS_admin['add'] ) || ( $action == $LANG_GUS_admin['remove'] ) ) {
     $newip = isset( $_POST['newip'] ) ? COM_applyFilter( $_POST['newip'] ) : '';
     $newuser = isset( $_POST['newuser'] ) ? COM_applyFilter( $_POST['newuser'] ) : '';
     $newpage = isset( $_POST['newpage'] ) ? COM_applyFilter( $_POST['newpage'] ) : '';
@@ -424,69 +395,55 @@ else if ( ( $action == $LANG_GUS_admin['add'] ) || ( $action == $LANG_GUS_admin[
     $newhost = isset( $_POST['newhost'] ) ? COM_applyFilter( $_POST['newhost'] ) : '';
     $newreferrer = isset( $_POST['newreferrer'] ) ? $_POST['newreferrer'] : '';
 
-    if ( $newip != '' )
-    {
-        $table = $_TABLES['gus_ignore_ip'];
+    $data = '';
+
+// need to update this query to use the new ignore table.
+
+    if ( $newip != '' ) {
         $field = 'ip';
         $data = substr( trim( $newip ), 0, 20 );
-    }
-    else if ( $newuser != '' )
-    {
-        $table = $_TABLES['gus_ignore_user'];
-        $field = 'username';
+    } else if ( $newuser != '' ) {
+        $field = 'user';
         $data = substr( trim( $newuser ), 0, 16 );
-    }
-    else if ( $newpage != '' )
-    {
-        $table = $_TABLES['gus_ignore_page'];
+    } else if ( $newpage != '' ) {
         $field = 'page';
         $data = substr( trim( $newpage ), 0, 255 );
-    }
-    else if ( $newuseragent != '' )
-    {
-        $table = $_TABLES['gus_ignore_ua'];
+    } else if ( $newuseragent != '' ) {
         $field = 'ua';
         $data = substr( trim( $newuseragent ), 0, 128 );
-    }
-    else if ( $newhost != '' )
-    {
-        $table = $_TABLES['gus_ignore_host'];
+    } else if ( $newhost != '' ) {
         $field = 'host';
         $data = substr( trim( $newhost ), 0, 128 );
-    }
-    else if ( $newreferrer != '' )
-    {
-        $table = $_TABLES['gus_ignore_referrer'];
+    } else if ( $newreferrer != '' ) {
         $field = 'referrer';
         $data = substr( trim( $newreferrer ), 0, 128 );
     }
 
-    $data = DB_escapeString( $data );
+    if (!empty($data)) {
+        $data = DB_escapeString( $data );
 
-    if ( $action == $LANG_GUS_admin['add'] )
-        DB_query( "INSERT INTO {$table} VALUES ('{$data}')", 1 );
-    else
-        DB_query( "DELETE FROM {$table} WHERE {$field}='{$data}'", 1 );
-}
-else if ( $action == 'clean_user' )
-{
+        if ( $action == $LANG_GUS_admin['add'] ) {
+            DB_query("INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('{$field}','{$data}');");
+        } else {
+            DB_query("DELETE FROM `{$_TABLES['gus_ignore']}` WHERE `type`='{$field}' AND `value`='{$data}';");
+        }
+    }
+} else if ( $action == 'clean_user' ) {
     // clean_user
     $result = DB_query( "SELECT DISTINCT( us.username ) AS username
-                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_user']} iu
-                            WHERE us.username LIKE iu.username" );
+                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} iu
+                            WHERE (iu.type='user') AND (us.username LIKE iu.username)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'username' );
 
     if (!empty($list)) {
         DB_query( "DELETE FROM {$_TABLES['gus_userstats']} WHERE username IN ( $list )" );
     }
-}
-else if ( $action == 'clean_page' )
-{
+} else if ( $action == 'clean_page' ) {
     // clean_page
     $result = DB_query( "SELECT DISTINCT( us.page ) AS page
-                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_page']} ip
-                            WHERE us.page LIKE ip.page" );
+                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ip
+                            WHERE (ip.type='page') && (us.page LIKE ip.page)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'page' );
 
@@ -494,13 +451,11 @@ else if ( $action == 'clean_page' )
         DB_query( "DELETE FROM {$_TABLES['gus_userstats']}
                     WHERE page IN ( $list )" );
     }
-}
-else if ( $action == 'clean_host' )
-{
+} else if ( $action == 'clean_host' ) {
     // clean_host
     $result = DB_query( "SELECT DISTINCT( us.host ) AS host
-                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_host']} ih
-                            WHERE us.host LIKE ih.host" );
+                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ih
+                            WHERE (ih.type='host') AND (us.host LIKE ih.host)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'host' );
 
@@ -508,13 +463,11 @@ else if ( $action == 'clean_host' )
         DB_query( "DELETE FROM {$_TABLES['gus_userstats']}
                     WHERE host IN ( $list )" );
     }
-}
-else if ( $action == 'clean_ip' )
-{
+} else if ( $action == 'clean_ip' ) {
     // clean_ip
     $result = DB_query( "SELECT DISTINCT( us.ip ) AS ip
-                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_ip']} iip
-                            WHERE us.ip LIKE iip.ip" );
+                            FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} iip
+                            WHERE (iip.type='ip') AND (us.ip LIKE iip.ip)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'ip' );
 
@@ -522,13 +475,11 @@ else if ( $action == 'clean_ip' )
         DB_query( "DELETE FROM {$_TABLES['gus_userstats']}
                     WHERE ip IN ( $list )" );
     }
-}
-else if ( $action == 'clean_ua' )
-{
+} else if ( $action == 'clean_ua' ) {
     // clean_ua
     $result = DB_query( "SELECT DISTINCT( ua_id )
-                            FROM {$_TABLES['gus_user_agents']} ua, {$_TABLES['gus_ignore_ua']} iua
-                            WHERE ua.user_agent LIKE iua.ua" );
+                            FROM {$_TABLES['gus_user_agents']} ua, {$_TABLES['gus_ignore']} iua
+                            WHERE (iua.type='ua') AND (ua.user_agent LIKE iua.ua)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'ua_id' );
 
@@ -536,28 +487,26 @@ else if ( $action == 'clean_ua' )
         DB_query( "DELETE FROM {$_TABLES['gus_userstats']}
                     WHERE ua_id IN ( $list )" );
     }
-}
-else if ( $action == 'clean_referrer' )
-{
+} else if ( $action == 'clean_referrer' ) {
     // clean_referrer
-    $result = DB_query( "SELECT * FROM {$_TABLES['gus_ignore_referrer']}" );
+    $result = DB_query( "SELECT * FROM {$_TABLES['gus_ignore']} WHERE type='referrer'" );
 
     $count = DB_numRows( $result );
 
-    $list = 'WHERE ';
+    $list = "WHERE (ir.type='referrer') AND (";
 
-    while ( $row = DB_fetchArray( $result, false ) )
-    {
-        $list .= 'us.referer LIKE \'' . str_replace( '%25', '%', urlencode( $row['referrer'] ) ) . '\'';
+    while ( $row = DB_fetchArray( $result, false ) ) {
+        $list .= 'us.referer LIKE \'' . str_replace( '%25', '%', urlencode( $row['value'] ) ) . '\'';
 
         if ( $count > 1 )
             $list .= 'OR ';
 
         $count--;
     }
+    $list .= ') ';
 
     $result = DB_query( "SELECT DISTINCT( us.referer ) AS referrer
-                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore_referrer']} ir
+                        FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ir
                         {$list}
                         GROUP BY us.referer" );
 
@@ -586,8 +535,7 @@ $titles['user'] = $LANG_GUS_admin['user_title'];
 
 $counts = GUS_get_user_counts();
 
-if ( $counts['list_len'] )
-{
+if ( $counts['list_len'] ) {
     $i_user .= GUS_create_cleanup_form( $counts, 'clean_user', 11, $LANG_GUS_admin['user_num_user'] );
 
     $titles['user'] .= ' *';
@@ -603,8 +551,7 @@ $titles['page'] = $LANG_GUS_admin['page_title'];
 
 $counts = GUS_get_page_counts();
 
-if ( $counts['list_len'] )
-{
+if ( $counts['list_len'] ) {
     $i_page .= GUS_create_cleanup_form( $counts, 'clean_page', 12, $LANG_GUS_admin['page_num_page'] );
 
     $titles['page'] .= ' *';
@@ -621,8 +568,7 @@ $titles['host'] = $LANG_GUS_admin['host_title'];
 
 $counts = GUS_get_host_counts();
 
-if ( $counts['list_len'] )
-{
+if ( $counts['list_len'] ) {
     $i_host .= GUS_create_cleanup_form( $counts, 'clean_host', 14, $LANG_GUS_admin['host_num_host'] );
 
     $titles['host'] .= ' *';
@@ -639,8 +585,7 @@ $titles['ip'] = $LANG_GUS_admin['ip_title'];
 
 $counts = GUS_get_ip_counts();
 
-if ( $counts['list_len'] )
-{
+if ( $counts['list_len'] ) {
     $i_ip .= GUS_create_cleanup_form( $counts, 'clean_ip', 10, $LANG_GUS_admin['ip_num_ip'] );
 
     $titles['ip'] .= ' *';
@@ -656,8 +601,7 @@ $titles['ua'] = $LANG_GUS_admin['ua_title'];
 
 $counts = GUS_get_ua_counts();
 
-if ( $counts['list_len'] )
-{
+if ( $counts['list_len'] ) {
     $i_ua .= GUS_create_cleanup_form( $counts, 'clean_ua', 13, $LANG_GUS_admin['ua_num_ua'] );
 
     $titles['ua'] .= ' *';
@@ -673,8 +617,7 @@ $titles['referrer'] = $LANG_GUS_admin['referrer_title'];
 
 $counts = GUS_get_referrer_counts();
 
-if ( $counts['list_len'] )
-{
+if ( $counts['list_len'] ) {
     $i_referrer .= GUS_create_cleanup_form( $counts, 'clean_referrer', 15, $LANG_GUS_admin['referrer_num_referrer'] );
 
     $titles['referrer'] .= ' *';
@@ -705,8 +648,9 @@ $display .= '<div class="noscriptpane"><b>' . $titles['ua'] . '</b><br>' . $i_ua
 $display .= '<div class="noscriptpane"><b>' . $titles['referrer'] . '</b><br>' . $i_referrer . '</div>';
 $display .= '</noscript>';
 
-if ( $at_least_one_dirty )
+if ( $at_least_one_dirty ) {
     $display .= '<p><span class="smaller">' . $LANG_GUS_admin['star'] . '</span>';
+}
 
 $display .= '</div><br>';
 
@@ -715,14 +659,11 @@ $display .= '</div><br>';
 $display .= "<hr /><h4>{$LANG_GUS_admin['capture']}</h4>";
 $display .= "<form method=\"post\" action=\"{$_CONF['site_admin_url']}/plugins/gus/index.php\">";
 
-if ( $_GUS_VARS['capture'] == '1' )
-{
+if ( $_GUS_VARS['capture'] == '1' ) {
     $display .= $LANG_GUS_admin['captureon'] . '&nbsp;&nbsp;&nbsp;';
     $display .= '<input type="submit" value="'.$LANG_GUS_admin['turnoff'] .'" />';
     $display .= '<input type="hidden" value="capture_off" name="action" />';
-}
-else
-{
+} else {
     $display .= $LANG_GUS_admin['captureoff'] . '&nbsp;&nbsp;&nbsp;';
     $display .= "<input type=\"submit\" value=\"{$LANG_GUS_admin['turnon']}\" />";
     $display .= '<input type="hidden" value="capture_on" name="action" />';
@@ -776,8 +717,7 @@ $row = DB_fetchArray( $rec );
 $_GUS_VARS['imported'] = $row['value'];
 
 // check for old stats to see if we should add an import link
-if ( GUS_checkStatsInstall() && $_ST_plugin_name != '' && ( $_GUS_VARS['imported'] < 3 ) )
-{
+if ( GUS_checkStatsInstall() && $_ST_plugin_name != '' && ( $_GUS_VARS['imported'] < 3 ) ) {
     $import_url = $_CONF['site_admin_url'] . '/plugins/gus/import.php';
 
     $stats_version = DB_getItem( $_TABLES['plugins'], 'pi_version', "pi_name = '{$_ST_plugin_name}'" );
@@ -785,14 +725,11 @@ if ( GUS_checkStatsInstall() && $_ST_plugin_name != '' && ( $_GUS_VARS['imported
     $display .= "<hr /><h4>{$LANG_GUS_admin['import_data']}</h4>";
     $display .= "I notice you have the stats plugin version {$stats_version} installed as '{$_ST_plugin_name}'. ";
 
-    if ( $stats_version != '1.3' )
-    {
+    if ( $stats_version != '1.3' )     {
         $display .= "<p>If you had version 1.3 installed, I could import its data.
             If you update this in the future, you can import its data from
             the <a href=\"{$admin_url}\">admin page</a>.";
-    }
-    else
-    {
+    } else {
         $display .= "<p>You may import its data into GUS using the <a href=\"{$import_url}\">import page</a>.";
     }
 }

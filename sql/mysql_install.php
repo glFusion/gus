@@ -1,35 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | gus.php                                                                  |
-// |                                                                          |
-// | Contains all the SQL necessary to install the GUS plugin                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2005 by the following authors:                             |
-// |                                                                          |
-// | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats
+*
+* SQL to build GUS tables
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*  Authors: Andy Maloney      - asmaloney@users.sf.net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -71,46 +58,14 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_user_agents']} (
 ) ENGINE=MyISAM
 ";
 
-$_SQL['gus_ignore_ip'] = "
-CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_ip']} (
-  ip varchar(20) NOT NULL default '0.0.0.0',
-  PRIMARY KEY  (ip)
-) ENGINE=MyISAM
-";
-
-$_SQL['gus_ignore_user'] = "
-CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_user']} (
-  username varchar(48) NOT NULL default '',
-  PRIMARY KEY (username)
-) ENGINE=MyISAM
-";
-
-$_SQL['gus_ignore_page'] = "
-CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_page']} (
-  page varchar(255) NOT NULL default '',
-  PRIMARY KEY  (page(191))
-) ENGINE=MyISAM
-";
-
-$_SQL['gus_ignore_ua'] = "
-CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_ua']} (
-  ua varchar(128) NOT NULL default '',
-  PRIMARY KEY (ua)
-) ENGINE=MyISAM
-";
-
-$_SQL['gus_ignore_host'] = "
-CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_host']} (
-  host varchar(128) NOT NULL default '',
-  PRIMARY KEY (host)
-) ENGINE=MyISAM
-";
-
-$_SQL['gus_ignore_referrer'] = "
-CREATE TABLE IF NOT EXISTS {$_TABLES['gus_ignore_referrer']} (
-  referrer varchar(128) NOT NULL default '',
-  PRIMARY KEY (referrer)
-) ENGINE=MyISAM
+$_SQL['gus_ignore'] = "
+CREATE TABLE `{$_TABLES['gus_ignore']}` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(16) NOT NULL DEFAULT '',
+  `value` VARCHAR(200) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `type_value` (`type`, `value`)
+  ) ENGINE=MyISAM
 ";
 
 $_SQL['gus_vars'] = "
@@ -132,10 +87,11 @@ if ( !isset($_GUS_VARS['remote_ip'])) {
 if ( !isset($_USER['uid'])) $_USER['uid'] = 2;
 
 // By default ignore current IP
-$_DATA['remote_ip'] = "INSERT IGNORE INTO {$_TABLES['gus_ignore_ip']} VALUES ('" . $_GUS_VARS['remote_ip'] . "')";
+//$_DATA['remote_ip'] = "INSERT IGNORE INTO {$_TABLES['gus_ignore']} VALUES ('" . $_GUS_VARS['remote_ip'] . "')";
+$_DATA['remote_ip'] = "INSERT IGNORE INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('ip','".$_GUS_VARS['remote_ip']."');";
 
 // By default ignore current user
-$_DATA['ignore_user'] ="INSERT IGNORE INTO {$_TABLES['gus_ignore_user']} VALUES ('" . $_USER['username'] . "')";
+$_DATA['ignore_user'] = "INSERT IGNORE INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('user','".$_USER['username']."');";
 
 // Var that controls capture of info
 $_DATA['capture'] = "INSERT IGNORE INTO {$_TABLES['gus_vars']} VALUES ( 'capture', '1' )";
