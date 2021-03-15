@@ -79,7 +79,7 @@ function GUS_template_get_page_data( $page, $query_string )
 	    $host .= $_GUS_VARS['parsed_site_url']['path'];
 	}
 
-	if ( $page{0} != '/' )
+	if ( $page[0] != '/' )
 		$host .= '/';
 
 	if ( ($page == 'article.php') && preg_match( "/^.*story=([^&]+).*$/", $html_query, $sid ) )
