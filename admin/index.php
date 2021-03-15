@@ -739,7 +739,7 @@ $header = '<img src="' . $img_url . '" width="24" height="24" alt="GUS pic" alig
 $readme_url = $_CONF['site_admin_url'] . '/plugins/gus/readme.html#config';
 
 $menu_arr = array (
-    array('url' => $_CONF['site_admin_url'],
+    array('url' => $_CONF['site_admin_url'].'/index.php',
           'text' => $LANG_ADMIN['admin_home'])
 );
 $head = COM_startBlock ($LANG_GUS_admin['admin'] . ' [v' . plugin_chkVersion_gus() .']', '',COM_getBlockTemplate ('_admin_block', 'header'));
