@@ -1306,7 +1306,7 @@ function plugin_user_delete_gus ($uid)
     $username = DB_getItem($_TABLES['users'], "username", "uid=".(int) $uid);
 
     DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE uid=".(int) $uid);
-    DB_query("DELETE FROM {$_TABLES['gus_ignore_user']} WHERE username ='".DB_escapeString($username)."'");
+    DB_query("DELETE FROM {$_TABLES['gus_ignore']} WHERE type='user' && value ='".DB_escapeString($username)."'");
 }
 
 function plugin_profileedit_gus($uid,$panel,$fieldset)
@@ -1325,7 +1325,7 @@ function plugin_profileedit_gus($uid,$panel,$fieldset)
                     }
                     $username = DB_getItem($_TABLES['users'],'username','uid = ' . (int) $uid);
                     $ignored = false;
-                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore_user']} WHERE username='".DB_escapeString($username)."'");
+                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore']} WHERE type='user' && value='".DB_escapeString($username)."'");
                     $nrows = DB_numRows($result);
                     if ($nrows > 0) {
                         $ignored = true;
@@ -1370,10 +1370,11 @@ function plugin_profilesave_gus( $uid = 0 )
     if ( $username == '' || $username == null ) return;
 
     if ( $track == 0 ) {
-        DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($username)."'");
+        DB_save($_TABLES['gus_ignore'],'type,username',"'user','".DB_escapeString($username)."'");
         DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE username='".DB_escapeString($username)."'",1);
     } else {
-        DB_delete($_TABLES['gus_ignore_user'],'username',DB_escapeString($username));
+        $sql = "DELETE FROM {$_TABLES['gus_ignore']} WHERE type='user' && value='".DB_escapeString($username)."'";
+        DB_query($sql,1);
     }
 }
 
@@ -1431,7 +1432,7 @@ function plugin_user_create_gus($uid)
     if ( $track == 0 ) {
         $username = DB_getItem($_TABLES['users'],'username','uid='.(int)$uid);
         if ( $username != '' && $username != null ) {
-            DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($username)."'");
+            DB_save($_TABLES['gus_ignore'],'type,username',"'user','".DB_escapeString($username)."'");
         }
     }
 }
