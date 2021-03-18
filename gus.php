@@ -28,7 +28,7 @@ global $_DB_table_prefix;
 $_GUS_CONF['pi_name']           = 'gus';
 $_GUS_CONF['pi_display_name']   = 'GUS';
 $_GUS_CONF['pi_version']        = '2.5.0';
-$_GUS_CONF['gl_version']        = '2.0.0';
+$_GUS_CONF['gl_version']        = '1.5.0';
 $_GUS_CONF['pi_url']            = 'https://www.glfusion.org';
 
 $_GUS_table_prefix = $_DB_table_prefix . 'gus_';
