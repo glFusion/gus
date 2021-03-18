@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "wolfcast/browser-detection",
-            "version": "2.9.1",
+            "version": "2.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wolfcast/BrowserDetection.git",
-                "reference": "eda2b898e69d52c7eb5d613e15ebde2f4dafb625"
+                "reference": "88cfc2d1b19de8fea19854da4cfa67e5bd5d9ecb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Wolfcast/BrowserDetection/zipball/eda2b898e69d52c7eb5d613e15ebde2f4dafb625",
-                "reference": "eda2b898e69d52c7eb5d613e15ebde2f4dafb625",
+                "url": "https://api.github.com/repos/Wolfcast/BrowserDetection/zipball/88cfc2d1b19de8fea19854da4cfa67e5bd5d9ecb",
+                "reference": "88cfc2d1b19de8fea19854da4cfa67e5bd5d9ecb",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,11 @@
                 "platform",
                 "version"
             ],
-            "time": "2018-08-24T00:17:38+00:00"
+            "support": {
+                "issues": "https://github.com/Wolfcast/BrowserDetection/issues",
+                "source": "https://github.com/Wolfcast/BrowserDetection/tree/2.9.5"
+            },
+            "time": "2020-02-02T13:47:48+00:00"
         }
     ],
     "packages-dev": [],
@@ -60,5 +64,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }

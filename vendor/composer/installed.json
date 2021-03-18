@@ -1,50 +1,59 @@
-[
-    {
-        "name": "wolfcast/browser-detection",
-        "version": "2.9.1",
-        "version_normalized": "2.9.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Wolfcast/BrowserDetection.git",
-            "reference": "eda2b898e69d52c7eb5d613e15ebde2f4dafb625"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Wolfcast/BrowserDetection/zipball/eda2b898e69d52c7eb5d613e15ebde2f4dafb625",
-            "reference": "eda2b898e69d52c7eb5d613e15ebde2f4dafb625",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2018-08-24T00:17:38+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "lib/BrowserDetection.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "Alexandre Valiquette",
-                "homepage": "https://wolfcast.com/",
-                "role": "Lead developer"
-            }
-        ],
-        "description": "The Wolfcast BrowserDetection PHP class facilitates the identification of the user's environment such as Web browser, version, platform family, platform version or if it's a mobile device or not.",
-        "homepage": "https://github.com/Wolfcast/BrowserDetection",
-        "keywords": [
-            "browser",
-            "detection",
-            "environment",
-            "mobile",
-            "platform",
-            "version"
-        ]
-    }
-]
+{
+    "packages": [
+        {
+            "name": "wolfcast/browser-detection",
+            "version": "2.9.5",
+            "version_normalized": "2.9.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Wolfcast/BrowserDetection.git",
+                "reference": "88cfc2d1b19de8fea19854da4cfa67e5bd5d9ecb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Wolfcast/BrowserDetection/zipball/88cfc2d1b19de8fea19854da4cfa67e5bd5d9ecb",
+                "reference": "88cfc2d1b19de8fea19854da4cfa67e5bd5d9ecb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2020-02-02T13:47:48+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "lib/BrowserDetection.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Valiquette",
+                    "homepage": "https://wolfcast.com/",
+                    "role": "Lead developer"
+                }
+            ],
+            "description": "The Wolfcast BrowserDetection PHP class facilitates the identification of the user's environment such as Web browser, version, platform family, platform version or if it's a mobile device or not.",
+            "homepage": "https://github.com/Wolfcast/BrowserDetection",
+            "keywords": [
+                "browser",
+                "detection",
+                "environment",
+                "mobile",
+                "platform",
+                "version"
+            ],
+            "support": {
+                "issues": "https://github.com/Wolfcast/BrowserDetection/issues",
+                "source": "https://github.com/Wolfcast/BrowserDetection/tree/2.9.5"
+            },
+            "install-path": "../wolfcast/browser-detection"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

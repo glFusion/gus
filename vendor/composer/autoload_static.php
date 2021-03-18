@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit79655282fd94439233de012c108fb7ba
 {
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Wolfcast\\BrowserDetection' => __DIR__ . '/..' . '/wolfcast/browser-detection/lib/BrowserDetection.php',
     );
 
