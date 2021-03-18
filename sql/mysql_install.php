@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_userstats']} (
 $_SQL['gus_user_agents'] = "
 CREATE TABLE IF NOT EXISTS {$_TABLES['gus_user_agents']} (
   ua_id smallint(5) unsigned NOT NULL auto_increment,
-  user_agent varchar(128) default NULL,
+  user_agent varchar(256) default NULL,
   browser varchar(20) default NULL,
   version varchar(40) default NULL,
   platform varchar(30) default NULL,

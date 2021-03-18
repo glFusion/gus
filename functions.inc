@@ -655,6 +655,8 @@ function GUS_doUpgrades( $current_gus_version )
                     DB_query($sql,1);
                 }
 
+                DB_query("ALTER TABLE {$_TABLES['gus_user_agents']} CHANGE `user_agent` `user_agent` VARCHAR(256) NULL DEFAULT NULL;",1);
+
                 DB_query("DROP TABLE {$_TABLES['gus_ignore_ip']}",1);
                 DB_query("DROP TABLE {$_TABLES['gus_ignore_user']}",1);
                 DB_query("DROP TABLE {$_TABLES['gus_ignore_page']}",1);
