@@ -1,6 +1,11 @@
 # GUS ChangeLog
 
-## v2.4.3 
+## v2.5.0
+- Updated Browser Detection
+- Enhanced ignore hanlding to be much more efficient
+- Increased user_agent storage to 256 characters
+
+## v2.4.3
   - Fixed a typo in the language file inclusion
 
 ## v2.4.2
