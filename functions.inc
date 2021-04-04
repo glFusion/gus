@@ -1372,7 +1372,7 @@ function plugin_profilesave_gus( $uid = 0 )
     if ( $username == '' || $username == null ) return;
 
     if ( $track == 0 ) {
-        DB_save($_TABLES['gus_ignore'],'type,username',"'user','".DB_escapeString($username)."'");
+        DB_save($_TABLES['gus_ignore'],'type,value',"'user','".DB_escapeString($username)."'");
         DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE username='".DB_escapeString($username)."'",1);
     } else {
         $sql = "DELETE FROM {$_TABLES['gus_ignore']} WHERE type='user' && value='".DB_escapeString($username)."'";
