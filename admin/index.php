@@ -397,8 +397,6 @@ if ( $action == 'capture_on' ) {
 
     $data = '';
 
-// need to update this query to use the new ignore table.
-
     if ( $newip != '' ) {
         $field = 'ip';
         $data = substr( trim( $newip ), 0, 20 );
@@ -410,13 +408,13 @@ if ( $action == 'capture_on' ) {
         $data = substr( trim( $newpage ), 0, 255 );
     } else if ( $newuseragent != '' ) {
         $field = 'ua';
-        $data = substr( trim( $newuseragent ), 0, 128 );
+        $data = substr( trim( $newuseragent ), 0, 255 );
     } else if ( $newhost != '' ) {
         $field = 'host';
-        $data = substr( trim( $newhost ), 0, 128 );
+        $data = substr( trim( $newhost ), 0, 255 );
     } else if ( $newreferrer != '' ) {
         $field = 'referrer';
-        $data = substr( trim( $newreferrer ), 0, 128 );
+        $data = substr( trim( $newreferrer ), 0, 255 );
     }
 
     if (!empty($data)) {

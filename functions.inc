@@ -588,6 +588,7 @@ function GUS_doUpgrades( $current_gus_version )
 				// no changes
 
             case '2.4.3' :
+            case '2.5.0' :
 
                 // create new table
                 $_SQL = array();
@@ -595,7 +596,7 @@ function GUS_doUpgrades( $current_gus_version )
                     CREATE TABLE `{$_TABLES['gus_ignore']}` (
                     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `type` VARCHAR(16) NOT NULL DEFAULT '',
-                    `value` VARCHAR(200) NOT NULL DEFAULT '',
+                    `value` VARCHAR(256) NOT NULL DEFAULT '',
                     PRIMARY KEY (`id`),
                     UNIQUE INDEX `type_value` (`type`, `value`)
                     ) ENGINE=MyISAM
@@ -663,6 +664,8 @@ function GUS_doUpgrades( $current_gus_version )
                 DB_query("DROP TABLE {$_TABLES['gus_ignore_ua']}",1);
                 DB_query("DROP TABLE {$_TABLES['gus_ignore_host']}",1);
                 DB_query("DROP TABLE {$_TABLES['gus_ignore_referrer']}",1);
+
+                DB_query("ALTER TABLE {$_TABLES['gus_ignore']} CHANGE `value` `value` VARCHAR(256) NULL DEFAULT NULL;",1);
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];

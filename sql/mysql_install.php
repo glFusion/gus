@@ -62,7 +62,7 @@ $_SQL['gus_ignore'] = "
 CREATE TABLE `{$_TABLES['gus_ignore']}` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(16) NOT NULL DEFAULT '',
-  `value` VARCHAR(200) NOT NULL DEFAULT '',
+  `value` VARCHAR(256) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `type_value` (`type`, `value`)
   ) ENGINE=MyISAM
