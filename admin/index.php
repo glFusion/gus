@@ -423,16 +423,16 @@ if ( $action == 'capture_on' ) {
         $data = DB_escapeString( $data );
 
         if ( $action == $LANG_GUS_admin['add'] ) {
-            DB_query("INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('{$field}','{$data}');");
+            DB_query("INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('{$field}','{$data}');",1);
         } else {
-            DB_query("DELETE FROM `{$_TABLES['gus_ignore']}` WHERE `type`='{$field}' AND `value`='{$data}';");
+            DB_query("DELETE FROM `{$_TABLES['gus_ignore']}` WHERE `type`='{$field}' AND `value`='{$data}';",1);
         }
     }
 } else if ( $action == 'clean_user' ) {
     // clean_user
     $result = DB_query( "SELECT DISTINCT( us.username ) AS username
                             FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} iu
-                            WHERE (iu.type='user') AND (us.username LIKE iu.username)" );
+                            WHERE (iu.type='user') AND (us.username LIKE iu.value)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'username' );
 
@@ -443,7 +443,7 @@ if ( $action == 'capture_on' ) {
     // clean_page
     $result = DB_query( "SELECT DISTINCT( us.page ) AS page
                             FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ip
-                            WHERE (ip.type='page') && (us.page LIKE ip.page)" );
+                            WHERE (ip.type='page') && (us.page LIKE ip.value)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'page' );
 
@@ -455,7 +455,7 @@ if ( $action == 'capture_on' ) {
     // clean_host
     $result = DB_query( "SELECT DISTINCT( us.host ) AS host
                             FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} ih
-                            WHERE (ih.type='host') AND (us.host LIKE ih.host)" );
+                            WHERE (ih.type='host') AND (us.host LIKE ih.value)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'host' );
 
@@ -467,7 +467,7 @@ if ( $action == 'capture_on' ) {
     // clean_ip
     $result = DB_query( "SELECT DISTINCT( us.ip ) AS ip
                             FROM {$_TABLES['gus_userstats']} us, {$_TABLES['gus_ignore']} iip
-                            WHERE (iip.type='ip') AND (us.ip LIKE iip.ip)" );
+                            WHERE (iip.type='ip') AND (us.ip LIKE iip.value)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'ip' );
 
@@ -479,7 +479,7 @@ if ( $action == 'capture_on' ) {
     // clean_ua
     $result = DB_query( "SELECT DISTINCT( ua_id )
                             FROM {$_TABLES['gus_user_agents']} ua, {$_TABLES['gus_ignore']} iua
-                            WHERE (iua.type='ua') AND (ua.user_agent LIKE iua.ua)" );
+                            WHERE (iua.type='ua') AND (ua.user_agent LIKE iua.value)" );
 
     $list = GUS_create_item_list_for_delete( $result, 'ua_id' );
 
