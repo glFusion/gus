@@ -1437,7 +1437,7 @@ function plugin_user_create_gus($uid)
     if ( $track == 0 ) {
         $username = DB_getItem($_TABLES['users'],'username','uid='.(int)$uid);
         if ( $username != '' && $username != null ) {
-            DB_save($_TABLES['gus_ignore'],'type,username',"'user','".DB_escapeString($username)."'");
+            DB_save($_TABLES['gus_ignore'],'type,value',"'user','".DB_escapeString($username)."'");
         }
     }
 }
