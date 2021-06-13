@@ -64,7 +64,7 @@ CREATE TABLE `{$_TABLES['gus_ignore']}` (
   `type` VARCHAR(16) NOT NULL DEFAULT '',
   `value` VARCHAR(256) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `type_value` (`type`, `value`)
+  UNIQUE INDEX `type_value` (`type`, `value`(200))
   ) ENGINE=MyISAM
 ";
 
