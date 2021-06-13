@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS {$_TABLES['gus_user_agents']} (
   version varchar(40) default NULL,
   platform varchar(30) default NULL,
   PRIMARY KEY  (ua_id),
-  UNIQUE KEY user_agent (user_agent)
+  UNIQUE KEY user_agent (user_agent(200))
 ) ENGINE=MyISAM
 ";
 
