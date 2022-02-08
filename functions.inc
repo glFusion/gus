@@ -731,7 +731,7 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
 {
     global $_CONF, $_TABLES, $_GUS_VARS, $QUERY_STRING;
 
-    $sql = "SELECT ua_id FROM {$_TABLES['gus_user_agents']} WHERE user_agent = '{$user_agent}' LIMIT 1";
+    $sql = "SELECT ua_id FROM {$_TABLES['gus_user_agents']} WHERE user_agent = '".DB_escapeString($user_agent)."' LIMIT 1";
     $res = DB_query( $sql );
 
     if ( $row = DB_fetchArray( $res ) ) {
