@@ -1,37 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
-// |                                                                          |
-// | English language file (UTF-8)                                            |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the GUS Plugin                                                  |
-// | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
-// |                                                                          |
-// | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
-// |          Tom Willett       - twillett@users.sourceforge.net              |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats Plugin for glFusion
+*
+* Language File - UTF-8
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*     Authors: Andy Maloney      - asmaloney@users.sf.net
+*              Tom Willett       - twillett@users.sourceforge.net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -238,14 +225,13 @@ $LANG_configsubgroups['gus'] = array(
 
 $LANG_fs['gus'] = array(
     'gus_options'           => 'General Settings',
-    'gus_wo'                => 'Who\'s Online Block Settings',
+    'gus_wo'                => 'Who\'s On-line Block Settings',
     'gus_access'            => 'Permissions',
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['gus'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array('Host' => 'host', 'Nslookup' => 'nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'None' => 'none'),
+$LANG_configSelect['gus'] = array(
+    0 => array(1=>'True', 0 => 'False'),
+    1 => array(true => 'True', false => 'False'),
+    2 => array('host' => 'Host', 'nslookup' => 'Nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'none'=> 'None'),
 );
 ?>

@@ -9,7 +9,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2018 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on the GUS Plugin
@@ -45,7 +45,6 @@ $_GUS_IMG_name = "GUS48.png";
 $_GUS_IMG_small_name = "GUS24.png";
 $_GUS_anon_access = $_GUS_CONF['anon_access'];
 $_GUS_enable_main_menu_GUS = $_GUS_CONF['enable_main_menu_GUS'];
-//$_GUS_enable_main_menu_privacy_policy = $_GUS_CONF['enable_main_menu_privacy_policy'];
 $_GUS_user = $_GUS_CONF['gus_user'];
 $_GUS_stats = $_GUS_CONF['gus_stats'];
 
@@ -70,11 +69,14 @@ GUS();
 
 function GUS()
 {
-    global $_GUS_VARS, $_GUS_CONF, $_USER, $_TABLES, $_CONF, $REMOTE_ADDR;
+    global $_PLUGINS, $_GUS_VARS, $_GUS_CONF, $_USER, $_TABLES, $_CONF, $REMOTE_ADDR;
+
+    if (!in_array('gus', $_PLUGINS)) {
+        return;
+    }
 
     $_GUS_VARS = array();
 
-// cache this...
     $rec = DB_query( "SELECT * FROM {$_TABLES['gus_vars']}", 1 );
     $rows = DB_fetchAll($rec,false);
     if (count($rows)> 0) {
@@ -86,36 +88,19 @@ function GUS()
         $_GUS_VARS['parsed_site_url'] = parse_url( $_CONF['site_url'] );
 
         if ( $_GUS_VARS['capture'] == '1' ) {
+
+            // remote IP
+
             if ( version_compare(GVERSION,'1.7.4','<')) {
                 $_GUS_VARS['remote_ip'] = GetIP( $REMOTE_ADDR );
             } else {
                 $_GUS_VARS['remote_ip'] = GetIP( $_SERVER['REAL_ADDR'] );
             }
-// Query 1
-            $rec = DB_query("SELECT EXISTS(SELECT 1
-                            FROM {$_TABLES['gus_ignore_ip']}
-                            WHERE '{$_GUS_VARS['remote_ip']}' LIKE ip
-                            LIMIT 1) AS ignored", 1 );
 
-            $row = DB_fetchArray( $rec, false );
-
-            if ( $row['ignored'] == '1' && !defined ('GUS_DVLP_MODE')) {
-                return;
-            }
-
-            // Next check the hostname...
+            // Get Hostname
             $host_name = ip_to_hostname( $_GUS_VARS['remote_ip'] );
-// Query 2
-            $rec = DB_query("SELECT EXISTS(SELECT 1
-                            FROM {$_TABLES['gus_ignore_host']}
-                            WHERE '{$host_name}' LIKE host
-                            LIMIT 1) AS ignored", 1 );
 
-            $row = DB_fetchArray( $rec, false );
-            if ( $row['ignored'] == '1'  && !defined ('GUS_DVLP_MODE')) {
-                return;
-            }
-            // Next check the page...
+            // Get page
             // remove extra path from the page name if necessary
             $page = $_SERVER['SCRIPT_NAME'];
             if ( isset($_GUS_VARS['parsed_site_url']['path']) ) {
@@ -128,76 +113,89 @@ function GUS()
                 if ( strncmp( $page, $_GUS_VARS['parsed_site_url']['path'], $len ) == 0 )
                     $page = substr( $page, $len + 1 );
             }
-// query 3
-            $rec = DB_query("SELECT EXISTS(SELECT 1
-                                FROM {$_TABLES['gus_ignore_page']}
-                                WHERE '".DB_escapeString($page)."' LIKE page
-                                LIMIT 1) AS ignored", 1 );
 
-            $row = DB_fetchArray( $rec, false );
+            // get user name - if one
 
-            if ( $row['ignored'] == '1' && !defined ('GUS_DVLP_MODE')) {
-                return;
-            }
-
-            // check the user...
             $check_user = true;
 
             if ( COM_isAnonUser() ) {
                 $user_id = 1;
                 $user_name = 'Anonymous';
-
                 $check_user = $_GUS_CONF['allow_ignore_anonymous'];
             } else {
                 $user_id = $_USER['uid'];
                 $user_name = $_USER['username'];
             }
 
-            if ( $check_user ) {
-// query 4
-                $rec = DB_query( "SELECT EXISTS(SELECT 1
-                                    FROM {$_TABLES['gus_ignore_user']}
-                                    WHERE '{$user_name}' LIKE username
-                                    LIMIT 1) AS ignored", 1 );
-
-                $row = DB_fetchArray( $rec, false );
-                if ( $row['ignored'] == '1' && !defined ('GUS_DVLP_MODE')) {
-                    return;
-                }
+            // get user agent
+            $user_agent = '';
+            if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] != '') {
+                $user_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 200 );
             }
-// query 5
-            // check user agent
-            $user_agent = DB_escapeString( substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 ) );
-            $rec = DB_query( "SELECT EXISTS(SELECT 1
-                                FROM {$_TABLES['gus_ignore_ua']}
-                                WHERE '{$user_agent}' LIKE ua
-                                LIMIT 1) AS ignored", 1 );
 
+            // referer
+            $referrer = '';
+            if ( isset( $_SERVER['HTTP_REFERER'] ) && ( $_SERVER['HTTP_REFERER'] != '' ) ) {
+                $referrer = $_SERVER['HTTP_REFERER'];
+            }
+
+            $orNeeded = false;
+
+            $sql = "SELECT EXISTS(SELECT 1
+                        FROM `{$_TABLES['gus_ignore']}`
+                        WHERE ";
+
+            if (isset($_GUS_VARS['remote_ip']) && $_GUS_VARS['remote_ip'] != '' ) {
+                if ($orNeeded) {
+                    $sql .= " OR ";
+                }
+                $sql .= "(`type` = 'ip' AND '".DB_escapeString($_GUS_VARS['remote_ip'])."' LIKE `value` )";
+                $orNeeded = true;
+            }
+            if ($host_name != '') {
+                if ($orNeeded) {
+                    $sql .= " OR ";
+                }
+                $sql .= "(`type` = 'host' AND '".DB_escapeString($host_name)."' LIKE `value`)";
+                $orNeeded = true;
+            }
+            if ($page != '') {
+                if ($orNeeded) {
+                    $sql .= " OR ";
+                }
+                $sql .= "(`type` = 'page' AND '".DB_escapeString($page)."' LIKE `value`) ";
+                $orNeeded = true;
+            }
+            if ($user_agent != '') {
+                if ($orNeeded) {
+                    $sql .= " OR ";
+                }
+                $sql .= "(`type` = 'ua' AND '".DB_escapeString($user_agent)."' LIKE `value`)";
+                $orNeeded = true;
+            }
+            if ($referrer != '') {
+                if ($orNeeded) {
+                    $sql .= " OR ";
+                }
+                $sql .= "(`type` = 'referer' AND '".DB_escapeString($referrer)."' LIKE `value`)";
+                $orNeeded;
+            }
+            if ($check_user) {
+                if ($orNeeded) {
+                    $sql .= " OR ";
+                }
+                $sql .= "(`type` = 'user' AND '".DB_escapeString($user_name)."' LIKE `value`) ";
+            }
+            $sql .= " LIMIT 1) AS ignored";
+
+            $rec = DB_query($sql,1);
             $row = DB_fetchArray( $rec, false );
 
-            if ( $row['ignored'] == '1' && !defined ('GUS_DVLP_MODE')) {
+            if ( $row['ignored'] == '1' ) {
                 return;
             }
 
-            // check the referrer
-            if ( isset( $_SERVER['HTTP_REFERER'] ) && ( $_SERVER['HTTP_REFERER'] != '' ) ) {
-                $referrer = $_SERVER['HTTP_REFERER'];
-// query 6
-                $rec = DB_query( "SELECT EXISTS(SELECT 1
-                                    FROM {$_TABLES['gus_ignore_referrer']}
-                                    WHERE '".DB_escapeString($referrer)."' LIKE referrer
-                                    LIMIT 1) as ignored", 1 );
-
-                $row = DB_fetchArray( $rec, false );
-
-                if ( $row['ignored'] == '1' && !defined ('GUS_DVLP_MODE')) {
-                    return;
-                }
-            }
-
-            // Finally, add stats
             GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent );
-
         } else {
             $_GUS_VARS['remote_ip'] = '';
         }
@@ -443,9 +441,9 @@ function plugin_upgrade_gus()
 
 function GUS_doUpgrades( $current_gus_version )
 {
-    global $_TABLES, $_CONF, $_DB, $_GUS_CONF;
+    global $_TABLES, $_CONF, $_DB, $_GUS_CONF, $_DB_dbms;
 
-    $_DB->setDisplayError( true );
+//    $_DB->setDisplayError( true );
 
     $done = false;
 
@@ -589,6 +587,90 @@ function GUS_doUpgrades( $current_gus_version )
 			case '2.4.2' :
 				// no changes
 
+            case '2.4.3' :
+            case '2.5.0' :
+
+                // create new table
+                $_SQL = array();
+                $_SQL[] = "
+                    CREATE TABLE `{$_TABLES['gus_ignore']}` (
+                    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                    `type` VARCHAR(16) NOT NULL DEFAULT '',
+                    `value` VARCHAR(256) NOT NULL DEFAULT '',
+                    PRIMARY KEY (`id`),
+                    UNIQUE INDEX `type_value` (`type`, `value`)
+                    ) ENGINE=MyISAM
+                ";
+
+                $use_innodb = false;
+                if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                    $use_innodb = true;
+                }
+                if ($use_innodb) {
+                    $statements = count($_SQL);
+                    for ($i = 0; $i < $statements; $i++) {
+                        $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+                    }
+                }
+                foreach ($_SQL as $sql) {
+                    DB_query($sql,1);
+                }
+
+                // convert to new format....
+
+                $result = DB_query("SELECT * FROM `{$_TABLES['gus_ignore_ip']}`;",1);
+                while (($row = DB_fetchArray($result)) != NULL) {
+                    $sql = "INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('ip','".DB_escapeString($row['ip'])."')";
+                    DB_query($sql,1);
+                }
+                $result = DB_query("SELECT * FROM `{$_TABLES['gus_ignore_user']}`;",1);
+                while (($row = DB_fetchArray($result)) != NULL) {
+                    $sql = "INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('user','".DB_escapeString($row['username'])."');";
+                    DB_query($sql,1);
+                }
+                $result = DB_query("SELECT * FROM `{$_TABLES['gus_ignore_page']}`;",1);
+                while (($row = DB_fetchArray($result)) != NULL) {
+                // truncate page to 200 bytes
+                    $page = substr($row['page'],0,200);
+                    $sql = "INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('page','".DB_escapeString($page)."');";
+                    DB_query($sql,1);
+                }
+                $result = DB_query("SELECT * FROM `{$_TABLES['gus_ignore_ua']}`;",1);
+                while (($row = DB_fetchArray($result)) != NULL) {
+                // truncate page to 200 bytes
+                    $ua = substr($row['ua'],0,200);
+                    $sql = "INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('ua','".DB_escapeString($ua)."');";
+                    DB_query($sql,1);
+                }
+
+                $result = DB_query("SELECT * FROM `{$_TABLES['gus_ignore_host']}`",1);
+                while (($row = DB_fetchArray($result)) != NULL) {
+                    $host = substr($row['host'],0,200);
+                    $sql = "INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('page','".DB_escapeString($host)."');";
+                    DB_query($sql,1);
+                }
+                $result = DB_query("SELECT * FROM `{$_TABLES['gus_ignore_referrer']}`",1);
+                while (($row = DB_fetchArray($result)) != NULL) {
+                    $referrer = substr($row['referrer'],0,200);
+                    $sql = "INSERT INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('referrer','".DB_escapeString($referrer)."');";
+                    DB_query($sql,1);
+                }
+
+                DB_query("ALTER TABLE {$_TABLES['gus_user_agents']} CHANGE `user_agent` `user_agent` VARCHAR(256) NULL DEFAULT NULL;",1);
+
+                DB_query("DROP TABLE {$_TABLES['gus_ignore_ip']}",1);
+                DB_query("DROP TABLE {$_TABLES['gus_ignore_user']}",1);
+                DB_query("DROP TABLE {$_TABLES['gus_ignore_page']}",1);
+                DB_query("DROP TABLE {$_TABLES['gus_ignore_ua']}",1);
+                DB_query("DROP TABLE {$_TABLES['gus_ignore_host']}",1);
+                DB_query("DROP TABLE {$_TABLES['gus_ignore_referrer']}",1);
+
+                DB_query("ALTER TABLE {$_TABLES['gus_ignore']} CHANGE `value` `value` VARCHAR(256) NULL DEFAULT NULL;",1);
+
+            case '2.5.0' :
+            case '2.5.0.1' :
+                // no changes
+
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
                 $done = true;
@@ -649,7 +731,7 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
 {
     global $_CONF, $_TABLES, $_GUS_VARS, $QUERY_STRING;
 
-    $sql = "SELECT ua_id FROM {$_TABLES['gus_user_agents']} WHERE user_agent = '{$user_agent}' LIMIT 1";
+    $sql = "SELECT ua_id FROM {$_TABLES['gus_user_agents']} WHERE user_agent = '".DB_escapeString($user_agent)."' LIMIT 1";
     $res = DB_query( $sql );
 
     if ( $row = DB_fetchArray( $res ) ) {
@@ -873,15 +955,29 @@ function phpblock_gusstats()
 
             $ip = $row['remote_ip'];
 
-            $google_cidrs = array("66.249.64.0/19",
-	        	                  "66.102.0.0/20",
-	                              "64.233.160.0/19",
-	                              "72.14.192.0/18",
-	                              "203.208.32.0/19",
-	                              "74.125.0.0/16",
-	                              "209.85.128.0/17",
-	                              "216.239.32.0/19"
-	                              );
+            $google_cidrs = array(
+                                    "35.190.247.0/24",
+                                    "35.191.0.0/16",
+                                    "64.233.160.0/19",
+                                    "66.102.0.0/20",
+                                    "66.249.80.0/20",
+                                    "72.14.192.0/18",
+                                    "74.125.0.0/16",
+                                    "108.177.8.0/21",
+                                    "108.177.96.0/19",
+                                    "130.211.0.0/22",
+                                    "172.217.0.0/19",
+                                    "172.217.32.0/20",
+                                    "172.217.128.0/19",
+                                    "172.217.160.0/20",
+                                    "172.217.192.0/19",
+                                    "172.253.56.0/21",
+                                    "172.253.112.0/20",
+                                    "173.194.0.0/16",
+                                    "209.85.128.0/17",
+                                    "216.58.192.0/19",
+                                    "216.239.32.0/19"
+            );
 
             $yahoo_cidrs = array("202.160.176.0/20",
                                  "67.195.0.0/16",
@@ -891,6 +987,7 @@ function phpblock_gusstats()
                                  "74.6.0.0/16",
                                  "68.180.128.0/17"
                                  );
+
             $bing_cidrs = array("207.46.0.0/16",
                                 "65.52.0.0/14",
                                 "207.68.128.0/18",
@@ -906,6 +1003,20 @@ function phpblock_gusstats()
                                 "131.253.32.0/20"
                                 );
 
+            $yandex_cidrs = array(
+                                "5.45.192.0/19",
+                                "5.255.192.0/18",
+                                "5.45.254.0/25",
+                                "37.9.109.0/24",
+                                "37.140.128.0/18",
+                                "77.88.0.0/18",
+                                "87.250.224.0/19",
+                                "93.158.136.48/28",
+                                "95.108.130.0/23",
+                                "95.108.192.0/18",
+                                "141.8.132.0/24",
+                                "213.180.223.192/26"
+            );
 
             if ( match_cidr($ip,$google_cidrs) ) {
                 $bot_list[] = "Google";
@@ -915,6 +1026,9 @@ function phpblock_gusstats()
                 $num_anon--;
             } else if (match_cidr($ip,$bing_cidrs) ) {
                 $bot_list[] = "Bing";
+                $num_anon--;
+            } else if (match_cidr($ip,$yandex_cidrs)) {
+                $bot_list[] = "Yandex";
                 $num_anon--;
             } else if (preg_match("@^65\.(19[2-9]|2[0-1]\d?|22[0-3])@", $ip)) {
                 $bot_list[] = "Ask Jeeves";
@@ -1201,7 +1315,7 @@ function plugin_user_delete_gus ($uid)
     $username = DB_getItem($_TABLES['users'], "username", "uid=".(int) $uid);
 
     DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE uid=".(int) $uid);
-    DB_query("DELETE FROM {$_TABLES['gus_ignore_user']} WHERE username ='".DB_escapeString($username)."'");
+    DB_query("DELETE FROM {$_TABLES['gus_ignore']} WHERE type='user' && value ='".DB_escapeString($username)."'");
 }
 
 function plugin_profileedit_gus($uid,$panel,$fieldset)
@@ -1220,7 +1334,7 @@ function plugin_profileedit_gus($uid,$panel,$fieldset)
                     }
                     $username = DB_getItem($_TABLES['users'],'username','uid = ' . (int) $uid);
                     $ignored = false;
-                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore_user']} WHERE username='".DB_escapeString($username)."'");
+                    $result = DB_query("SELECT * FROM {$_TABLES['gus_ignore']} WHERE type='user' && value='".DB_escapeString($username)."'");
                     $nrows = DB_numRows($result);
                     if ($nrows > 0) {
                         $ignored = true;
@@ -1265,10 +1379,11 @@ function plugin_profilesave_gus( $uid = 0 )
     if ( $username == '' || $username == null ) return;
 
     if ( $track == 0 ) {
-        DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($username)."'");
+        DB_save($_TABLES['gus_ignore'],'type,value',"'user','".DB_escapeString($username)."'");
         DB_query("DELETE FROM {$_TABLES['gus_userstats']} WHERE username='".DB_escapeString($username)."'",1);
     } else {
-        DB_delete($_TABLES['gus_ignore_user'],'username',DB_escapeString($username));
+        $sql = "DELETE FROM {$_TABLES['gus_ignore']} WHERE type='user' && value='".DB_escapeString($username)."'";
+        DB_query($sql,1);
     }
 }
 
@@ -1326,7 +1441,7 @@ function plugin_user_create_gus($uid)
     if ( $track == 0 ) {
         $username = DB_getItem($_TABLES['users'],'username','uid='.(int)$uid);
         if ( $username != '' && $username != null ) {
-            DB_save($_TABLES['gus_ignore_user'],'username',"'".DB_escapeString($username)."'");
+            DB_save($_TABLES['gus_ignore'],'type,value',"'user','".DB_escapeString($username)."'");
         }
     }
 }

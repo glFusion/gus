@@ -1,31 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | autoinstall.php                                                          |
-// |                                                                          |
-// | glFusion Auto Installer module                                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats
+*
+* Auto Installer
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*  Authors: Andy Maloney      - asmaloney@users.sf.net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -45,12 +36,7 @@ $INSTALL_plugin['gus'] = array(
     'plugin' => array('type' => 'plugin', 'name' => $_GUS_CONF['pi_name'], 'ver' => $_GUS_CONF['pi_version'], 'gl_ver' => $_GUS_CONF['gl_version'], 'url' => $_GUS_CONF['pi_url'], 'display' => $_GUS_CONF['pi_display_name']),
     array('type' => 'table', 'table' => $_TABLES['gus_userstats'], 'sql' => $_SQL['gus_userstats']),
     array('type' => 'table', 'table' => $_TABLES['gus_user_agents'], 'sql' => $_SQL['gus_user_agents']),
-    array('type' => 'table', 'table' => $_TABLES['gus_ignore_ip'], 'sql' => $_SQL['gus_ignore_ip']),
-    array('type' => 'table', 'table' => $_TABLES['gus_ignore_user'], 'sql' => $_SQL['gus_ignore_user']),
-    array('type' => 'table', 'table' => $_TABLES['gus_ignore_page'], 'sql' => $_SQL['gus_ignore_page']),
-    array('type' => 'table', 'table' => $_TABLES['gus_ignore_ua'], 'sql' => $_SQL['gus_ignore_ua']),
-    array('type' => 'table', 'table' => $_TABLES['gus_ignore_host'], 'sql' => $_SQL['gus_ignore_host']),
-    array('type' => 'table', 'table' => $_TABLES['gus_ignore_referrer'], 'sql' => $_SQL['gus_ignore_referrer']),
+    array('type' => 'table', 'table' => $_TABLES['gus_ignore'], 'sql' => $_SQL['gus_ignore']),
     array('type' => 'table', 'table' => $_TABLES['gus_vars'], 'sql' => $_SQL['gus_vars']),
     array('type' => 'group', 'group' => 'Gus Admin', 'desc' => 'Moderators of the Gus Plugin',
             'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
@@ -130,6 +116,7 @@ function plugin_autouninstall_gus ()
         /* give the name of the tables, without $_TABLES[] */
         'tables' => array ( 'gus_userstats',
 						'gus_user_agents',
+                        'gus_ignore',
 						'gus_ignore_ip',
 						'gus_ignore_user',
 						'gus_ignore_page',

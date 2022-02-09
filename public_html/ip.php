@@ -1,35 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | GUS Plugin for glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | ip.php                                                                   |
-// | Displays statistics on IPs                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the GUS Plugin                                                  |
-// | Copyright (C) 2002, 2003, 2005 by the following authors:                 |
-// |                                                                          |
-// | Authors: Andy Maloney      - asmaloney@users.sf.net                      |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* GUS - glFusion Usage Stats
+*
+* IP Viewer / Manager
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the GUS Plugin
+*  Copyright (C) 2002, 2003, 2005 by the following authors:
+*  Authors: Andy Maloney      - asmaloney@users.sf.net
+*
+*/
 
 require_once './include/security.inc';
 
@@ -53,10 +40,13 @@ $sort = isset( $_GET['sort'] ) ? COM_applyFilter( $_GET['sort'] ) : '';
 $ip_addr = isset( $_GET['ip_addr'] ) ? COM_applyFilter( $_GET['ip_addr'] ) : '';
 
 // handle our forms
-if ( $gus_ip_collect_data == '0' )
-	DB_query( "INSERT IGNORE INTO {$_TABLES['gus_ignore_ip']} VALUES ( '$ip_addr' )", 1 );
-else if ( $gus_ip_collect_data == '1' )
-	DB_query( "DELETE FROM {$_TABLES['gus_ignore_ip']} WHERE ip = '$ip_addr' LIMIT 1", 1 );
+if ( $gus_ip_collect_data == '0' ) {
+	$sql = "INSERT IGNORE INTO `{$_TABLES['gus_ignore']}` (`type`, `value`) VALUES('ip','".DB_escapeString($ip_addr)."')";
+	DB_query($sql,1);
+} else if ( $gus_ip_collect_data == '1' ) {
+	DB_query( "DELETE FROM {$_TABLES['gus_ignore']} WHERE type='ip' && value = '".DB_escapeString($ip_addr)."' LIMIT 1", 1 );
+}
+
 
 if ( isset($_POST['banmode'])) {
     $gus_ip_ban = isset( $_POST['gus_ip_ban'] ) ? COM_applyFilter( $_POST['gus_ip_ban']) : 0;
@@ -112,9 +102,10 @@ $T->set_var( 'additional_nav', GUS_make_nav( $day, $month, $year, "ip_addr=$ip_a
 $block_title = "$ip_addr [" . $_GUS_Whois_URL_start . $ip_addr . $_GUS_Whois_URL_end . 'whois</a>]';
 
 // Check to see if collect stats on this IP
+
 $result = DB_query( "SELECT COUNT(*) AS ignored
-						FROM {$_TABLES['gus_ignore_ip']}
-						WHERE '{$ip_addr}' LIKE ip
+						FROM {$_TABLES['gus_ignore']}
+						WHERE type='ip' && '{$ip_addr}' LIKE value
 						LIMIT 1", 1 );
 
 $row = DB_fetchArray( $result, false );
@@ -126,22 +117,19 @@ $data .= '<table cellspacing="0" cellpadding="0"  style="border: 0px;"><tr>';
 
 $data .= '<td class="col_right">Stats collection:</td>';
 
-if ( $row['ignored'] == '1' )
-{
+if ( isset($row['ignored']) && $row['ignored'] == '1' ) {
 	$data .= '<td><span style="font-weight: bold;">off</span></td>';
 
 	$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
-	$data .= "<input type=\"submit\" value=\"Turn On\"".XHTML.">";
-	$data .= "<input type=\"hidden\" value=\"1\" name=\"gus_ip_collect_data\"".XHTML.">";
+	$data .= "<input type=\"submit\" value=\"Turn On\">";
+	$data .= "<input type=\"hidden\" value=\"1\" name=\"gus_ip_collect_data\">";
 	$data .= '</form></td>';
-}
-else
-{
+} else {
 	$data .= '<td><span style="font-weight: bold;">on</span></td>';
 
 	$data .= "<td><form method=\"post\" action=\"" . $actionURL . "\">";
-	$data .= "<input type=\"submit\" value=\"Turn Off\"".XHTML.">";
-	$data .= "<input type=\"hidden\" value=\"0\" name=\"gus_ip_collect_data\"".XHTML.">";
+	$data .= "<input type=\"submit\" value=\"Turn Off\">";
+	$data .= "<input type=\"hidden\" value=\"0\" name=\"gus_ip_collect_data\">";
 	$data .= '</form></td>';
 }
 
@@ -167,7 +155,7 @@ if (function_exists('bb2_ban')) {
 		$data .= '</form></td>';
 	}
 } else {
-    $data .= '<td colspan="2">[the <a href="http://www.glfusion.org">BB2 Banning</a> is not activated]</td>';
+    $data .= '<td colspan="2">[the <a href="https://www.glfusion.org">BB2 Banning</a> is not activated]</td>';
 }
 $data .= '</tr></table></td></tr><tr><td>';
 
@@ -214,21 +202,18 @@ $sql = "SELECT DISTINCT( a.user_agent )
 $result = DB_query( $sql );
 $num_results = DB_numRows( $result );
 
-if ( $num_results == 0 )
-{
+if ( $num_results == 0 ) {
 	$data .= "There are <b>no</b> user agents associated with this IP address.";
-}
-else
-{
-	if ( $num_results == 1 )
+} else {
+	if ( $num_results == 1 ) {
 		$data .= "There is <b>one</b> user agent associated with this IP address:";
-	else
+	} else {
 		$data .= "There are <b>{$num_results}</b> user agents associated with this IP address:";
+	}
 
 	$data .= '<ul>';
 
-	while ( $row = DB_fetchArray( $result ) )
-	{
+	while ( $row = DB_fetchArray( $result ) ) {
 		$data .= '<li>' . htmlentities( $row['user_agent'] ) . '</li>';
 	}
 
@@ -271,8 +256,7 @@ $T->parse( 'CBlock', 'COLUMN', true );
 $T->set_var( 'rowclass', 'header' );
 $T->parse( 'BBlock', 'ROW' , true );
 
-for ( $i = 0; $i < $nrows; $i++ )
-{
+for ( $i = 0; $i < $nrows; $i++ ) {
     if ( ($i + 1) % 2 )
 	    $T->set_var( 'rowclass', 'row1' );
 	else
@@ -308,12 +292,13 @@ for ( $i = 0; $i < $nrows; $i++ )
 $T->parse( 'ABlock', 'TABLE', true );
 $T->set_var( 'google_paging', $navigation_URLs );
 
-if ( $day != '' )
+if ( $day != '' ) {
     $title = "$ip_addr - " . $dt->format( 'l, j F, Y ', true );
-else if ( $month != '' )
+} else if ( $month != '' ) {
     $title = "$ip_addr - " . $dt->format( 'F Y ', true );
-else
+} else {
     $title = "$ip_addr - " . $dt->format( 'Y ', true );
+}
 
 $T->set_var( 'header_text', $title );
 
