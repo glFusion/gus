@@ -667,7 +667,6 @@ function GUS_doUpgrades( $current_gus_version )
 
                 DB_query("ALTER TABLE {$_TABLES['gus_ignore']} CHANGE `value` `value` VARCHAR(256) NULL DEFAULT NULL;",1);
 
-            case '2.5.0' :
             case '2.5.0.1' :
                 // no changes
 
