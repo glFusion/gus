@@ -203,11 +203,10 @@ $LANG_fs['gus'] = array(
     'gus_access' => 'Permissions'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['gus'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Host' => 'host', 'Nslookup' => 'nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'None' => 'none')
+$LANG_configSelect['gus'] = array(
+    0 => array(1=>'True', 0 => 'False'),
+    1 => array(true => 'True', false => 'False'),
+    2 => array('host' => 'Host', 'nslookup' => 'Nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'none'=> 'None'),
 );
 
 ?>
