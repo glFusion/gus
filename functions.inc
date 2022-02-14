@@ -35,6 +35,14 @@ if ( file_exists( $langfile ) ) {
     include_once $_CONF['path'].'plugins/gus/language/english_utf-8.php';
 }
 
+if (version_compare(GVERSION,'2.0.0','lt')) {
+    if (isset($LANG_configSelect['gus']) && !isset($LANG_configselects['gus'])) {
+        foreach ($LANG_configSelect['gus'] AS $cfgItem) {
+            $LANG_configselects['gus'][] = array_flip($cfgItem);
+        }
+    }
+}
+
 $gus_config = config::get_instance();
 $_GUS_CONF = $gus_config->get_config('gus');
 
@@ -669,6 +677,8 @@ function GUS_doUpgrades( $current_gus_version )
 
             case '2.5.0.1' :
                 // no changes
+            case '2.5.1' :
+                // no changes
 
             default:
                 $current_gus_version = $_GUS_CONF['pi_version'];
@@ -694,7 +704,7 @@ function GUS_checkStatsInstall()
 //  - escape '%' for the LIKE clause
 function GUS_getEncodedURL( $url )
 {
-    $encoded_site_url = urlencode( DB_escapeString( $url ) );
+    $encoded_site_url = urlencode( (string) DB_escapeString( $url ) );
     $encoded_site_url = str_replace( '%', '\%', $encoded_site_url );
 
     return $encoded_site_url;
@@ -761,12 +771,12 @@ function GUS_addStats( $page, $user_id, $user_name, $host_name, $user_agent )
     }
 
     if ( $query_string != '' )
-        $query_string = urlencode( DB_escapeString( $query_string ) );
+        $query_string = urlencode( (string) DB_escapeString( $query_string ) );
 
     $referrer = '';
 
     if ( isset( $_SERVER['HTTP_REFERER'] ) && ( $_SERVER['HTTP_REFERER'] != '' ) )
-        $referrer = urlencode( DB_escapeString( $_SERVER['HTTP_REFERER'] ) );
+        $referrer = urlencode( (string) DB_escapeString( $_SERVER['HTTP_REFERER'] ) );
 
     $dt = new \Date('now',$_CONF['timezone']);
 
@@ -853,7 +863,7 @@ function GUS_log_and_execute( $sql )
 */
 function phpblock_gusstats()
 {
-    global $_USER, $_CONF, $_TABLES, $LANG01, $LANG_GUS_wo, $_GUS_CONF;
+    global $_USER, $_CONF, $_TABLES, $LANG01, $LANG_GUS_wo, $_GUS_CONF, $_GUS_VARS;
 
     if ( !isset($_GUS_CONF['whatsnew_cache_time']) ) {
         $_GUS_CONF['whatsnew_cache_time'] = 90;
