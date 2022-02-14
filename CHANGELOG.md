@@ -1,5 +1,9 @@
 # GUS ChangeLog
 
+## 2.5.2
+
+- Fixed configuration error where configuration dropdowns did not display
+
 ## v2.5.1
 
 - Updated Browser Detection
