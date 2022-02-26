@@ -174,7 +174,7 @@ $LANG_GUS_admin = array(
 	// Referrer
 	'referrer_title'	    => 'Odkazovatelé',
 	'referrer_example'	    => 'Pomocí %images.google.% budou ignorovány všechny stránky, na které odkazují jakékoliv obrázky z Google.',
-	'referrer_num_referrer'	=> 'Number of matching referrers',
+	'referrer_num_referrer'	=> 'Počet odpovídajících doporučujících',
 
 	// Remove Data
 	'remove_data'	=> 'Odstranit data',
@@ -232,6 +232,6 @@ $LANG_fs['gus'] = array(
 $LANG_configSelect['gus'] = array(
     0 => array(1=>'Ano', 0 => 'Ne'),
     1 => array(true => 'Ano', false => 'Ne'),
-    2 => array('host' => 'Hostitel', 'nslookup' => 'Nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'none'=> 'None'),
+    2 => array('host' => 'Hostitel', 'nslookup' => 'Nslookup', 'gethostbyaddr' => 'gethostbyaddr', 'none'=> 'Žádný(á)'),
 );
 ?>
