@@ -1415,6 +1415,7 @@ function plugin_templatesetvars_gus($templatename, $template)
             if ( $_GUS_VARS['capture'] != '1' ) {
                 return $retval;
             }
+            $existingPluginFields = $template->get_var('plugin_fields');
             $ignored = true;
             $T = new Template($_CONF['path'].'plugins/gus/templates/');
             $T->set_file (array ('privacy'=>'gus_profile_privacy.thtml'));
@@ -1426,7 +1427,7 @@ function plugin_templatesetvars_gus($templatename, $template)
             $T->parse ('output', 'privacy');
             $retval .= $T->finish ($T->get_var('output'));
 
-            $template->set_var('plugin_fields', $retval);
+            $template->set_var('plugin_fields', $existingPluginFields . $retval);
 
             break;
     }
